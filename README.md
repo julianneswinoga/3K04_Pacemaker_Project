@@ -9,3 +9,4 @@ Group Members:
 * Aleks Mercik
 * Peter LaRue
 
+Aleks Check
