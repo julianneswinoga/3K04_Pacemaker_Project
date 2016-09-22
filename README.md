@@ -1,5 +1,7 @@
 # 3K04_Pacemaker_Project
 
+## Team TiC++ToC
+
 Group Members:
 * Cameron Swinoga
 * Dillon Mulcahy
@@ -8,5 +10,3 @@ Group Members:
 * Nicholas Amorim
 * Aleks Mercik
 * Peter LaRue
-
-Aleks Check
