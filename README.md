@@ -21,3 +21,5 @@ Group Members:
 	- A folder called `.build` should appear, with a `*.bin` file in it
 - Type `make load MBED=$(MBED_location)`, where `$(MBED_location)` is the location of where the MBED flash is loaded
 	- `$(MBED_location)` defaults to `/cygdrive/e`
+	- This will load the program binary onto the ARM board
+- Press the reset button
