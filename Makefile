@@ -31,7 +31,7 @@ else
 VPATH = .. 
 
 GCC_BIN = 
-PROJECT = frdm_gpio
+PROJECT = main
 OBJECTS = main.o 
 SYS_OBJECTS = mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/cmsis_nvic.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/mbed_board.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/mbed_overrides.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/retarget.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/startup_MK64F12.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/system_MK64F12.o 
 INCLUDE_PATHS = -I../. -I../mbed/. -I../mbed/TARGET_K64F -I../mbed/TARGET_K64F/TARGET_Freescale -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F/TARGET_FRDM -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F/drivers -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/api -I../mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM 
@@ -119,8 +119,12 @@ size: $(PROJECT).elf
 DEPS = $(OBJECTS:.o=.d) $(SYS_OBJECTS:.o=.d)
 -include $(DEPS)
 
+
+MBED ?= /cygdrive/e
+CYG = $(shell uname -o)
 load:
-	cp $(PROJECT).bin E:/
+	$(shell if [[ "$(CYG)" -eq "Cygwin" ]]; then cp $(PROJECT).bin $(MBED); else echo "Cygwin only!"; fi)
+	
 
 
 endif

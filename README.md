@@ -10,3 +10,14 @@ Group Members:
 * Nicholas Amorim
 * Aleks Mercik
 * Peter LaRue
+
+## Compiling Instructions:
+
+- Download & install [Cygwin](https://cygwin.com/install.html)
+- Download & install [GNU Arm toolchain](https://launchpad.net/gcc-arm-embedded)
+	- Add the $(install_dir)/bin to your system path
+- Open Cygwin and cd into the project
+- Type `make`
+	- A folder called `.build` should appear, with a `*.bin` file in it
+- Type `make load MBED=$(MBED_location)`, where `$(MBED_location)` is the location of where the MBED flash is loaded
+	- `$(MBED_location)` defaults to `/cygdrive/e`
