@@ -119,5 +119,8 @@ size: $(PROJECT).elf
 DEPS = $(OBJECTS:.o=.d) $(SYS_OBJECTS:.o=.d)
 -include $(DEPS)
 
+load:
+	cp $(PROJECT).bin E:/
+
 
 endif
