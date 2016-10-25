@@ -1,12 +1,7 @@
 #include "mbed.h"
 #include "Pacemaker.h"
 
-<<<<<<< HEAD
-DigitalOut gpo(D0);
-DigitalOut led(LED_BLUE);
-=======
 DigitalOut led(LED_RED);
->>>>>>> master
 
 Serial pc(USBTX, USBRX);
 
