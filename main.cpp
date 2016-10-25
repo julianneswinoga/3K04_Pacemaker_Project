@@ -1,6 +1,7 @@
 #include "mbed.h"
 #include "Pacemaker.h"
 #include "Communications.h"
+#include "Sense.h"
 
 DigitalOut led(LED_RED);
 
