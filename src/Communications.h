@@ -13,8 +13,14 @@ class Communications : public Pacemaker {
 		//i_vs:??
 		uint8_t o_CommOut;
 		//o_vp:??
+		
 	public:
 		Communications();
+		void initEGM();
+		
+	protected:
+		int sendEGM();
+
 };
 
 #endif // COMMUNICATIONS_H
