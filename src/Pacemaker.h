@@ -6,7 +6,7 @@ class Pacemaker {
 		int thinggg;
 	 
 	public:
-		Pacemaker(int thing1);
+		Pacemaker(int param);
 	 
 		void tempFunction(void);
 };
