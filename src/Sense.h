@@ -6,12 +6,13 @@
 
 class Sense : public Pacemaker {
 	protected:
-		void setChambersSensed(void);
-		void setActivityResponse(void);
+		//void setChambersSensed(enum);
+		//void setActivityResponse(enum);
+		
 	public:
 		Sense();
-		void getChambersSensed();
-		void getActivityResponse();
+		//enum getChambersSensed();
+		//enum getActivityResponse();
 };
 
 #endif // SENSE_H
