@@ -9,10 +9,10 @@ int main() {
 	pc.baud(9600);
 	Pacemaker p(5);
 	
-    pc.printf("Pacemaker initialized\n");
-    while (true) {
-        led = !led; // toggle led
-		pc.printf("ECH\n");
-        wait(0.2f);
-    }
+	pc.printf("Pacemaker initialized\n");
+	while (true) {
+		led = !led; // toggle led
+		pc.printf("><><>%i\n", p.publicThing);
+		wait(0.2f);
+	}
 }
