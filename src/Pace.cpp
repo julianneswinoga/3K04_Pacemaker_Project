@@ -6,23 +6,23 @@ Pace::Pace()  {
 
 // Public functions
 uint16_t Pace::getHysteresisInterval() {
-	
+	return 0;
 }
 
 uint16_t Pace::getLowRateInterval() {
-	
+	return 0;
 }
 
 uint16_t Pace::getvPaceAmp() {
-	
+	return 0;
 }
 
 uint16_t Pace::getvPaceWidth() {
-	
+	return 0;
 }
 
 uint16_t Pace::getVRP() {
-	
+	return 0;
 }
 
 // Protected functions

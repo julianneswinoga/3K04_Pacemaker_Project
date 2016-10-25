@@ -2,7 +2,7 @@
 #define PACE_H
 
 #include "mbed.h"
-#include "Pace.h"
+#include "Sense.h"
 
 class Pace : public Sense {
 	private:
@@ -21,7 +21,7 @@ class Pace : public Sense {
 		//enum getPaceState();
 		uint16_t getHysteresisInterval();
 		uint16_t getLowRateInterval();
-		uint16_t getvPaceAmp():
+		uint16_t getvPaceAmp();
 		uint16_t getvPaceWidth();
 		uint16_t getVRP();
 		
