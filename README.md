@@ -14,8 +14,9 @@ Group Members:
 ## Compiling Instructions:
 
 - Download & install [Cygwin](https://cygwin.com/install.html)
+	- Make sure to install the `make` package
 - Download & install [GNU Arm toolchain](https://launchpad.net/gcc-arm-embedded)
-	- Add the $(install_dir)/bin to your system path
+	- Add the $(install_dir)/bin to your system path (Use the checkbox at the end of the install)
 - Open Cygwin and cd into the project
 - Type `make`
 	- A folder called `.build` should appear, with a `*.bin` file in it
