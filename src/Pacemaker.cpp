@@ -1,7 +1,7 @@
 #include "Pacemaker.h"
 
-Pacemaker::Pacemaker(int thing1) {
-	int test = 0;
+Pacemaker::Pacemaker(int param) {
+	thinggg = param;
 }
 
 void Pacemaker::tempFunction(void) {

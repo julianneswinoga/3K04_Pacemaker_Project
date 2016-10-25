@@ -7,6 +7,8 @@ Serial pc(USBTX, USBRX);
 
 int main() {
 	pc.baud(9600);
+	Pacemaker p(5);
+	
     pc.printf("Pacemaker initialized\n");
     while (true) {
         led = !led; // toggle led
