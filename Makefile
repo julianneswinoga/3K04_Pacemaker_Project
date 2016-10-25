@@ -32,9 +32,11 @@ VPATH = ..
 
 GCC_BIN = 
 PROJECT = main
+CPP_FILES := $(wildcard src/*.cpp)
 OBJECTS = main.o 
+OBJECTS += $(notdir $(CPP_FILES:.cpp=.o))
 SYS_OBJECTS = mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/cmsis_nvic.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/mbed_board.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/mbed_overrides.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/retarget.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/startup_MK64F12.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/system_MK64F12.o 
-INCLUDE_PATHS = -I../. -I../mbed/. -I../mbed/TARGET_K64F -I../mbed/TARGET_K64F/TARGET_Freescale -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F/TARGET_FRDM -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F/drivers -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/api -I../mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM 
+INCLUDE_PATHS = -I../. -I../src/. -I../mbed/. -I../mbed/TARGET_K64F -I../mbed/TARGET_K64F/TARGET_Freescale -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F/TARGET_FRDM -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F/drivers -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/api -I../mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM 
 LIBRARY_PATHS = -L../mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM 
 LIBRARIES = -lmbed 
 LINKER_SCRIPT = ../mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/MK64FN1M0xxx12.ld
@@ -63,7 +65,6 @@ CC_SYMBOLS = -D__MBED__=1 -DDEVICE_I2CSLAVE=1 -D__FPU_PRESENT=1 -DTARGET_Freesca
 
 LD_FLAGS =-Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,_malloc_r -Wl,--wrap,_free_r -Wl,--wrap,_realloc_r -Wl,--wrap,_calloc_r -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp 
 LD_SYS_LIBS = -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
-
 
 ifeq ($(DEBUG), 1)
   CC_FLAGS += -DDEBUG -O0
@@ -118,7 +119,6 @@ size: $(PROJECT).elf
 
 DEPS = $(OBJECTS:.o=.d) $(SYS_OBJECTS:.o=.d)
 -include $(DEPS)
-
 
 MBED ?= /cygdrive/e
 CYG = $(shell uname -o)

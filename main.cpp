@@ -1,13 +1,16 @@
 #include "mbed.h"
+#include "Pacemaker.h"
 
-DigitalOut gpo(D0);
-DigitalOut led(LED_BLUE);
+DigitalOut led(LED_RED);
 
-int main()
-{
+Serial pc(USBTX, USBRX);
+
+int main() {
+	pc.baud(9600);
+    pc.printf("Pacemaker initialized\n");
     while (true) {
-        gpo = !gpo; // toggle pin
         led = !led; // toggle led
+		pc.printf("ECH\n");
         wait(0.2f);
     }
 }
