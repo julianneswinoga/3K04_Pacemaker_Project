@@ -14,6 +14,8 @@ class Pace : public Sense {
 		uint16_t vPaceAmp;
 		uint16_t vPaceWidth;
 		uint16_t VRP;
+		uint8_t maxHeartRate;
+		uint8_t baseHeartRate;
 		
 	public:
 		Pace();
@@ -24,6 +26,8 @@ class Pace : public Sense {
 		uint16_t getvPaceAmp();
 		uint16_t getvPaceWidth();
 		uint16_t getVRP();
+		uint8_t getMaxHeartRate();
+		uint8_t getBaseHeartRate();
 		
 	protected:
 		//void setPaceMode(enum);
@@ -33,6 +37,8 @@ class Pace : public Sense {
 		void setvPaceAmp(uint16_t);
 		void setvPaceWidth(uint16_t);
 		void setVRP(uint16_t);
+		void setMaxHeartRate(uint8_t);
+		void setBaseHeartRate(uint8_t);
 		
 		
 		
