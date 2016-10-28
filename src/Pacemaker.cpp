@@ -1,7 +1,8 @@
 #include "Pacemaker.h"
 
 Pacemaker::Pacemaker()  {
-	
+	//Initialize Critical State Variables
+	setMaxVOut(3.2);
 }
 
 //Protected Functions

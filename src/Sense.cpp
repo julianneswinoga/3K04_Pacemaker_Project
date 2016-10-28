@@ -1,7 +1,10 @@
 #include "Sense.h"
 
 Sense::Sense()  {
-
+	//Initialize Critical State Variables
+	//setChamberSensed(); //Uses values from paceMode
+	//setActivityResponse(); //Uses values from activityResponse
+	setMagnetInPlace(false);
 }
 
 /*void Sense::setChamberSensed(enum c){
