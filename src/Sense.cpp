@@ -21,6 +21,14 @@ enum Sense::getChamberSensed(){
 
 enum Sense::getActivityResponse(){
 	return activityResponse;
+}
+
+void Sense::setActivityThreshold(enum t){
+	activityThreshold = t;
+}
+
+enum Sense::getActivityThreshold(){
+	return activityThreshold;
 }*/
 
 void Sense::setMagnetInPlace(bool m){
