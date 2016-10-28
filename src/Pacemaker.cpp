@@ -22,10 +22,6 @@ void Pacemaker::clearCardiacEvents(){
 
 }
 
-void Pacemaker::setLeadImpedance(float i){
-	leadImpedance = i;
-}
-
 float Pacemaker::getLeadImpedance(){
 	return leadImpedance;
 }
