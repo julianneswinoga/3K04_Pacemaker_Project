@@ -5,26 +5,26 @@ Pacemaker::Pacemaker()  {
 }
 
 //Protected Functions
-void Pacemaker::setMaxVOut(float) {
-
+void Pacemaker::setMaxVOut(float v) {
+	maxVOut = v;
 }
 
-float getMaxVOut(){
+float Pacemaker::getMaxVOut(){
+	return maxVOut;
+}
+
+float Pacemaker::voltageTest(float v){
 	return 1.0;
 }
 
-float voltageTest(float){
-	return 1.0;
-}
-
-void clearCardiacEvents(){
+void Pacemaker::clearCardiacEvents(){
 
 }
 
-void setLeadImpedance(float){
-
+void Pacemaker::setLeadImpedance(float i){
+	leadImpedance = i;
 }
 
-float getLeadImpedance(){
-	return 1.0;
+float Pacemaker::getLeadImpedance(){
+	return leadImpedance;
 }
