@@ -35,3 +35,8 @@ void Sense::measureLeadImpedance(){
 	//Measure currentLeadImpedance
 	leadImpedance = 100;
 }
+
+void Sense::measureBatteryVoltage(){
+	//Measure battery voltage
+	batteryVoltage = 3.3;
+}
