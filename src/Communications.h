@@ -9,7 +9,6 @@ class Communications : public Pacemaker {
 		uint8_t i_CommIn[16];
 		uint16_t vraw;
 		uint16_t f_marker;
-		int i_magnet;
 		//i_vs:??
 		uint8_t o_CommOut;
 		//o_vp:??
