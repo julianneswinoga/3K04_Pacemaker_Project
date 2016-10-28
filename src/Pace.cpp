@@ -25,6 +25,14 @@ uint16_t Pace::getVRP() {
 	return 0;
 }
 
+uint8_t Pace::getMaxHeartRate() {
+	return 0;
+}
+
+uint8_t Pace::getBaseHeartRate() {
+	return 0;
+}
+
 // Protected functions
 void Pace::setHysteresisInterval(uint16_t p) {
 	
@@ -43,5 +51,13 @@ void Pace::setvPaceWidth(uint16_t p) {
 }
 
 void Pace::setVRP(uint16_t p) {
+	
+}
+
+void Pace::setMaxHeartRate(uint8_t p) {
+	
+}
+
+void Pace::setBaseHeartRate(uint8_t p) {
 	
 }
