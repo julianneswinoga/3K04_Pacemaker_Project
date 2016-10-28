@@ -9,6 +9,7 @@ class Sense : public Pacemaker {
 		//enum chambersSensed;
 		//enum activityResponse;
 		bool magnetInPlace;
+		//enum activityThreshold;
 	protected:
 		//void setChambersSensed(enum);
 		//void setActivityResponse(enum);
