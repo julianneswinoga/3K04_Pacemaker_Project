@@ -14,8 +14,6 @@ class Pacemaker {
 		string deviceID;
 		string deviceImplantDate;
 		string leadImplantDate;
-		float replaceBatteryVoltage;
-		float batteryVoltage;
 		float maxVOut;
 		uint8_t txRegister;
 		uint8_t rxRegister;
@@ -23,6 +21,8 @@ class Pacemaker {
 
 	protected:
 		float leadImpedance;
+		float replaceBatteryVoltage;
+		float batteryVoltage;
 
 		//setLeadPins([enum]);
 		//[enum] getLeadPins();
@@ -39,6 +39,7 @@ class Pacemaker {
 	 
 	public:
 		Pacemaker();
+		//enum getBatteryStatus()
 };
 
 #endif // PACEMAKER_H

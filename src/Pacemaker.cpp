@@ -25,3 +25,11 @@ void Pacemaker::clearCardiacEvents(){
 float Pacemaker::getLeadImpedance(){
 	return leadImpedance;
 }
+
+/* enum Pacemaker::getBatteryStatus(){
+	//Use batteryVoltage and replaceBatteryVoltage to figure out battery status level
+	return one of{BOL,ERN,ERT,ERP}
+}*/
+
+
+

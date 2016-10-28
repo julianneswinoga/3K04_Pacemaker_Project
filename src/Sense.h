@@ -14,6 +14,7 @@ class Sense : public Pacemaker {
 		//void setActivityResponse(enum);
 		void setMagnetInPlace(bool);
 		void measureLeadImpedance();
+		void measureBatteryVoltage();
 		
 	public:
 		Sense();
