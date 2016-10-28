@@ -2,6 +2,7 @@
 #define PACEMAKER_H
 
 #include "mbed.h"
+#include <string>
 
 class Pacemaker {
 	private:
@@ -10,8 +11,9 @@ class Pacemaker {
 		PinName leadOneOutPin;
 		PinName leadTwoOutPin;
 		
-		uint32_t deviceID;
-		float batteryVoltage;
+		string deviceID;
+		string deviceImplantDate;
+		string leadImplantDate;
 		float maxVOut;
 		uint8_t txRegister;
 		uint8_t rxRegister;
@@ -19,6 +21,8 @@ class Pacemaker {
 
 	protected:
 		float leadImpedance;
+		float replaceBatteryVoltage;
+		float batteryVoltage;
 
 		//setLeadPins([enum]);
 		//[enum] getLeadPins();
@@ -35,6 +39,7 @@ class Pacemaker {
 	 
 	public:
 		Pacemaker();
+		//enum getBatteryStatus()
 };
 
 #endif // PACEMAKER_H
