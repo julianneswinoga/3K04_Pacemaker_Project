@@ -13,6 +13,7 @@ class Sense : public Pacemaker {
 	protected:
 		//void setChambersSensed(enum);
 		//void setActivityResponse(enum);
+		uint16_t maxSensorRate;
 		void setMagnetInPlace(bool);
 		void measureLeadImpedance();
 		void measureBatteryVoltage();
