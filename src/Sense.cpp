@@ -4,26 +4,26 @@ Sense::Sense()  {
 
 }
 
-/*void Sense::setChamberSensed(enum){
-	
+/*void Sense::setChamberSensed(enum c){
+	chambersSensed = c;
 }
 
-void Sense::setActivityResponse(enum){
-	
+void Sense::setActivityResponse(enum a){
+	activityResponse = a;
 }
 
 enum Sense::getChamberSensed(){
-	
+	return chamberSensed;
 }
 
 enum Sense::getActivityResponse(){
-	
+	return activityResponse;
 }*/
 
-void Sense::setMagnetInPlace(bool){
-
+void Sense::setMagnetInPlace(bool m){
+	magnetInPlace = m;
 }
 
 bool Sense::getMagnetInPlace(){
-	return false;
+	return magnetInPlace;
 }
