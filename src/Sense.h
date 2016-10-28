@@ -13,6 +13,7 @@ class Sense : public Pacemaker {
 		//void setChambersSensed(enum);
 		//void setActivityResponse(enum);
 		void setMagnetInPlace(bool);
+		void measureLeadImpedance();
 		
 	public:
 		Sense();

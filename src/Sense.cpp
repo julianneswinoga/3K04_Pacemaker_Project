@@ -30,3 +30,8 @@ void Sense::setMagnetInPlace(bool m){
 bool Sense::getMagnetInPlace(){
 	return magnetInPlace;
 }
+
+void Sense::measureLeadImpedance(){
+	//Measure currentLeadImpedance
+	leadImpedance = 100;
+}
