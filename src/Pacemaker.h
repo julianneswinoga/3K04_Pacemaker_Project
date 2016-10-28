@@ -12,8 +12,7 @@ class Pacemaker {
 		
 		uint32_t deviceID;
 		float batteryVoltage;
-		uint16_t maxVOut;
-		uint8_t comPort;
+		float maxVOut;
 		uint8_t txRegister;
 		uint8_t rxRegister;
 		float leadImpedanceThreshold;
@@ -23,10 +22,8 @@ class Pacemaker {
 
 		//setLeadPins([enum]);
 		//[enum] getLeadPins();
-		void setMaxVOut(uint16_t);
-		uint16_t getMaxVOut();
-		void setComPort(uint8_t);
-		uint8_t getComPort();
+		void setMaxVOut(float);
+		float getMaxVOut();
 		//void setTxRxReg([uint8_t]);
 		//[uint8_t] getTxRxReg();
 		float voltageTest(float);
