@@ -19,3 +19,11 @@ enum Sense::getChamberSensed(){
 enum Sense::getActivityResponse(){
 	
 }*/
+
+void Sense::setMagnetInPlace(bool){
+
+}
+
+bool Sense::getMagnetInPlace(){
+	return false;
+}
