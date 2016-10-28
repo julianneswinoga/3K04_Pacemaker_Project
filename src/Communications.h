@@ -13,6 +13,7 @@ class Communications : public Pacemaker {
 		//i_vs:??
 		uint8_t o_CommOut;
 		//o_vp:??
+		uint32_t baudRate;
 		
 	public:
 		Communications();
