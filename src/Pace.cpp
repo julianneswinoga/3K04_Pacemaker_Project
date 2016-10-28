@@ -1,7 +1,13 @@
 #include "Pace.h"
 
 Pace::Pace()  {
-	
+	//Initialize Critical State Variables
+	setHysteresisInterval(0);
+	setvPaceAmp(getMaxVOut());
+	setvPaceWidth(0);
+	setLowRateInterval(10);
+	setMaxHeartRate(180);
+	setBaseHeartRate(60);
 }
 
 // Public functions
