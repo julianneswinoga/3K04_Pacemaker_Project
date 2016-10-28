@@ -3,8 +3,7 @@
 #include "Communications.h"
 #include "Sense.h"
 
-DigitalOut led(LED_RED);
-
+PwmOut led(D13);
 Serial pc(USBTX, USBRX);
 
 int main() {
@@ -13,8 +12,10 @@ int main() {
 	
 	pc.printf("Pacemaker initialized\n");
 	while (true) {
-		led = !led; // toggle led
-		pc.printf("><><>");
-		wait(0.2f);
+		for (float i = 0.0f;i < 1.0f;i+=0.05f) {
+			led.write(i);
+			wait(0.1f);
+		}
+		pc.printf(".");
 	}
 }
