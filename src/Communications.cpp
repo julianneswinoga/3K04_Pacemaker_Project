@@ -6,7 +6,8 @@ Communications::Communications()  {
 }
 
 bool Communications::sendEGM() {
-	return 0;
+	//Return true if data sent successfully over serial.
+	return true;
 }
 
 void Communications::initEGM() {
