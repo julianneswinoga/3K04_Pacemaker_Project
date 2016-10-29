@@ -3,6 +3,7 @@
 
 #include "mbed.h"
 #include "Pacemaker.h"
+#include <string>
 
 class Communications : public Pacemaker {
 	private:
@@ -13,13 +14,17 @@ class Communications : public Pacemaker {
 		uint8_t o_CommOut;
 		//o_vp:??
 		uint32_t baudRate;
+
+		bool connectDCM();
+		//void transmitDeviceInfo();
 		
 	public:
 		Communications();
 		void initEGM();
 		
 	protected:
-		int sendEGM();
+		bool sendEGM();
+		//string[] recieveDeviceInfo();
 
 };
 
