@@ -41,25 +41,28 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer4.Add( gSizer3, 1, 0, 5 )
 		
-		self.Img_Connected = wx.StaticBitmap( self, wx.ID_ANY, wx.Bitmap( u"img/disconnected.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
+		self.Img_Connected = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
 		gSizer4.Add( self.Img_Connected, 0, wx.ALL, 5 )
 		
 		
 		gSizer1.Add( gSizer4, 1, 0, 5 )
 		
 		self.PlotFrame = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		gSizer1.Add( self.PlotFrame, 1, wx.EXPAND |wx.ALL, 5 )
+		self.PlotFrame.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+		self.PlotFrame.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+		
+		gSizer1.Add( self.PlotFrame, 1, wx.ALL|wx.EXPAND, 5 )
 		
 		gSizer5 = wx.GridSizer( 4, 4, 0, 0 )
 		
 		gSizer51 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText171 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText171 = wx.StaticText( self, wx.ID_ANY, u"Wait Time", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText171.Wrap( -1 )
 		gSizer51.Add( self.m_staticText171, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl1 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer51.Add( self.m_spinCtrl1, 0, wx.ALL|wx.EXPAND, 5 )
+		self.ParamWait = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
+		gSizer51.Add( self.ParamWait, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer51, 1, wx.EXPAND, 5 )
@@ -185,22 +188,26 @@ class MainFrame ( wx.Frame ):
 		self.Centre( wx.BOTH )
 		
 		# Connect Events
+		self.Bind( wx.EVT_CLOSE, self.OnWindowClose )
 		self.Bttn_Scan.Bind( wx.EVT_BUTTON, self.OnScanBttnClicked )
 		self.Bttn_ConnectDisconnect.Bind( wx.EVT_BUTTON, self.OnConnectBttnClicked )
-		self.PlotFrame.Bind( wx.EVT_MOTION, self.OnPlotMouseover )
+		self.Btn_LoadParams.Bind( wx.EVT_BUTTON, self.OnLoadBttnClicked )
 	
 	def __del__( self ):
 		pass
 	
 	
 	# Virtual event handlers, overide them in your derived class
+	def OnWindowClose( self, event ):
+		event.Skip()
+	
 	def OnScanBttnClicked( self, event ):
 		event.Skip()
 	
 	def OnConnectBttnClicked( self, event ):
 		event.Skip()
 	
-	def OnPlotMouseover( self, event ):
+	def OnLoadBttnClicked( self, event ):
 		event.Skip()
 	
 
