@@ -19,7 +19,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	def __init__(self, parent):
 		pacemakerInterface.MainFrame.__init__(self, parent)
 		
-		self.plotLength = 50
+		self.plotLength = 100
 		self.plotPoints = [0]*self.plotLength
 		
 		self.THING = 0.0
@@ -36,10 +36,31 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		
 		self.StaticBitmapDisconnected = scale_bitmap(wx.Bitmap('img/disconnected.png', wx.BITMAP_TYPE_ANY), 50, 50)
 		self.StaticBitmapConnected = scale_bitmap(wx.Bitmap('img/connected.png', wx.BITMAP_TYPE_ANY), 50, 50)
-		self.Img_Connected.SetBitmap(self.StaticBitmapDisconnected)		
+		self.Img_Connected.SetBitmap(self.StaticBitmapDisconnected)
+		
+		self.timer = wx.Timer(self, 100)
+		self.Bind(wx.EVT_TIMER, self.OnTimer)
+		self.timer.Start(10)
+		
+		self.waitingTime = 0.1
 	
-	def OnPlotMouseover(self, event):
-		self.AddPoint(numpy.sin(self.THING))
+	def OnTimer(self, event):
+		if (self.SerialInterface != None and self.SerialInterface.is_open):
+			if self.SerialInterface.inWaiting() == 0:
+				return
+			buf = ''
+			data = self.SerialInterface.read()
+			while (data != '\n'):
+				buf += data
+				data = self.SerialInterface.read()
+			try:
+				data = float(buf)
+			except(ValueError):
+				print 'Error converting', buf
+				data = -1
+		else:
+			data = numpy.sin(self.THING)
+		self.AddPoint(data)
 		self.THING += 0.1
 		self.UpdateGraph()
 	
@@ -69,7 +90,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				return
 			print 'Connecting to ' + activeText + '\n'
 			
-			self.SerialInterface = open_port(activeText, baud = 9600, timeout = None)
+			self.SerialInterface = open_port(activeText, baud = 9600, timeout = 3)
 			if (self.SerialInterface.is_open):
 				self.Bttn_ConnectDisconnect.SetLabel('Disconnect')
 				self.Img_Connected.SetBitmap(self.StaticBitmapConnected)
@@ -82,9 +103,21 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				self.Img_Connected.SetBitmap(self.StaticBitmapDisconnected)
 			else:
 				print 'Failed to disconnect from serial device!'
+				
+	def OnLoadBttnClicked(self, event):
+		self.waitingTime = self.ParamWait.GetValue()
+	
+		self.SerialInterface.write('W:0.'+str(self.waitingTime)+'0000000\n')
+		self.SerialInterface.flush()
+		print 'Writing ' + 'W'+str(self.waitingTime)
+		
+	def OnWindowClose(self, event):
+		self.timer.Stop()
+		self.Destroy()
 
 if (__name__ == '__main__'):
 	app = wx.App(False) 
 	frame = pacemakerInterfaceMainFrame(None) 
-	frame.Show(True) 
+	frame.Show(True)
+	
 	app.MainLoop() 
