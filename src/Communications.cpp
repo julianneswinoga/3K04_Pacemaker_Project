@@ -28,6 +28,11 @@ void Communications::startSerial() {
 	USBSerialConnection.attach(this, &Communications::serialCallback); // Add an inturupt
 }
 
+/*void Communications::debug(string msg, ...) {
+	va_list args;
+	USBSerialConnection.vprintf(msg, args);
+}*/
+
 bool Communications::sendEGM() {
 	//Return true if data sent successfully over serial.
 	return true;

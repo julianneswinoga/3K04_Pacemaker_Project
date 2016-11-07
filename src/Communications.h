@@ -23,6 +23,7 @@ class Communications : public Pacemaker {
 		Communications();
 		void initEGM();
 		void startSerial();
+		//void debug(string msg, ...);
 		
 		Serial USBSerialConnection;
 		
