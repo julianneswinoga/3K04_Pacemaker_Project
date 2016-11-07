@@ -17,10 +17,15 @@ class Communications : public Pacemaker {
 
 		bool connectDCM();
 		//void transmitDeviceInfo();
+		void serialCallback();
 		
 	public:
 		Communications();
 		void initEGM();
+		void startSerial();
+		//void debug(string msg, ...);
+		
+		Serial USBSerialConnection;
 		
 	protected:
 		bool sendEGM();
