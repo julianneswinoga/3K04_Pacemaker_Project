@@ -5,22 +5,39 @@ Communications::Communications() : USBSerialConnection(USBTX, USBRX)  {
 	baudRate = 57600;
 }
 
-void Communications::serialCallback() {
-	char buf[128]; // char array to store serial buffer
-	char data; // Actual data byte coming in
-	int i;
-	for(i = 0; (data = USBSerialConnection.getc()) >= 32; i++) // While there are visible characters (catches both \r and \n)
-		buf[i] = data; // Store the data
+uint16_t Communications::twoByteRecieve() {
+	uint8_t b[2];
 	
-	buf[i] = '\0'; // Make buf a null terminated C string
+	for (uint8_t C = 0;C < sizeof(b);C++)
+		b[C] = USBSerialConnection.getc();
 	
-	switch (buf[0]) {
-		case 'W':
-			/*char* numStr = strtok(buf, ":");
-			numStr = strtok(NULL, ":");
-			sscanf(numStr, "%f", &waitTime);*/
-			break;
-	}
+	return (b[1] << 8) | b[0];
+}
+
+float Communications::floatRecieve() {
+	float f;
+	uint8_t b[4];
+	
+	for (uint8_t C = 0;C < sizeof(b);C++)
+		b[C] = USBSerialConnection.getc();
+	
+	memcpy(&f, &b, 4);
+	return f;
+}
+
+void Communications::serialCallback() {	
+	packetStruct.p_pacingState = USBSerialConnection.getc();
+	packetStruct.p_pacingMode = USBSerialConnection.getc();
+	packetStruct.p_hysteresis = twoByteRecieve();
+	packetStruct.p_hysteresisInterval = twoByteRecieve();
+	packetStruct.p_vPaceAmp = twoByteRecieve();
+	packetStruct.p_vPaceWidth_10x = twoByteRecieve();
+	packetStruct.p_VRP = twoByteRecieve();
+	packetStruct.batteryVoltage = floatRecieve();
+	packetStruct.leadImpedance = floatRecieve();
+	
+	while (USBSerialConnection.getc() >= 32)
+		; // Wait for null/endline termination
 }
 
 void Communications::startSerial() {
