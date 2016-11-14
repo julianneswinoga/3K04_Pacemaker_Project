@@ -40,12 +40,12 @@ uint8_t Pace::getBaseHeartRate() {
 }
 
 /*enum Pace::getPaceMode() {
-	return paceMode;
-}
-
-enum Pace::getPaceState() {
-	return paceState;
+	return pacingMode;
 }*/
+
+PACESTATE Pace::getPaceState() {
+	return pacingState;
+}
 
 // Protected functions
 void Pace::setHysteresisInterval(uint16_t h) {
@@ -76,24 +76,28 @@ void Pace::setBaseHeartRate(uint8_t h) {
 	baseHeartRate = h;
 }
 
-/*void Pace::setPaceState(enum state) {
+void Pace::setPaceState(PACESTATE state) {
 	switch (state)
 	{
-	
 	case PERMANENT:
-
+		pacingState = PERMANENT;
+		break;
 	case TEMPORARY:
-
+		pacingState =TEMPORARY;
+		break;
 	case PACE_NOW:
-
+		pacingState =PACE_NOW;
+		break;
 	case MAGNET:
-
-	case POWER_ON_INPLACE:
-
+		pacingState =MAGNET;
+		break;
+	case POWER_ON_RESET:
+		pacingState = POWER_ON_RESET;
+		break;
 	}
 }
 
-void Pace::setPaceMode(enum mode) {
+/*void Pace::setPaceMode(enum mode) {
 	switch(mode):
 	{
 	case Off:

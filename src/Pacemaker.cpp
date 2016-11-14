@@ -32,6 +32,7 @@ BATTERYSTATE Pacemaker::getBatteryStatus(){
 	//Use batteryVoltage and replaceBatteryVoltage to figure out battery status level
 	//return one of{BOL,ERN,ERT,ERP}
 	getBatteryStatus();
+	
 	if(batteryVoltage <= replaceBatteryVoltage){
 		return ERT;
 	}
