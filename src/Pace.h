@@ -5,11 +5,13 @@
 #include "Sense.h"
 
 typedef enum {PERMANENT,TEMPORARY,PACE_NOW,MAGNET,POWER_ON_RESET} PACESTATE;
+typedef enum {OFF,AAT,AOO,AAI,VOO,VVI,VDD,DOO,DDI,DDD,AOOR,
+			  AAIR,VOOR,VVIR,VDDR,DOOR,DDIR,DDDR} PACEMODE;
 
 class Pace : public Sense {
 	private:
 		PACESTATE pacingState;
-		//pacingMode: enum
+		PACEMODE pacingMode;
 		bool hysteresis;
 		uint16_t hysteresisInterval;
 		uint16_t lowrateInterval;
