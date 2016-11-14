@@ -4,9 +4,11 @@
 #include "mbed.h"
 #include "Sense.h"
 
+typedef enum {PERMANENT,TEMPORARY,PACE_NOW,MAGNET,POWER_ON_RESET} PACESTATE;
+
 class Pace : public Sense {
 	private:
-		//pacingState: enum
+		PACESTATE pacingState;
 		//pacingMode: enum
 		bool hysteresis;
 		uint16_t hysteresisInterval;
@@ -20,7 +22,7 @@ class Pace : public Sense {
 	public:
 		Pace();
 		//enum getPaceMode();
-		//enum getPaceState();
+		PACESTATE getPaceState();
 		uint16_t getHysteresisInterval();
 		uint16_t getLowRateInterval();
 		uint16_t getvPaceAmp();
@@ -31,7 +33,7 @@ class Pace : public Sense {
 		
 	protected:
 		//void setPaceMode(enum);
-		//void setPaceState(enum);
+		void setPaceState(PACESTATE);
 		void setHysteresisInterval(uint16_t);
 		void setLowRateInterval(uint16_t);
 		void setvPaceAmp(uint16_t);
