@@ -34,20 +34,18 @@ class Communications : public Pacemaker {
 		uint16_t twoByteRecieve();
 		float floatRecieve();
 		bool connectDCM();
-		//void transmitDeviceInfo();
+		void transmitDeviceInfo();
 		void serialCallback();
 		
 	public:
 		Communications();
 		void initEGM();
-		void startSerial();
-		//void debug(string msg, ...);
 		
 		Serial USBSerialConnection;
 		
 	protected:
 		bool sendEGM();
-		//string[] recieveDeviceInfo();
+		void recieveDeviceInfo();
 
 };
 

@@ -3,6 +3,7 @@
 Communications::Communications() : USBSerialConnection(USBTX, USBRX)  {
 	//Initialize Critical State Variables
 	baudRate = 57600;
+	connectDCM();
 }
 
 uint16_t Communications::twoByteRecieve() {
@@ -44,16 +45,6 @@ void Communications::serialCallback() {
 		; // Wait for null/endline termination
 }
 
-void Communications::startSerial() {
-	USBSerialConnection.baud(baudRate); // Set the baudrate
-	USBSerialConnection.attach(this, &Communications::serialCallback); // Add an inturupt
-}
-
-/*void Communications::debug(string msg, ...) {
-	va_list args;
-	USBSerialConnection.vprintf(msg, args);
-}*/
-
 bool Communications::sendEGM() {
 	//Return true if data sent successfully over serial.
 	return true;
@@ -64,14 +55,21 @@ void Communications::initEGM() {
 }
 
 bool Communications::connectDCM() {
-	//Returns true if connection successful
+	USBSerialConnection.baud(baudRate); // Set the baudrate
+	USBSerialConnection.attach(this, &Communications::serialCallback); // Add an inturupt
 	return true;
 }
 
-/*string[] Communications::recieveDeviceInfo() {
-	return [deviceID]
+void Communications::recieveDeviceInfo() {
+	
 }
 
-void Communications::transmitDeviceInfo([deviceID]) {
-
-}*/
+void Communications::transmitDeviceInfo() {
+	USBSerialConnection.printf("%s\0%s\0%s\0%f\0",
+		deviceID,
+		deviceImplantDate,
+		leadImplantDate,
+		batteryVoltage/*,
+		cardiac_events*/
+	);
+}

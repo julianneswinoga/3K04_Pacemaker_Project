@@ -7,8 +7,7 @@ float waitTime = 0.1f;
 float increase = 0.05f;
 
 int main() {	
-	Communications comms;
-	comms.startSerial();
+	Communications comms();
 	
 	Pacemaker p();
 	
