@@ -21,8 +21,11 @@ typedef struct {
 	uint8_t checkSum;
 } RECEV_PACKET;
 
+enum class SERIAL_RECIEVE_MODE { UPDATE_PARAMS, UPDATE_DEVICE_INFO };
+
 class Communications : public Pacemaker {
 	private:
+		SERIAL_RECIEVE_MODE serialRecieveMode
 		RECEV_PACKET packetStruct;
 		uint16_t vraw;
 		uint16_t f_marker;
