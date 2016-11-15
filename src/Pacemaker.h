@@ -4,7 +4,7 @@
 #include "mbed.h"
 #include <string>
 
-enum class BATTERYSTATE{BOL,ERN,ERT,ERP};
+enum class BATTERYSTATE {BOL,ERN,ERT,ERP};
 
 class Pacemaker {
 	private:
