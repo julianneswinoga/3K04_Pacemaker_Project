@@ -24,7 +24,6 @@ void Pacemaker::clearCardiacEvents(){
 
 float Pacemaker::getLeadImpedance(){
 	return leadImpedance;
-	//batteryState temp = BOL;
 }
 
 BATTERYSTATE Pacemaker::getBatteryStatus(){
