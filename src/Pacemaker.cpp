@@ -3,6 +3,7 @@
 Pacemaker::Pacemaker()  {
 	//Initialize Critical State Variables
 	setMaxVOut(3.2);
+
 }
 
 //Protected Functions
@@ -26,10 +27,25 @@ float Pacemaker::getLeadImpedance(){
 	return leadImpedance;
 }
 
-/* enum Pacemaker::getBatteryStatus(){
+BATTERYSTATE Pacemaker::getBatteryStatus(){
+	//enum batteryState {BOL,ERN,ERT,ERP};
 	//Use batteryVoltage and replaceBatteryVoltage to figure out battery status level
-	return one of{BOL,ERN,ERT,ERP}
-}*/
+	//return one of{BOL,ERN,ERT,ERP}
+
+	if(batteryVoltage <= replaceBatteryVoltage){
+		return BATTERYSTATE::ERT;
+	
+	} else if(batteryVoltage >= (0.70*replaceBatteryVoltage)){
+		return BATTERYSTATE::BOL;
+	
+	} else if((batteryVoltage > replaceBatteryVoltage) && (batteryVoltage < (0.70*replaceBatteryVoltage))){
+		return BATTERYSTATE::ERN;
+	
+	} else{
+		return BATTERYSTATE::ERP;
+	}
+
+}
 
 
 

@@ -39,13 +39,13 @@ uint8_t Pace::getBaseHeartRate() {
 	return baseHeartRate;
 }
 
-/*enum Pace::getPaceMode() {
-	return paceMode;
+PACEMODE Pace::getPaceMode() {
+	return pacingMode;
 }
 
-enum Pace::getPaceState() {
-	return paceState;
-}*/
+PACESTATE Pace::getPaceState() {
+	return pacingState;
+}
 
 // Protected functions
 void Pace::setHysteresisInterval(uint16_t h) {
@@ -76,61 +76,86 @@ void Pace::setBaseHeartRate(uint8_t h) {
 	baseHeartRate = h;
 }
 
-/*void Pace::setPaceState(enum state) {
+void Pace::setPaceState(PACESTATE state) {
 	switch (state)
 	{
-	
-	case PERMANENT:
-
-	case TEMPORARY:
-
-	case PACE_NOW:
-
-	case MAGNET:
-
-	case POWER_ON_INPLACE:
-
+	case PACESTATE::PERMANENT:
+		pacingState = PACESTATE::PERMANENT;
+		break;
+	case PACESTATE::TEMPORARY:
+		pacingState =PACESTATE::TEMPORARY;
+		break;
+	case PACESTATE::PACE_NOW:
+		pacingState =PACESTATE::PACE_NOW;
+		break;
+	case PACESTATE::MAGNET:
+		pacingState =PACESTATE::MAGNET;
+		break;
+	case PACESTATE::POWER_ON_RESET:
+		pacingState = PACESTATE::POWER_ON_RESET;
+		break;
 	}
 }
 
-void Pace::setPaceMode(enum mode) {
-	switch(mode):
+void Pace::setPaceMode(PACEMODE mode) {
+	switch(mode)
 	{
-	case Off:
-
-	case AAT:
-
-	case VVT:
-	
-	case AOO:
-
-	case AAI:
-
-	case VVI:
-
-	case VDD:
-
-	case DOO:
-
-	case DDI:
-
-	case DDD:
-
-	case AOOR:
-
-	case AAIR:
-
-	case COOR:
-
-	case VVIR:
-
-	case VDDR:
-
-	case DOOR:
-
-	case DDIR:
-
-	case DDDR:
-	
+	case PACEMODE::OFF:
+		pacingMode = PACEMODE::OFF;
+		break;
+	case PACEMODE::AAT:
+		pacingMode = PACEMODE::AAT;
+		break;
+	case PACEMODE::VVT:
+		pacingMode = PACEMODE::VVT;
+		break;
+	case PACEMODE::AOO:
+		pacingMode = PACEMODE::AOO;
+		break;
+	case PACEMODE::AAI:
+		pacingMode = PACEMODE::AAI;
+		break;
+	case PACEMODE::VOO:
+		pacingMode = PACEMODE::VOO;
+		break;
+	case PACEMODE::VVI:
+		pacingMode = PACEMODE::VVI;
+		break;
+	case PACEMODE::VDD:
+		pacingMode = PACEMODE::VDD;
+		break;
+	case PACEMODE::DOO:
+		pacingMode = PACEMODE::DOO;
+		break;
+	case PACEMODE::DDI:
+		pacingMode = PACEMODE::DDI;
+		break;
+	case PACEMODE::DDD:
+		pacingMode = PACEMODE::DDD;
+		break;
+	case PACEMODE::AOOR:
+		pacingMode = PACEMODE::AOOR;
+		break;
+	case PACEMODE::AAIR:
+		pacingMode = PACEMODE::AAIR;
+		break;
+	case PACEMODE::VOOR:
+		pacingMode = PACEMODE::VOOR;
+		break;
+	case PACEMODE::VVIR:
+		pacingMode = PACEMODE::VVIR;
+		break;
+	case PACEMODE::VDDR:
+		pacingMode = PACEMODE::VDDR;
+		break;
+	case PACEMODE::DOOR:
+		pacingMode = PACEMODE::DOOR;
+		break;
+	case PACEMODE::DDIR:
+		pacingMode = PACEMODE::DDIR;
+		break;
+	case PACEMODE::DDDR:
+		pacingMode = PACEMODE::DDDR;
+		break;
 	}
-}*/
+}
