@@ -4,9 +4,9 @@
 #include "mbed.h"
 #include "Pacemaker.h"
 
-enum class CHAMBERS{NONE,ATRIUM,VENTRICLE,DUAL};
+enum class CHAMBERS {NONE,ATRIUM,VENTRICLE,DUAL};
 enum class ACTIVITYRESPONSE {NONE,TRIGGERED,INHIBITED,DUAL};
-enum class ACTIVITYTHRESHOLD{V_LOW,LOW,MED_LOW,MED,MED_HIGH,HIGH,V_HIGH};
+enum class ACTIVITYTHRESHOLD {V_LOW,LOW,MED_LOW,MED,MED_HIGH,HIGH,V_HIGH};
 
 class Sense : public Pacemaker {
 	private:

@@ -3,6 +3,7 @@
 Pacemaker::Pacemaker()  {
 	//Initialize Critical State Variables
 	setMaxVOut(3.2);
+
 }
 
 //Protected Functions
@@ -33,17 +34,14 @@ BATTERYSTATE Pacemaker::getBatteryStatus(){
 
 	if(batteryVoltage <= replaceBatteryVoltage){
 		return BATTERYSTATE::ERT;
-	}
-
-	else if(batteryVoltage >= (0.70*replaceBatteryVoltage)){
+	
+	} else if(batteryVoltage >= (0.70*replaceBatteryVoltage)){
 		return BATTERYSTATE::BOL;
-	}
-
-	else if((batteryVoltage > replaceBatteryVoltage) && (batteryVoltage < (0.70*replaceBatteryVoltage))){
+	
+	} else if((batteryVoltage > replaceBatteryVoltage) && (batteryVoltage < (0.70*replaceBatteryVoltage))){
 		return BATTERYSTATE::ERN;
-	}
-
-	else{
+	
+	} else{
 		return BATTERYSTATE::ERP;
 	}
 
