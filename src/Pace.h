@@ -5,7 +5,7 @@
 #include "Sense.h"
 
 typedef enum {PERMANENT,TEMPORARY,PACE_NOW,MAGNET,POWER_ON_RESET} PACESTATE;
-typedef enum {OFF,AAT,AOO,AAI,VOO,VVI,VDD,DOO,DDI,DDD,AOOR,
+typedef enum {OFF,AAT,VVT,AOO,AAI,VOO,VVI,VDD,DOO,DDI,DDD,AOOR,
 			  AAIR,VOOR,VVIR,VDDR,DOOR,DDIR,DDDR} PACEMODE;
 
 class Pace : public Sense {
@@ -23,7 +23,7 @@ class Pace : public Sense {
 		
 	public:
 		Pace();
-		//enum getPaceMode();
+		PACEMODE getPaceMode();
 		PACESTATE getPaceState();
 		uint16_t getHysteresisInterval();
 		uint16_t getLowRateInterval();
@@ -34,7 +34,7 @@ class Pace : public Sense {
 		uint8_t getBaseHeartRate();
 		
 	protected:
-		//void setPaceMode(enum);
+		void setPaceMode(PACEMODE);
 		void setPaceState(PACESTATE);
 		void setHysteresisInterval(uint16_t);
 		void setLowRateInterval(uint16_t);
