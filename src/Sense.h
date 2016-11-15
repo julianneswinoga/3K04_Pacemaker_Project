@@ -4,35 +4,29 @@
 #include "mbed.h"
 #include "Pacemaker.h"
 
-namespace chambers{
-	typedef enum {NONE,ATRIUM,VENTRICLE,DUAL} CHAMBERS;
-}
-
-namespace activityresponse{
-	typedef enum {NONE,TRIGGERED,INHIBITED,DUAL} ACTIVITYRESPONSE;
-}
-
-typedef enum {V_LOW,LOW,MED_LOW,MED,MED_HIGH,HIGH,V_HIGH} ACTIVITYTHRESHOLD;
+enum class CHAMBERS{NONE,ATRIUM,VENTRICLE,DUAL};
+enum class ACTIVITYRESPONSE {NONE,TRIGGERED,INHIBITED,DUAL};
+enum class ACTIVITYTHRESHOLD{V_LOW,LOW,MED_LOW,MED,MED_HIGH,HIGH,V_HIGH};
 
 class Sense : public Pacemaker {
 	private:
-		chambers::CHAMBERS chambersSensed;
-		activityresponse::ACTIVITYRESPONSE activityResponse;
+		CHAMBERS chambersSensed;
+		ACTIVITYRESPONSE activityResponse;
 		bool magnetInPlace;
 		ACTIVITYTHRESHOLD activityThreshold;
+		void measureBatteryVoltage();
 	protected:
-		void setChambersSensed(chambers::CHAMBERS);
-		void setActivityResponse(activityresponse::ACTIVITYRESPONSE);
+		void setChambersSensed(CHAMBERS);
+		void setActivityResponse(ACTIVITYRESPONSE);
 		void setActivityThreshold(ACTIVITYTHRESHOLD);
 		uint16_t maxSensorRate;
 		void setMagnetInPlace(bool);
 		void measureLeadImpedance();
-		void measureBatteryVoltage();
 		
 	public:
 		Sense();
-		chambers::CHAMBERS getChambersSensed();
-		activityresponse::ACTIVITYRESPONSE getActivityResponse();
+		CHAMBERS getChambersSensed();
+		ACTIVITYRESPONSE getActivityResponse();
 		ACTIVITYTHRESHOLD getActivityThreshold();
 		bool getMagnetInPlace();
 };

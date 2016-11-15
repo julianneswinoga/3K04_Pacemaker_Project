@@ -7,20 +7,20 @@ Sense::Sense()  {
 	setMagnetInPlace(false);
 }
 
-void Sense::setChambersSensed(chambers::CHAMBERS c){
+void Sense::setChambersSensed(CHAMBERS c){
 	chambersSensed = c;
 }
 
 
-void Sense::setActivityResponse(activityresponse::ACTIVITYRESPONSE a){
+void Sense::setActivityResponse(ACTIVITYRESPONSE a){
 	activityResponse = a;
 }
 
-chambers::CHAMBERS Sense::getChambersSensed(){
+CHAMBERS Sense::getChambersSensed(){
 	return chambersSensed;
 }
 
-activityresponse::ACTIVITYRESPONSE Sense::getActivityResponse(){
+ACTIVITYRESPONSE Sense::getActivityResponse(){
 	return activityResponse;
 }
 
