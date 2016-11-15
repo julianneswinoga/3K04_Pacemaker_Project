@@ -4,6 +4,7 @@ Communications::Communications() : USBSerialConnection(USBTX, USBRX)  {
 	//Initialize Critical State Variables
 	baudRate = 57600;
 	connectDCM();
+	serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_PARAMS;
 }
 
 uint16_t Communications::twoByteRecieve() {
@@ -27,22 +28,43 @@ float Communications::floatRecieve() {
 }
 
 void Communications::serialCallback() {
-	packetStruct.FnCode						= USBSerialConnection.getc();
-	
-	packetStruct.p_pacingState			= USBSerialConnection.getc();
-	packetStruct.p_pacingMode			= USBSerialConnection.getc();
-	packetStruct.p_hysteresis				= twoByteRecieve();
-	packetStruct.p_hysteresisInterval	= twoByteRecieve();
-	packetStruct.p_vPaceAmp				= twoByteRecieve();
-	packetStruct.p_vPaceWidth_10x	= twoByteRecieve();
-	packetStruct.p_VRP						= twoByteRecieve();
-	//packetStruct.batteryVoltage			= floatRecieve();
-	//packetStruct.leadImpedance			= floatRecieve();
-	
-	packetStruct.checkSum					= USBSerialConnection.getc();
-	
-	while (USBSerialConnection.getc() >= 32)
-		; // Wait for null/endline termination
+	switch (serialRecieveMode) {
+		case SERIAL_RECIEVE_MODE::UPDATE_PARAMS:
+			packetStruct.FnCode				= USBSerialConnection.getc();
+			
+			packetStruct.p_pacingState			= USBSerialConnection.getc();
+			packetStruct.p_pacingMode			= USBSerialConnection.getc();
+			packetStruct.p_hysteresis			= twoByteRecieve();
+			packetStruct.p_hysteresisInterval	= twoByteRecieve();
+			packetStruct.p_vPaceAmp			= twoByteRecieve();
+			packetStruct.p_vPaceWidth_10x	= twoByteRecieve();
+			packetStruct.p_VRP				= twoByteRecieve();
+			//packetStruct.batteryVoltage			= floatRecieve();
+			//packetStruct.leadImpedance			= floatRecieve();
+			
+			packetStruct.checkSum				= USBSerialConnection.getc();
+			
+			while (USBSerialConnection.getc() >= 32)
+				; // Wait for null/endline termination
+			
+			USBSerialConnection.printf("%i, %i, %i, %i, %i, %i, %i, %i, %i\n",
+				packetStruct.FnCode,
+				packetStruct.p_pacingState,
+				packetStruct.p_pacingMode,
+				packetStruct.p_hysteresis,
+				packetStruct.p_hysteresisInterval,
+				packetStruct.p_vPaceAmp,
+				packetStruct.p_vPaceWidth_10x,
+				packetStruct.p_VRP,
+				packetStruct.checkSum
+			);
+			
+			break;
+			
+		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:
+			
+			break;
+	}
 }
 
 bool Communications::sendEGM() {

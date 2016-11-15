@@ -43,21 +43,26 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.timer.Start(10)
 	
 	def OnTimer(self, event):
-		if (self.SerialInterface != None and self.SerialInterface.is_open):
-			if self.SerialInterface.inWaiting() == 0:
-				return
-			buf = ''
-			data = self.SerialInterface.read()
-			while (data != '\n'):
-				buf += data
-				data = self.SerialInterface.read()
-			try:
-				data = float(buf)
-			except(ValueError):
-				print 'Error converting', buf
-				data = -1
-		else:
+		if (self.SerialInterface == None or not self.SerialInterface.is_open):
 			return
+		
+		if (self.SerialInterface.inWaiting() == 0):
+			return
+			
+		buf = ''
+		data = self.SerialInterface.read()
+		while (data != '\0'):
+			buf += data
+			data = self.SerialInterface.read()
+		try:
+			data = float(buf)
+		except(ValueError):
+			print 'Error converting', buf
+			data = -1
+		
+		print data
+		return
+		
 		self.AddPoint(data)
 		self.THING += 0.1
 		self.UpdateGraph()
@@ -104,25 +109,26 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				
 	def OnLoadBttnClicked(self, event):
 		if (self.SerialInterface == None or not self.SerialInterface.is_open):
-			return
+			pass
+			#return
 		
 		byteStream = []
 		
-		byteStream.append(bytes([self.choice_FnCode.GetSelection()])) # FnCode
+		byteStream.append(bytearray([self.choice_FnCode.GetSelection()])) # FnCode
 		
-		byteStream.append(bytes([self.choice_pacingState.GetSelection()])) # pacingState
-		byteStream.append(bytes([self.choice_pacingMode.GetSelection()])) # pacingMode
-		byteStream.append(bytes([self.choice_hysteresis.GetSelection()])) # hysteresis
-		byteStream.append(bytes([self.spinctrl_hysteresisInterval.GetValue()])) # hysteresisInterval
-		byteStream.append(bytes([self.spinctrl_vPaceAmp.GetValue()])) # vPaceAmp
-		byteStream.append(bytes([self.spinctrl_vPaceWidth_10x.GetValue()])) # vPaceWidth_10x
-		byteStream.append(bytes([self.spinctrl_VRP.GetValue()])) # VRP
+		byteStream.append(bytearray([self.choice_pacingState.GetSelection()])) # pacingState
+		byteStream.append(bytearray([self.choice_pacingMode.GetSelection()])) # pacingMode
+		byteStream.append(bytearray([self.choice_hysteresis.GetSelection()])) # hysteresis
+		byteStream.append(bytearray([self.spinctrl_hysteresisInterval.GetValue()])) # hysteresisInterval
+		byteStream.append(bytearray([self.spinctrl_vPaceAmp.GetValue()])) # vPaceAmp
+		byteStream.append(bytearray([self.spinctrl_vPaceWidth_10x.GetValue()])) # vPaceWidth_10x
+		byteStream.append(bytearray([self.spinctrl_VRP.GetValue()])) # VRP
 		
-		byteStream.append(bytes([0])); # checksum
+		byteStream.append(bytearray([0])); # checksum
 		
 		byteStream.append("\0"); # null ending byte
-		
-		self.SerialInterface.write(bytes(byteStream))
+		print byteStream
+		self.SerialInterface.write(byteStream)
 		self.SerialInterface.flush()
 		
 	def OnWindowClose(self, event):
