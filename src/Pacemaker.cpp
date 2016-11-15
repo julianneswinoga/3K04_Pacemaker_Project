@@ -31,22 +31,21 @@ BATTERYSTATE Pacemaker::getBatteryStatus(){
 	//enum batteryState {BOL,ERN,ERT,ERP};
 	//Use batteryVoltage and replaceBatteryVoltage to figure out battery status level
 	//return one of{BOL,ERN,ERT,ERP}
-	getBatteryStatus();
-	
+
 	if(batteryVoltage <= replaceBatteryVoltage){
-		return ERT;
+		return BATTERYSTATE::ERT;
 	}
 
-	else if(batteryVoltage >= 0.70*replaceBatteryVoltage){
-		return BOL;
+	else if(batteryVoltage >= (0.70*replaceBatteryVoltage)){
+		return BATTERYSTATE::BOL;
 	}
 
-	else if(batteryVoltage > replaceBatteryVoltage && batteryVoltage < 0.70*replaceBatteryVoltage){
-		return ERN;
+	else if((batteryVoltage > replaceBatteryVoltage) && (batteryVoltage < (0.70*replaceBatteryVoltage))){
+		return BATTERYSTATE::ERN;
 	}
 
 	else{
-		return ERP;
+		return BATTERYSTATE::ERP;
 	}
 
 }
