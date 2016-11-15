@@ -1,3 +1,4 @@
 /.build
 /update.bat
 /update.sh
+/gui/*.pyc
