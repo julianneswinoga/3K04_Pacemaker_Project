@@ -11,15 +11,15 @@ class Pacemaker {
 		PinName leadOneOutPin;
 		PinName leadTwoOutPin;
 		
-		string deviceID;
-		string deviceImplantDate;
-		string leadImplantDate;
 		float maxVOut;
 		uint8_t txRegister;
 		uint8_t rxRegister;
 		float leadImpedanceThreshold;
 
 	protected:
+		string deviceID;
+		string deviceImplantDate;
+		string leadImplantDate;
 		float leadImpedance;
 		float replaceBatteryVoltage;
 		float batteryVoltage;
