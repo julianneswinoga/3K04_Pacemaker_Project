@@ -25,16 +25,20 @@ float Communications::floatRecieve() {
 	return f;
 }
 
-void Communications::serialCallback() {	
-	packetStruct.p_pacingState = USBSerialConnection.getc();
-	packetStruct.p_pacingMode = USBSerialConnection.getc();
-	packetStruct.p_hysteresis = twoByteRecieve();
-	packetStruct.p_hysteresisInterval = twoByteRecieve();
-	packetStruct.p_vPaceAmp = twoByteRecieve();
-	packetStruct.p_vPaceWidth_10x = twoByteRecieve();
-	packetStruct.p_VRP = twoByteRecieve();
-	packetStruct.batteryVoltage = floatRecieve();
-	packetStruct.leadImpedance = floatRecieve();
+void Communications::serialCallback() {
+	packetStruct.FnCode						= USBSerialConnection.getc();
+	
+	packetStruct.p_pacingState			= USBSerialConnection.getc();
+	packetStruct.p_pacingMode			= USBSerialConnection.getc();
+	packetStruct.p_hysteresis				= twoByteRecieve();
+	packetStruct.p_hysteresisInterval	= twoByteRecieve();
+	packetStruct.p_vPaceAmp				= twoByteRecieve();
+	packetStruct.p_vPaceWidth_10x	= twoByteRecieve();
+	packetStruct.p_VRP						= twoByteRecieve();
+	//packetStruct.batteryVoltage			= floatRecieve();
+	//packetStruct.leadImpedance			= floatRecieve();
+	
+	packetStruct.checkSum					= USBSerialConnection.getc();
 	
 	while (USBSerialConnection.getc() >= 32)
 		; // Wait for null/endline termination

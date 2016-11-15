@@ -41,8 +41,6 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.timer = wx.Timer(self, 100)
 		self.Bind(wx.EVT_TIMER, self.OnTimer)
 		self.timer.Start(10)
-		
-		self.waitingTime = 0.1
 	
 	def OnTimer(self, event):
 		if (self.SerialInterface != None and self.SerialInterface.is_open):
@@ -59,7 +57,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				print 'Error converting', buf
 				data = -1
 		else:
-			data = numpy.sin(self.THING)
+			return
 		self.AddPoint(data)
 		self.THING += 0.1
 		self.UpdateGraph()
@@ -105,11 +103,27 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				print 'Failed to disconnect from serial device!'
 				
 	def OnLoadBttnClicked(self, event):
-		self.waitingTime = self.ParamWait.GetValue()
-	
-		self.SerialInterface.write('W:0.'+str(self.waitingTime)+'0000000\n')
+		if (self.SerialInterface == None or not self.SerialInterface.is_open):
+			return
+		
+		byteStream = []
+		
+		byteStream.append(bytes([self.choice_FnCode.GetSelection()])) # FnCode
+		
+		byteStream.append(bytes([self.choice_pacingState.GetSelection()])) # pacingState
+		byteStream.append(bytes([self.choice_pacingMode.GetSelection()])) # pacingMode
+		byteStream.append(bytes([self.choice_hysteresis.GetSelection()])) # hysteresis
+		byteStream.append(bytes([self.spinctrl_hysteresisInterval.GetValue()])) # hysteresisInterval
+		byteStream.append(bytes([self.spinctrl_vPaceAmp.GetValue()])) # vPaceAmp
+		byteStream.append(bytes([self.spinctrl_vPaceWidth_10x.GetValue()])) # vPaceWidth_10x
+		byteStream.append(bytes([self.spinctrl_VRP.GetValue()])) # VRP
+		
+		byteStream.append(bytes([0])); # checksum
+		
+		byteStream.append("\0"); # null ending byte
+		
+		self.SerialInterface.write(bytes(byteStream))
 		self.SerialInterface.flush()
-		print 'Writing ' + 'W'+str(self.waitingTime)
 		
 	def OnWindowClose(self, event):
 		self.timer.Stop()
