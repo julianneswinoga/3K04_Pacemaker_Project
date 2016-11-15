@@ -2,7 +2,6 @@
 #define PACEMAKER_H
 
 #include "mbed.h"
-#include <string>
 
 enum class BATTERYSTATE {BOL,ERN,ERT,ERP};
 
@@ -19,9 +18,9 @@ class Pacemaker {
 		float leadImpedanceThreshold;
 
 	protected:
-		string deviceID;
-		string deviceImplantDate;
-		string leadImplantDate;
+		char deviceID[64];
+		char deviceImplantDate[64];
+		char leadImplantDate[64];
 		float leadImpedance;
 		float replaceBatteryVoltage;
 		float batteryVoltage;

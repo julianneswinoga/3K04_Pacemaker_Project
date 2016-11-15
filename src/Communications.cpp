@@ -45,8 +45,8 @@ void Communications::serialCallback() {
 		case SERIAL_RECIEVE_MODE::UPDATE_PARAMS:
 			packetStruct.FnCode				= USBSerialConnection.getc();
 			
-			packetStruct.p_pacingState			= USBSerialConnection.getc();
-			packetStruct.p_pacingMode			= USBSerialConnection.getc();
+			packetStruct.p_pacingState		= USBSerialConnection.getc();
+			packetStruct.p_pacingMode		= USBSerialConnection.getc();
 			packetStruct.p_hysteresis			= USBSerialConnection.getc();
 			
 			packetStruct.p_hysteresisInterval	= twoByteRecieve();
@@ -54,7 +54,7 @@ void Communications::serialCallback() {
 			packetStruct.p_vPaceWidth_10x	= twoByteRecieve();
 			packetStruct.p_VRP				= twoByteRecieve();
 			
-			packetStruct.checkSum				= USBSerialConnection.getc();
+			packetStruct.checkSum			= USBSerialConnection.getc();
 			
 			USBSerialConnection.printf("RECIEVED: %i, %i, %i, %i, %i, %i, %i, %i, %i\n",
 				packetStruct.FnCode,
@@ -70,24 +70,13 @@ void Communications::serialCallback() {
 			
 			break;
 			
-		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:			
+		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:
 			
-			char temp[128];
+			stringRecieve(deviceID);			
+			stringRecieve(deviceImplantDate);			
+			stringRecieve(leadImplantDate);
 			
-			stringRecieve(temp);
-			USBSerialConnection.printf("%s\n", temp);
-			deviceID = string(temp).c_str();
-			
-			stringRecieve(temp);
-			USBSerialConnection.printf("%s\n", temp);
-			deviceImplantDate = temp;
-			
-			stringRecieve(temp);
-			USBSerialConnection.printf("%s\n", temp);
-			leadImplantDate = temp;
-			
-			USBSerialConnection.printf("%s\n%s\n%s\n", deviceID, deviceImplantDate, leadImplantDate);
-			//transmitDeviceInfo();
+			transmitDeviceInfo();
 			
 			serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_PARAMS;
 			
@@ -115,7 +104,7 @@ void Communications::recieveDeviceInfo() {
 }
 
 void Communications::transmitDeviceInfo() {
-	USBSerialConnection.printf("%s\0%s\0%s\0%f\0",
+	USBSerialConnection.printf("%s\n%s\n%s\n%f\n",
 		deviceID,
 		deviceImplantDate,
 		leadImplantDate,
