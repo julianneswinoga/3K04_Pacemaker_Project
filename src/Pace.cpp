@@ -39,9 +39,9 @@ uint8_t Pace::getBaseHeartRate() {
 	return baseHeartRate;
 }
 
-/*enum Pace::getPaceMode() {
+PACEMODE Pace::getPaceMode() {
 	return pacingMode;
-}*/
+}
 
 PACESTATE Pace::getPaceState() {
 	return pacingState;
@@ -97,44 +97,65 @@ void Pace::setPaceState(PACESTATE state) {
 	}
 }
 
-/*void Pace::setPaceMode(enum mode) {
-	switch(mode):
+void Pace::setPaceMode(PACEMODE mode) {
+	switch(mode)
 	{
-	case Off:
-
+	case OFF:
+		pacingMode = OFF;
+		break;
 	case AAT:
-
+		pacingMode = AAT;
+		break;
 	case VVT:
-	
+		pacingMode = VVT;
+		break;
 	case AOO:
-
+		pacingMode = AOO;
+		break;
 	case AAI:
-
+		pacingMode = AAI;
+		break;
+	case VOO:
+		pacingMode = VOO;
+		break;
 	case VVI:
-
+		pacingMode = VVI;
+		break;
 	case VDD:
-
+		pacingMode = VDD;
+		break;
 	case DOO:
-
+		pacingMode = DOO;
+		break;
 	case DDI:
-
+		pacingMode = DDI;
+		break;
 	case DDD:
-
+		pacingMode = DDD;
+		break;
 	case AOOR:
-
+		pacingMode = AOOR;
+		break;
 	case AAIR:
-
-	case COOR:
-
+		pacingMode = AAIR;
+		break;
+	case VOOR:
+		pacingMode = VOOR;
+		break;
 	case VVIR:
-
+		pacingMode = VVIR;
+		break;
 	case VDDR:
-
+		pacingMode = VDDR;
+		break;
 	case DOOR:
-
+		pacingMode = DOOR;
+		break;
 	case DDIR:
-
+		pacingMode = DDIR;
+		break;
 	case DDDR:
-	
+		pacingMode = DDDR;
+		break;
 	}
-}*/
+}
