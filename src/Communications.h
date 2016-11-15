@@ -6,6 +6,8 @@
 #include <string>
 
 typedef struct {
+	uint8_t FnCode;
+	
 	uint8_t p_pacingState;
 	uint8_t p_pacingMode;
 	uint16_t p_hysteresis;
@@ -15,6 +17,8 @@ typedef struct {
 	uint16_t p_VRP;
 	float batteryVoltage;
 	float leadImpedance;
+	
+	uint8_t checkSum;
 } RECEV_PACKET;
 
 class Communications : public Pacemaker {
