@@ -43,13 +43,6 @@ class Pace : public Sense {
 		void setVRP(uint16_t);
 		void setMaxHeartRate(uint8_t);
 		void setBaseHeartRate(uint8_t);
-		
-		
-		
-		
-		
-		
-
 
 };
 
