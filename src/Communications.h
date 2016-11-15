@@ -3,7 +3,6 @@
 
 #include "mbed.h"
 #include "Pacemaker.h"
-#include <string>
 
 typedef struct {
 	uint8_t FnCode;

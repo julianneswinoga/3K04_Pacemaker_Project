@@ -95,7 +95,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				self.Img_Connected.SetBitmap(self.StaticBitmapConnected)
 				
 				
-				self.SerialInterface.write('aaaaaaaaaaa\nbbbbbbbbbbb\ncccccc\n\n')
+				self.SerialInterface.write('aaaaaaaaaaa\nbbbbbbbbbbb\ncccccc\n')
 				self.SerialInterface.flush()
 				
 				
@@ -138,9 +138,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				conversion = 'I'
 			byteStream += struct.pack(conversion, i[1])
 		
-		print repr(byteStream)
-		
-		print self.SerialInterface.write(byteStream)
+		print self.SerialInterface.write(byteStream), ':', repr(byteStream)
 		self.SerialInterface.flush()
 		
 	def OnWindowClose(self, event):
