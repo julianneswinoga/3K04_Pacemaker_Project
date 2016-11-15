@@ -7,22 +7,23 @@ Sense::Sense()  {
 	setMagnetInPlace(false);
 }
 
-/*void Sense::setChamberSensed(enum c){
+void Sense::setChambersSensed(chambers::CHAMBERS c){
 	chambersSensed = c;
 }
 
+/*
 void Sense::setActivityResponse(enum a){
 	activityResponse = a;
+}*/
+
+chambers::CHAMBERS Sense::getChambersSensed(){
+	return chambersSensed;
 }
 
-enum Sense::getChamberSensed(){
-	return chamberSensed;
-}
-
-enum Sense::getActivityResponse(){
+activityresponse::ACTIVITYRESPONSE Sense::getActivityResponse(){
 	return activityResponse;
 }
-
+/*
 void Sense::setActivityThreshold(enum t){
 	activityThreshold = t;
 }

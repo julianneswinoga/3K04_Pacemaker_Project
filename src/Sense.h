@@ -4,14 +4,22 @@
 #include "mbed.h"
 #include "Pacemaker.h"
 
+namespace chambers{
+	typedef enum {NONE,ATRIUM,VENTRICLE,DUAL} CHAMBERS;
+}
+
+namespace activityresponse{
+	typedef enum {NONE,TRIGGERED,INHIBITED,DUAL} ACTIVITYRESPONSE;
+}
+
 class Sense : public Pacemaker {
 	private:
-		//enum chambersSensed;
-		//enum activityResponse;
+		chambers::CHAMBERS chambersSensed;
+		activityresponse::ACTIVITYRESPONSE activityResponse;
 		bool magnetInPlace;
 		//enum activityThreshold;
 	protected:
-		//void setChambersSensed(enum);
+		void setChambersSensed(chambers::CHAMBERS);
 		//void setActivityResponse(enum);
 		uint16_t maxSensorRate;
 		void setMagnetInPlace(bool);
@@ -20,8 +28,8 @@ class Sense : public Pacemaker {
 		
 	public:
 		Sense();
-		//enum getChambersSensed();
-		//enum getActivityResponse();
+		chambers::CHAMBERS getChambersSensed();
+		activityresponse::ACTIVITYRESPONSE getActivityResponse();
 		bool getMagnetInPlace();
 };
 
