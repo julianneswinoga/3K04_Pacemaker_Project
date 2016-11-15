@@ -4,6 +4,8 @@
 #include "mbed.h"
 #include <string>
 
+enum class BATTERYSTATE {BOL,ERN,ERT,ERP};
+
 class Pacemaker {
 	private:
 		PinName leadOneInPin;
@@ -39,7 +41,7 @@ class Pacemaker {
 	 
 	public:
 		Pacemaker();
-		//enum getBatteryStatus()
+		BATTERYSTATE getBatteryStatus();
 };
 
 #endif // PACEMAKER_H
