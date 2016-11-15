@@ -4,13 +4,13 @@ Communications::Communications() : USBSerialConnection(USBTX, USBRX)  {
 	//Initialize Critical State Variables
 	baudRate = 57600;
 	connectDCM();
-	serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_PARAMS;
+	serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO;
 }
 
 uint16_t Communications::twoByteRecieve() {
 	uint8_t b[2];
 	
-	for (uint8_t C = 0;C < sizeof(b);C++)
+	for (uint8_t C = 0;C < 2;C++)
 		b[C] = USBSerialConnection.getc();
 	
 	return (b[1] << 8) | b[0];
@@ -20,11 +20,24 @@ float Communications::floatRecieve() {
 	float f;
 	uint8_t b[4];
 	
-	for (uint8_t C = 0;C < sizeof(b);C++)
+	for (uint8_t C = 0;C < 4;C++)
 		b[C] = USBSerialConnection.getc();
 	
 	memcpy(&f, &b, 4);
 	return f;
+}
+
+void Communications::stringRecieve(char *outStr) {
+	char buf[128];
+	char data;
+	int i;
+	
+	for(i = 0;(data = USBSerialConnection.getc()) >= 32;i++)
+		buf[i] = data;
+	
+	buf[i] = '\0'; // Make it a C string
+	
+	strcpy(outStr, buf);
 }
 
 void Communications::serialCallback() {
@@ -34,20 +47,16 @@ void Communications::serialCallback() {
 			
 			packetStruct.p_pacingState			= USBSerialConnection.getc();
 			packetStruct.p_pacingMode			= USBSerialConnection.getc();
-			packetStruct.p_hysteresis			= twoByteRecieve();
+			packetStruct.p_hysteresis			= USBSerialConnection.getc();
+			
 			packetStruct.p_hysteresisInterval	= twoByteRecieve();
 			packetStruct.p_vPaceAmp			= twoByteRecieve();
 			packetStruct.p_vPaceWidth_10x	= twoByteRecieve();
 			packetStruct.p_VRP				= twoByteRecieve();
-			//packetStruct.batteryVoltage			= floatRecieve();
-			//packetStruct.leadImpedance			= floatRecieve();
 			
 			packetStruct.checkSum				= USBSerialConnection.getc();
 			
-			while (USBSerialConnection.getc() >= 32)
-				; // Wait for null/endline termination
-			
-			USBSerialConnection.printf("%i, %i, %i, %i, %i, %i, %i, %i, %i\n",
+			USBSerialConnection.printf("RECIEVED: %i, %i, %i, %i, %i, %i, %i, %i, %i\n",
 				packetStruct.FnCode,
 				packetStruct.p_pacingState,
 				packetStruct.p_pacingMode,
@@ -61,7 +70,26 @@ void Communications::serialCallback() {
 			
 			break;
 			
-		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:
+		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:			
+			
+			char temp[128];
+			
+			stringRecieve(temp);
+			USBSerialConnection.printf("%s\n", temp);
+			deviceID = string(temp).c_str();
+			
+			stringRecieve(temp);
+			USBSerialConnection.printf("%s\n", temp);
+			deviceImplantDate = temp;
+			
+			stringRecieve(temp);
+			USBSerialConnection.printf("%s\n", temp);
+			leadImplantDate = temp;
+			
+			USBSerialConnection.printf("%s\n%s\n%s\n", deviceID, deviceImplantDate, leadImplantDate);
+			//transmitDeviceInfo();
+			
+			serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_PARAMS;
 			
 			break;
 	}

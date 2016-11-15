@@ -2,7 +2,7 @@ import wx
 import pacemakerInterface
 import wx.lib.plot as plot
 
-import numpy
+import numpy, struct
 
 from serialHelper import *
 
@@ -46,21 +46,17 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		if (self.SerialInterface == None or not self.SerialInterface.is_open):
 			return
 		
-		if (self.SerialInterface.inWaiting() == 0):
+		if (self.SerialInterface.in_waiting == 0):
 			return
-			
+		
 		buf = ''
 		data = self.SerialInterface.read()
-		while (data != '\0'):
+		while (data != "\n"):
 			buf += data
 			data = self.SerialInterface.read()
-		try:
-			data = float(buf)
-		except(ValueError):
-			print 'Error converting', buf
-			data = -1
 		
-		print data
+		print buf
+		
 		return
 		
 		self.AddPoint(data)
@@ -93,10 +89,16 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				return
 			print 'Connecting to ' + activeText + '\n'
 			
-			self.SerialInterface = open_port(activeText, baud = 9600, timeout = 3)
+			self.SerialInterface = open_port(activeText, baud = 57600, timeout = 3)
 			if (self.SerialInterface.is_open):
 				self.Bttn_ConnectDisconnect.SetLabel('Disconnect')
 				self.Img_Connected.SetBitmap(self.StaticBitmapConnected)
+				
+				
+				self.SerialInterface.write('aaaaaaaaaaa\nbbbbbbbbbbb\ncccccc\n\n')
+				self.SerialInterface.flush()
+				
+				
 			else:
 				print 'Serial connection to ' + activeText + ' failed!'
 		elif (self.SerialInterface != None and self.SerialInterface.is_open): # Disconnect from a device
@@ -107,28 +109,38 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 			else:
 				print 'Failed to disconnect from serial device!'
 				
-	def OnLoadBttnClicked(self, event):
+	def OnLoadBttnClicked(self, event):	
 		if (self.SerialInterface == None or not self.SerialInterface.is_open):
-			pass
-			#return
+			return
 		
-		byteStream = []
+		dataStream = []
+		byteStream = ''
 		
-		byteStream.append(bytearray([self.choice_FnCode.GetSelection()])) # FnCode
+		dataStream.append([1, self.choice_FnCode.GetSelection()]) # FnCode
 		
-		byteStream.append(bytearray([self.choice_pacingState.GetSelection()])) # pacingState
-		byteStream.append(bytearray([self.choice_pacingMode.GetSelection()])) # pacingMode
-		byteStream.append(bytearray([self.choice_hysteresis.GetSelection()])) # hysteresis
-		byteStream.append(bytearray([self.spinctrl_hysteresisInterval.GetValue()])) # hysteresisInterval
-		byteStream.append(bytearray([self.spinctrl_vPaceAmp.GetValue()])) # vPaceAmp
-		byteStream.append(bytearray([self.spinctrl_vPaceWidth_10x.GetValue()])) # vPaceWidth_10x
-		byteStream.append(bytearray([self.spinctrl_VRP.GetValue()])) # VRP
+		dataStream.append([1, self.choice_pacingState.GetSelection()]) # pacingState
+		dataStream.append([1, self.choice_pacingMode.GetSelection()]) # pacingMode
+		dataStream.append([1, self.choice_hysteresis.GetSelection()]) # hysteresis
 		
-		byteStream.append(bytearray([0])); # checksum
+		dataStream.append([2, self.spinctrl_hysteresisInterval.GetValue()]) # hysteresisInterval
+		dataStream.append([2, self.spinctrl_vPaceAmp.GetValue()]) # vPaceAmp
+		dataStream.append([2, self.spinctrl_vPaceWidth_10x.GetValue()]) # vPaceWidth_10x
+		dataStream.append([2, self.spinctrl_VRP.GetValue()]) # VRP
 		
-		byteStream.append("\0"); # null ending byte
-		print byteStream
-		self.SerialInterface.write(byteStream)
+		dataStream.append([1, 0]); # checksum
+		
+		for i in dataStream:
+			if (i[0] == 1):
+				conversion = 'B'
+			elif (i[0] == 2):
+				conversion = 'H'
+			elif (i[0] == 4):
+				conversion = 'I'
+			byteStream += struct.pack(conversion, i[1])
+		
+		print repr(byteStream)
+		
+		print self.SerialInterface.write(byteStream)
 		self.SerialInterface.flush()
 		
 	def OnWindowClose(self, event):
@@ -141,3 +153,4 @@ if (__name__ == '__main__'):
 	frame.Show(True)
 	
 	app.MainLoop() 
+	

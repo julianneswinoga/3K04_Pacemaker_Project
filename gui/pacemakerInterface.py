@@ -117,7 +117,7 @@ class MainFrame ( wx.Frame ):
 		self.m_staticText1714.Wrap( -1 )
 		gSizer514.Add( self.m_staticText1714, 0, wx.ALL, 5 )
 		
-		self.spinctrl_hysteresisInterval = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
+		self.spinctrl_hysteresisInterval = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10000, 0 )
 		gSizer514.Add( self.spinctrl_hysteresisInterval, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
