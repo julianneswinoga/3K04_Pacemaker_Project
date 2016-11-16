@@ -1,6 +1,8 @@
 #include "Pace.h"
 
-Pace::Pace()  {
+DigitalOut led(LED1);
+
+Pace::Pace() {
 	//Initialize Critical State Variables
 	setHysteresisInterval(0);
 	setvPaceAmp(getMaxVOut());
@@ -8,6 +10,14 @@ Pace::Pace()  {
 	setLowRateInterval(10);
 	setMaxHeartRate(180);
 	setBaseHeartRate(60);
+	paceTime = 0.3;
+	led = 0;
+	
+	paceTicker.attach(this, &Pace::paceTick, paceTime);
+}
+
+void Pace::paceTick() {
+	led = led == 1 ? 0 : 1;
 }
 
 // Public functions
@@ -77,85 +87,85 @@ void Pace::setBaseHeartRate(uint8_t h) {
 }
 
 void Pace::setPaceState(PACESTATE state) {
-	switch (state)
-	{
-	case PACESTATE::PERMANENT:
-		pacingState = PACESTATE::PERMANENT;
-		break;
-	case PACESTATE::TEMPORARY:
-		pacingState =PACESTATE::TEMPORARY;
-		break;
-	case PACESTATE::PACE_NOW:
-		pacingState =PACESTATE::PACE_NOW;
-		break;
-	case PACESTATE::MAGNET:
-		pacingState =PACESTATE::MAGNET;
-		break;
-	case PACESTATE::POWER_ON_RESET:
-		pacingState = PACESTATE::POWER_ON_RESET;
-		break;
+	switch (state) {
+		default:
+		case PACESTATE::PERMANENT:
+			pacingState = PACESTATE::PERMANENT;
+			break;
+		case PACESTATE::TEMPORARY:
+			pacingState =PACESTATE::TEMPORARY;
+			break;
+		case PACESTATE::PACE_NOW:
+			pacingState =PACESTATE::PACE_NOW;
+			break;
+		case PACESTATE::MAGNET:
+			pacingState =PACESTATE::MAGNET;
+			break;
+		case PACESTATE::POWER_ON_RESET:
+			pacingState = PACESTATE::POWER_ON_RESET;
+			break;
 	}
 }
 
 void Pace::setPaceMode(PACEMODE mode) {
-	switch(mode)
-	{
-	case PACEMODE::OFF:
-		pacingMode = PACEMODE::OFF;
-		break;
-	case PACEMODE::AAT:
-		pacingMode = PACEMODE::AAT;
-		break;
-	case PACEMODE::VVT:
-		pacingMode = PACEMODE::VVT;
-		break;
-	case PACEMODE::AOO:
-		pacingMode = PACEMODE::AOO;
-		break;
-	case PACEMODE::AAI:
-		pacingMode = PACEMODE::AAI;
-		break;
-	case PACEMODE::VOO:
-		pacingMode = PACEMODE::VOO;
-		break;
-	case PACEMODE::VVI:
-		pacingMode = PACEMODE::VVI;
-		break;
-	case PACEMODE::VDD:
-		pacingMode = PACEMODE::VDD;
-		break;
-	case PACEMODE::DOO:
-		pacingMode = PACEMODE::DOO;
-		break;
-	case PACEMODE::DDI:
-		pacingMode = PACEMODE::DDI;
-		break;
-	case PACEMODE::DDD:
-		pacingMode = PACEMODE::DDD;
-		break;
-	case PACEMODE::AOOR:
-		pacingMode = PACEMODE::AOOR;
-		break;
-	case PACEMODE::AAIR:
-		pacingMode = PACEMODE::AAIR;
-		break;
-	case PACEMODE::VOOR:
-		pacingMode = PACEMODE::VOOR;
-		break;
-	case PACEMODE::VVIR:
-		pacingMode = PACEMODE::VVIR;
-		break;
-	case PACEMODE::VDDR:
-		pacingMode = PACEMODE::VDDR;
-		break;
-	case PACEMODE::DOOR:
-		pacingMode = PACEMODE::DOOR;
-		break;
-	case PACEMODE::DDIR:
-		pacingMode = PACEMODE::DDIR;
-		break;
-	case PACEMODE::DDDR:
-		pacingMode = PACEMODE::DDDR;
-		break;
+	switch(mode) {
+		default:
+		case PACEMODE::OFF:
+			pacingMode = PACEMODE::OFF;
+			break;
+		case PACEMODE::AAT:
+			pacingMode = PACEMODE::AAT;
+			break;
+		case PACEMODE::VVT:
+			pacingMode = PACEMODE::VVT;
+			break;
+		case PACEMODE::AOO:
+			pacingMode = PACEMODE::AOO;
+			break;
+		case PACEMODE::AAI:
+			pacingMode = PACEMODE::AAI;
+			break;
+		case PACEMODE::VOO:
+			pacingMode = PACEMODE::VOO;
+			break;
+		case PACEMODE::VVI:
+			pacingMode = PACEMODE::VVI;
+			break;
+		case PACEMODE::VDD:
+			pacingMode = PACEMODE::VDD;
+			break;
+		case PACEMODE::DOO:
+			pacingMode = PACEMODE::DOO;
+			break;
+		case PACEMODE::DDI:
+			pacingMode = PACEMODE::DDI;
+			break;
+		case PACEMODE::DDD:
+			pacingMode = PACEMODE::DDD;
+			break;
+		case PACEMODE::AOOR:
+			pacingMode = PACEMODE::AOOR;
+			break;
+		case PACEMODE::AAIR:
+			pacingMode = PACEMODE::AAIR;
+			break;
+		case PACEMODE::VOOR:
+			pacingMode = PACEMODE::VOOR;
+			break;
+		case PACEMODE::VVIR:
+			pacingMode = PACEMODE::VVIR;
+			break;
+		case PACEMODE::VDDR:
+			pacingMode = PACEMODE::VDDR;
+			break;
+		case PACEMODE::DOOR:
+			pacingMode = PACEMODE::DOOR;
+			break;
+		case PACEMODE::DDIR:
+			pacingMode = PACEMODE::DDIR;
+			break;
+		case PACEMODE::DDDR:
+			pacingMode = PACEMODE::DDDR;
+			break;
 	}
 }
