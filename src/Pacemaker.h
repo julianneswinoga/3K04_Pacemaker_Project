@@ -3,7 +3,7 @@
 
 #include "mbed.h"
 
-enum class BATTERYSTATE {BOL,ERN,ERT,ERP};
+enum class BATTERYSTATE { BOL, ERN, ERT, ERP };
 
 class Pacemaker {
 	private:
@@ -11,6 +11,8 @@ class Pacemaker {
 		PinName leadTwoInPin;
 		PinName leadOneOutPin;
 		PinName leadTwoOutPin;
+		
+		Ticker paceTicker;
 		
 		float maxVOut;
 		uint8_t txRegister;
