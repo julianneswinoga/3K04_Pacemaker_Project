@@ -1,6 +1,6 @@
 #include "Pacemaker.h"
 
-Pacemaker::Pacemaker()  {
+Pacemaker::Pacemaker() {
 	//Initialize Critical State Variables
 	setMaxVOut(3.2);
 
@@ -15,33 +15,33 @@ float Pacemaker::getMaxVOut(){
 	return maxVOut;
 }
 
-float Pacemaker::voltageTest(float v){
+float Pacemaker::voltageTest(float v) {
 	return 1.0;
 }
 
-void Pacemaker::clearCardiacEvents(){
+void Pacemaker::clearCardiacEvents() {
 
 }
 
-float Pacemaker::getLeadImpedance(){
+float Pacemaker::getLeadImpedance() {
 	return leadImpedance;
 }
 
-BATTERYSTATE Pacemaker::getBatteryStatus(){
+BATTERYSTATE Pacemaker::getBatteryStatus() {
 	//enum batteryState {BOL,ERN,ERT,ERP};
 	//Use batteryVoltage and replaceBatteryVoltage to figure out battery status level
 	//return one of{BOL,ERN,ERT,ERP}
 
-	if(batteryVoltage <= replaceBatteryVoltage){
+	if (batteryVoltage <= replaceBatteryVoltage) {
 		return BATTERYSTATE::ERT;
 	
-	} else if(batteryVoltage >= (0.70*replaceBatteryVoltage)){
+	} else if (batteryVoltage >= 0.70 * replaceBatteryVoltage) {
 		return BATTERYSTATE::BOL;
 	
-	} else if((batteryVoltage > replaceBatteryVoltage) && (batteryVoltage < (0.70*replaceBatteryVoltage))){
+	} else if (batteryVoltage > replaceBatteryVoltage && batteryVoltage < 0.70 * replaceBatteryVoltage) {
 		return BATTERYSTATE::ERN;
 	
-	} else{
+	} else {
 		return BATTERYSTATE::ERP;
 	}
 

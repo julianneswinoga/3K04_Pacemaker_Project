@@ -7,45 +7,45 @@ Sense::Sense()  {
 	setMagnetInPlace(false);
 }
 
-void Sense::setChambersSensed(CHAMBERS c){
+void Sense::setChambersSensed(CHAMBERS c) {
 	chambersSensed = c;
 }
 
 
-void Sense::setActivityResponse(ACTIVITYRESPONSE a){
+void Sense::setActivityResponse(ACTIVITYRESPONSE a) {
 	activityResponse = a;
 }
 
-CHAMBERS Sense::getChambersSensed(){
+CHAMBERS Sense::getChambersSensed() {
 	return chambersSensed;
 }
 
-ACTIVITYRESPONSE Sense::getActivityResponse(){
+ACTIVITYRESPONSE Sense::getActivityResponse() {
 	return activityResponse;
 }
 
-void Sense::setActivityThreshold(ACTIVITYTHRESHOLD t){
+void Sense::setActivityThreshold(ACTIVITYTHRESHOLD t) {
 	activityThreshold = t;
 }
 
-ACTIVITYTHRESHOLD Sense::getActivityThreshold(){
+ACTIVITYTHRESHOLD Sense::getActivityThreshold() {
 	return activityThreshold;
 }
 
-void Sense::setMagnetInPlace(bool m){
-	magnetInPlace = m;
+void Sense::setMagnetInPlace(bool inPlace) {
+	magnetInPlace = inPlace;
 }
 
-bool Sense::getMagnetInPlace(){
+bool Sense::getMagnetInPlace() {
 	return magnetInPlace;
 }
 
-void Sense::measureLeadImpedance(){
+void Sense::measureLeadImpedance() {
 	//Measure currentLeadImpedance
 	leadImpedance = 100;
 }
 
-void Sense::measureBatteryVoltage(){
+void Sense::measureBatteryVoltage() {
 	//Measure battery voltage
 	batteryVoltage = 3.3;
 }
