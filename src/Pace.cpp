@@ -5,7 +5,7 @@ DigitalOut led(LED1);
 Pace::Pace() {
 	//Initialize Critical State Variables
 	setHysteresisInterval(0);
-	setvPaceAmp(getMaxVOut());
+	setvPaceAmp(3.2f);
 	setvPaceWidth(0);
 	setLowRateInterval(10);
 	setMaxHeartRate(180);

@@ -2,7 +2,6 @@
 #define COMMUNICATIONS_H
 
 #include "mbed.h"
-#include "Pacemaker.h"
 
 typedef struct {
 	uint8_t FnCode;
@@ -18,22 +17,24 @@ typedef struct {
 	float leadImpedance;
 	
 	uint8_t checkSum;
-} RECEV_PACKET;
+	
+	char deviceID[64];
+	char deviceImplantDate[64];
+	char leadImplantDate[64];
+} SERIAL_PACKET;
 
 enum class SERIAL_RECIEVE_MODE {
 	UPDATE_PARAMS = 0,
 	UPDATE_DEVICE_INFO = 1
 };
 
-class Communications : public Pacemaker {
+class Communications {
 	private:
 		SERIAL_RECIEVE_MODE serialRecieveMode;
-		RECEV_PACKET packetStruct;
+		SERIAL_PACKET packetStruct;
 		uint16_t vraw;
 		uint16_t f_marker;
-		//i_vs:??
 		uint8_t o_CommOut;
-		//o_vp:??
 		uint32_t baudRate;
 
 		uint16_t twoByteRecieve();
@@ -43,17 +44,15 @@ class Communications : public Pacemaker {
 		bool connectDCM();
 		void transmitDeviceInfo();
 		void serialCallback();
+	
+	protected:
+		bool sendEGM();
+		void recieveDeviceInfo();
 		
 	public:
 		Communications();
 		void initEGM();
-		
 		Serial USBSerialConnection;
-		
-	protected:
-		bool sendEGM();
-		void recieveDeviceInfo();
-
 };
 
 #endif // COMMUNICATIONS_H
