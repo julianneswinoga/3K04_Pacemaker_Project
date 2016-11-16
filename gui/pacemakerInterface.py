@@ -57,96 +57,104 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer51 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText171 = wx.StaticText( self, wx.ID_ANY, u"Wait Time", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText171 = wx.StaticText( self, wx.ID_ANY, u"FnCode", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText171.Wrap( -1 )
 		gSizer51.Add( self.m_staticText171, 0, wx.ALL, 5 )
 		
-		self.ParamWait = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer51.Add( self.ParamWait, 0, wx.ALL|wx.EXPAND, 5 )
+		choice_FnCodeChoices = [ u"k_pparams", u"k_echo", u"k_egram", u"k_estop" ]
+		self.choice_FnCode = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choice_FnCodeChoices, 0 )
+		self.choice_FnCode.SetSelection( 0 )
+		gSizer51.Add( self.choice_FnCode, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer51, 1, wx.EXPAND, 5 )
 		
 		gSizer511 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1711 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1711 = wx.StaticText( self, wx.ID_ANY, u"Pacing State", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1711.Wrap( -1 )
 		gSizer511.Add( self.m_staticText1711, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl11 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer511.Add( self.m_spinCtrl11, 0, wx.ALL|wx.EXPAND, 5 )
+		choice_pacingStateChoices = [ u"PERMANENT", u"TEMPORARY", u"PACE_NOW", u"MAGNET", u"POWER_ON_RESET" ]
+		self.choice_pacingState = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choice_pacingStateChoices, 0 )
+		self.choice_pacingState.SetSelection( 0 )
+		gSizer511.Add( self.choice_pacingState, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer511, 1, wx.EXPAND, 5 )
 		
 		gSizer512 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1712 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1712 = wx.StaticText( self, wx.ID_ANY, u"Pacing Mode", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1712.Wrap( -1 )
 		gSizer512.Add( self.m_staticText1712, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl12 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer512.Add( self.m_spinCtrl12, 0, wx.ALL|wx.EXPAND, 5 )
+		choice_pacingModeChoices = [ u"VVI", u"VOO", u"AOO", u"DDDR" ]
+		self.choice_pacingMode = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choice_pacingModeChoices, 0 )
+		self.choice_pacingMode.SetSelection( 0 )
+		gSizer512.Add( self.choice_pacingMode, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer512, 1, wx.EXPAND, 5 )
 		
 		gSizer513 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1713 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1713 = wx.StaticText( self, wx.ID_ANY, u"Hysteresis", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1713.Wrap( -1 )
 		gSizer513.Add( self.m_staticText1713, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl13 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer513.Add( self.m_spinCtrl13, 0, wx.ALL|wx.EXPAND, 5 )
+		choice_hysteresisChoices = [ u"No", u"Yes" ]
+		self.choice_hysteresis = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choice_hysteresisChoices, 0 )
+		self.choice_hysteresis.SetSelection( 0 )
+		gSizer513.Add( self.choice_hysteresis, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer513, 1, wx.EXPAND, 5 )
 		
 		gSizer514 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1714 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1714 = wx.StaticText( self, wx.ID_ANY, u"Hysteresis Interval", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1714.Wrap( -1 )
 		gSizer514.Add( self.m_staticText1714, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl14 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer514.Add( self.m_spinCtrl14, 0, wx.ALL|wx.EXPAND, 5 )
+		self.spinctrl_hysteresisInterval = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10000, 0 )
+		gSizer514.Add( self.spinctrl_hysteresisInterval, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer514, 1, wx.EXPAND, 5 )
 		
 		gSizer515 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1715 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1715 = wx.StaticText( self, wx.ID_ANY, u"vPaceAmp", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1715.Wrap( -1 )
 		gSizer515.Add( self.m_staticText1715, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl15 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer515.Add( self.m_spinCtrl15, 0, wx.ALL|wx.EXPAND, 5 )
+		self.spinctrl_vPaceAmp = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
+		gSizer515.Add( self.spinctrl_vPaceAmp, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer515, 1, wx.EXPAND, 5 )
 		
 		gSizer516 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1716 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1716 = wx.StaticText( self, wx.ID_ANY, u"vPaceWidth_10x", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1716.Wrap( -1 )
 		gSizer516.Add( self.m_staticText1716, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl16 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer516.Add( self.m_spinCtrl16, 0, wx.ALL|wx.EXPAND, 5 )
+		self.spinctrl_vPaceWidth_10x = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
+		gSizer516.Add( self.spinctrl_vPaceWidth_10x, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer516, 1, wx.EXPAND, 5 )
 		
 		gSizer517 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1717 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1717 = wx.StaticText( self, wx.ID_ANY, u"VRP", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1717.Wrap( -1 )
 		gSizer517.Add( self.m_staticText1717, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl17 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer517.Add( self.m_spinCtrl17, 0, wx.ALL|wx.EXPAND, 5 )
+		self.spinctrl_VRP = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
+		gSizer517.Add( self.spinctrl_VRP, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer517, 1, wx.EXPAND, 5 )

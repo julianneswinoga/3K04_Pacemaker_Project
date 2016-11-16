@@ -3,35 +3,86 @@
 Communications::Communications() : USBSerialConnection(USBTX, USBRX)  {
 	//Initialize Critical State Variables
 	baudRate = 57600;
+	connectDCM();
+	serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO;
+}
+
+uint16_t Communications::twoByteRecieve() {
+	uint8_t b[2];
+	
+	for (uint8_t C = 0;C < 2;C++)
+		b[C] = USBSerialConnection.getc();
+	
+	return (b[1] << 8) | b[0];
+}
+
+float Communications::floatRecieve() {
+	float f;
+	uint8_t b[4];
+	
+	for (uint8_t C = 0;C < 4;C++)
+		b[C] = USBSerialConnection.getc();
+	
+	memcpy(&f, &b, 4);
+	return f;
+}
+
+void Communications::stringRecieve(char *outStr) {
+	char buf[128];
+	char data;
+	int i;
+	
+	for(i = 0;(data = USBSerialConnection.getc()) >= 32;i++)
+		buf[i] = data;
+	
+	buf[i] = '\0'; // Make it a C string
+	
+	strcpy(outStr, buf);
 }
 
 void Communications::serialCallback() {
-	char buf[128]; // char array to store serial buffer
-	char data; // Actual data byte coming in
-	int i;
-	for(i = 0; (data = USBSerialConnection.getc()) >= 32; i++) // While there are visible characters (catches both \r and \n)
-		buf[i] = data; // Store the data
-	
-	buf[i] = '\0'; // Make buf a null terminated C string
-	
-	switch (buf[0]) {
-		case 'W':
-			/*char* numStr = strtok(buf, ":");
-			numStr = strtok(NULL, ":");
-			sscanf(numStr, "%f", &waitTime);*/
+	switch (serialRecieveMode) {
+		case SERIAL_RECIEVE_MODE::UPDATE_PARAMS:
+			packetStruct.FnCode				= USBSerialConnection.getc();
+			
+			packetStruct.p_pacingState			= USBSerialConnection.getc();
+			packetStruct.p_pacingMode			= USBSerialConnection.getc();
+			packetStruct.p_hysteresis			= USBSerialConnection.getc();
+			
+			packetStruct.p_hysteresisInterval	= twoByteRecieve();
+			packetStruct.p_vPaceAmp			= twoByteRecieve();
+			packetStruct.p_vPaceWidth_10x		= twoByteRecieve();
+			packetStruct.p_VRP					= twoByteRecieve();
+			
+			packetStruct.checkSum				= USBSerialConnection.getc();
+			
+			USBSerialConnection.printf("RECIEVED: %i, %i, %i, %i, %i, %i, %i, %i, %i\n",
+				packetStruct.FnCode,
+				packetStruct.p_pacingState,
+				packetStruct.p_pacingMode,
+				packetStruct.p_hysteresis,
+				packetStruct.p_hysteresisInterval,
+				packetStruct.p_vPaceAmp,
+				packetStruct.p_vPaceWidth_10x,
+				packetStruct.p_VRP,
+				packetStruct.checkSum
+			);
+			
+			break;
+			
+		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:
+			
+			stringRecieve(packetStruct.deviceID);			
+			stringRecieve(packetStruct.deviceImplantDate);			
+			stringRecieve(packetStruct.leadImplantDate);
+			
+			transmitDeviceInfo();
+			
+			serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_PARAMS;
+			
 			break;
 	}
 }
-
-void Communications::startSerial() {
-	USBSerialConnection.baud(baudRate); // Set the baudrate
-	USBSerialConnection.attach(this, &Communications::serialCallback); // Add an inturupt
-}
-
-/*void Communications::debug(string msg, ...) {
-	va_list args;
-	USBSerialConnection.vprintf(msg, args);
-}*/
 
 bool Communications::sendEGM() {
 	//Return true if data sent successfully over serial.
@@ -43,14 +94,21 @@ void Communications::initEGM() {
 }
 
 bool Communications::connectDCM() {
-	//Returns true if connection successful
+	USBSerialConnection.baud(baudRate); // Set the baudrate
+	USBSerialConnection.attach(this, &Communications::serialCallback); // Add an inturupt
 	return true;
 }
 
-/*string[] Communications::recieveDeviceInfo() {
-	return [deviceID]
+void Communications::recieveDeviceInfo() {
+	
 }
 
-void Communications::transmitDeviceInfo([deviceID]) {
-
-}*/
+void Communications::transmitDeviceInfo() {
+	USBSerialConnection.printf("%s\n%s\n%s\n%f\n",
+		packetStruct.deviceID,
+		packetStruct.deviceImplantDate,
+		packetStruct.leadImplantDate/*,
+		batteryVoltage,
+		cardiac_events*/
+	);
+}
