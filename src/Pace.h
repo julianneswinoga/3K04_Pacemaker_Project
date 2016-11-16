@@ -2,12 +2,11 @@
 #define PACE_H
 
 #include "mbed.h"
-#include "Sense.h"
 
 enum class PACESTATE { PERMANENT,  TEMPORARY,  PACE_NOW,  MAGNET,  POWER_ON_RESET };
 enum class PACEMODE { OFF,  AAT,  VVT,  AOO,  AAI, VOO, VVI, VDD, DOO, DDI, DDD, AOOR, AAIR, VOOR, VVIR, VDDR, DOOR, DDIR, DDDR };
 
-class Pace : public Sense {
+class Pace  {
 	private:
 		Ticker paceTicker;
 		void paceTick();

@@ -4,7 +4,6 @@ Sense::Sense()  {
 	//Initialize Critical State Variables
 	//setChamberSensed(); //Uses values from paceMode
 	//setActivityResponse(); //Uses values from activityResponse
-	setMagnetInPlace(false);
 }
 
 void Sense::setChambersSensed(CHAMBERS c) {
@@ -32,20 +31,29 @@ ACTIVITYTHRESHOLD Sense::getActivityThreshold() {
 	return activityThreshold;
 }
 
-void Sense::setMagnetInPlace(bool inPlace) {
-	magnetInPlace = inPlace;
-}
-
 bool Sense::getMagnetInPlace() {
-	return magnetInPlace;
+	return false;
 }
 
-void Sense::measureLeadImpedance() {
+float Sense::measureLeadImpedance() {
 	//Measure currentLeadImpedance
-	leadImpedance = 100;
+	return 100;
 }
 
-void Sense::measureBatteryVoltage() {
+float Sense::measureBatteryVoltage() {
 	//Measure battery voltage
-	batteryVoltage = 3.3;
+	return 3.3;
+}
+
+BATTERYSTATE Sense::getBatteryStatus() {
+	float batteryVoltage = measureBatteryVoltage();
+	
+	if (batteryVoltage <= replaceBatteryVoltage)
+		return BATTERYSTATE::ERT;
+	else if (batteryVoltage >= 0.70 * replaceBatteryVoltage)
+		return BATTERYSTATE::BOL;
+	else if (batteryVoltage > replaceBatteryVoltage && batteryVoltage < 0.70 * replaceBatteryVoltage)
+		return BATTERYSTATE::ERN;
+	else
+		return BATTERYSTATE::ERP;
 }
