@@ -5,6 +5,6 @@ int main() {
 	Pacemaker p;
 	
 	while (true) {
-		
+		p.mainLoop();
 	}
 }

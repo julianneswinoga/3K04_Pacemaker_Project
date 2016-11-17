@@ -3,26 +3,18 @@
 
 #include "mbed.h"
 #include "Communications.h"
-#include "Sense.h"
+#include "Activity.h"
+#include "Logging.h"
+#include "Pace.h"
 
-class Pacemaker : public Communications, public Sense {
-	private:		
-		float maxVOut;
-		uint8_t txRegister;
-		uint8_t rxRegister;
-		float leadImpedanceThreshold;
+class Pacemaker : public Communications, public Activity, public Logging, public Pace {
+	private:
 
 	protected:
-		//setLeadPins([enum]);
-		//[enum] getLeadPins();
-		//void setTxRxReg([uint8_t]);
-		//[uint8_t] getTxRxReg();
-		float voltageTest(float);
-		//Object getCardiacEvents();
-		void clearCardiacEvents();
-		
+
 	public:
 		Pacemaker();
+		void mainLoop();
 };
 
 #endif // PACEMAKER_H
