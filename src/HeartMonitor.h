@@ -5,13 +5,12 @@
 
 class HeartMonitor {
 	private:
-		uint16_t VRP;
 		
 	public:
 		HeartMonitor();
 		
 	protected:
-		void setVRP(uint16_t);
+		uint16_t VRP;
 		uint8_t getVentricleRate();
 		uint8_t getVAtriumRate();
 };

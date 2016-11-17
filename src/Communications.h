@@ -2,25 +2,24 @@
 #define COMMUNICATIONS_H
 
 #include "mbed.h"
+#include "Pace.h"
 
 typedef struct {
-	uint8_t FnCode;
+	uint8_t *FnCode;
 	
-	uint8_t p_pacingState;
-	uint8_t p_pacingMode;
-	uint16_t p_hysteresis;
-	uint16_t p_hysteresisInterval;
-	uint16_t p_vPaceAmp;
-	uint16_t p_vPaceWidth_10x;
-	uint16_t p_VRP;
-	float batteryVoltage;
-	float leadImpedance;
+	PACESTATE *p_pacingState;
+	PACEMODE *p_pacingMode;
+	uint16_t *p_hysteresis;
+	uint16_t *p_hysteresisInterval;
+	float *p_vPaceAmp;
+	uint16_t *p_vPaceWidth_10x;
+	uint16_t *p_VRP;
 	
 	uint8_t checkSum;
 	
-	char deviceID[64];
-	char deviceImplantDate[64];
-	char leadImplantDate[64];
+	char (*deviceID)[64];
+	char (*deviceImplantDate)[64];
+	char (*leadImplantDate)[64];
 } SERIAL_PACKET;
 
 enum class SERIAL_RECIEVE_MODE {
@@ -51,6 +50,7 @@ class Communications {
 		
 	public:
 		Communications();
+		void setDataPointers(uint8_t*, PACESTATE*, PACEMODE*, uint16_t*, uint16_t*, float*, uint16_t*, uint16_t*, char(*)[64], char(*)[64], char(*)[64]);
 		void initEGM();
 		Serial USBSerialConnection;
 };

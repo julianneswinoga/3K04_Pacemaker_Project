@@ -69,33 +69,8 @@ void Pace::paceAtrium() {
 	led2 = led2 == 1 ? 0 : 1;
 }
 
-void Pace::setPaceMode(PACEMODE mode) {
-	pacingMode = mode;
-}
-
 PACEMODE Pace::getPaceMode() {
 	return pacingMode;
-}
-
-void Pace::setPaceState(PACESTATE state) {
-	switch (state) {
-		default:
-		case PACESTATE::PERMANENT:
-			pacingState = PACESTATE::PERMANENT;
-			break;
-		case PACESTATE::TEMPORARY:
-			pacingState =PACESTATE::TEMPORARY;
-			break;
-		case PACESTATE::PACE_NOW:
-			pacingState =PACESTATE::PACE_NOW;
-			break;
-		case PACESTATE::MAGNET:
-			pacingState =PACESTATE::MAGNET;
-			break;
-		case PACESTATE::POWER_ON_RESET:
-			pacingState = PACESTATE::POWER_ON_RESET;
-			break;
-	}
 }
 
 PACESTATE Pace::getPaceState() {
