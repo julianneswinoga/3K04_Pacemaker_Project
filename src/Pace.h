@@ -28,7 +28,7 @@ class Pace : public HeartMonitor {
 		PACEMODE getPaceMode();
 		PACESTATE getPaceState();
 		
-		PACEMODE pacingMode;
+		PACEMODE pacingMode = PACEMODE::VOO;
 		PACESTATE pacingState;
 };
 

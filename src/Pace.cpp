@@ -4,14 +4,14 @@ DigitalOut led1(LED1);
 DigitalOut led2(LED2);
 
 Pace::Pace() {
-	led1 = 0;
-	led2 = 0;
+	led1 = 1;
+	led2 = 1;
 	
 	setPaceRate(baseHeartRate);
 }
 
 void Pace::setPaceRate(uint8_t BPM) {
-	paceTicker.attach(this, &Pace::paceTick, 1.0f/BPM);
+	paceTicker.attach(this, &Pace::paceTick, (1.0f/BPM) * 60.0f);
 }
 
 void Pace::paceTick() {

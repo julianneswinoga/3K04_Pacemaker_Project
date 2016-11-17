@@ -89,9 +89,9 @@ class MainFrame ( wx.Frame ):
 		self.m_staticText1712.Wrap( -1 )
 		gSizer512.Add( self.m_staticText1712, 0, wx.ALL, 5 )
 		
-		choice_pacingModeChoices = [ u"VVI", u"VOO", u"AOO", u"DDDR" ]
+		choice_pacingModeChoices = [ u"OFF", u" AAT", u" VVT", u" AOO", u" AAI", u"VOO", u"VVI", u"VDD", u"DOO", u"DDI", u"DDD", u"AOOR", u"AAIR", u"VOOR", u"VVIR", u"VDDR", u"DOOR", u"DDIR", u"DDDR" ]
 		self.choice_pacingMode = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choice_pacingModeChoices, 0 )
-		self.choice_pacingMode.SetSelection( 0 )
+		self.choice_pacingMode.SetSelection( 5 )
 		gSizer512.Add( self.choice_pacingMode, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -129,7 +129,7 @@ class MainFrame ( wx.Frame ):
 		self.m_staticText1715.Wrap( -1 )
 		gSizer515.Add( self.m_staticText1715, 0, wx.ALL, 5 )
 		
-		self.spinctrl_vPaceAmp = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
+		self.spinctrl_vPaceAmp = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, -10, 10, 0 )
 		gSizer515.Add( self.spinctrl_vPaceAmp, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		

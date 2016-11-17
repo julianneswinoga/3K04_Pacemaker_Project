@@ -2,6 +2,7 @@
 #define COMMUNICATIONS_H
 
 #include "mbed.h"
+#include <cstdarg>
 #include "Pace.h"
 
 typedef struct {
@@ -9,7 +10,7 @@ typedef struct {
 	
 	PACESTATE *p_pacingState;
 	PACEMODE *p_pacingMode;
-	uint16_t *p_hysteresis;
+	uint8_t *p_hysteresis;
 	uint16_t *p_hysteresisInterval;
 	float *p_vPaceAmp;
 	uint16_t *p_vPaceWidth_10x;
@@ -29,16 +30,18 @@ enum class SERIAL_RECIEVE_MODE {
 
 class Communications {
 	private:
+		volatile uint8_t serialBuffer[256];
+		
 		SERIAL_RECIEVE_MODE serialRecieveMode;
-		SERIAL_PACKET packetStruct;
+		volatile SERIAL_PACKET packetStruct;
 		uint16_t vraw;
 		uint16_t f_marker;
 		uint8_t o_CommOut;
 		uint32_t baudRate;
 
-		uint16_t twoByteRecieve();
-		float floatRecieve();
-		void stringRecieve(char *);
+		uint16_t twoBytesFromBuffer(volatile uint8_t[], uint16_t);
+		float floatFromBuffer(volatile uint8_t[], uint16_t);
+		void stringsFromBuffer(volatile uint8_t[], uint8_t, ...);
 		
 		bool connectDCM();
 		void transmitDeviceInfo();
@@ -50,9 +53,11 @@ class Communications {
 		
 	public:
 		Communications();
-		void setDataPointers(uint8_t*, PACESTATE*, PACEMODE*, uint16_t*, uint16_t*, float*, uint16_t*, uint16_t*, char(*)[64], char(*)[64], char(*)[64]);
+		void setDataPointers(uint8_t*, PACESTATE*, PACEMODE*, uint8_t*, uint16_t*, float*, uint16_t*, uint16_t*, char(*)[64], char(*)[64], char(*)[64]);
 		void initEGM();
 		Serial USBSerialConnection;
+		void readBuffer();
+		bool dataInBuffer = false;
 };
 
 #endif // COMMUNICATIONS_H
