@@ -15,23 +15,21 @@ class Pace : public HeartMonitor {
 		
 		uint8_t baseHeartRate = 60;
 		uint8_t maxHeartRate = 180;
-		float vPaceAmp;
-		uint16_t vPaceWidth_milliseconds;
 		
 		void paceVentricle();
 		void paceAtrium();
-		
-		PACEMODE pacingMode;
-		PACESTATE pacingState;
 		
 	public:
 		Pace();
 		
 	protected:
-		void setPaceMode(PACEMODE);
+		float vPaceAmp;
+		uint16_t vPaceWidth_milliseconds;
 		PACEMODE getPaceMode();
-		void setPaceState(PACESTATE);
 		PACESTATE getPaceState();
+		
+		PACEMODE pacingMode;
+		PACESTATE pacingState;
 };
 
 #endif // PACE_H

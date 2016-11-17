@@ -7,10 +7,39 @@ Communications::Communications() : USBSerialConnection(USBTX, USBRX)  {
 	serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO;
 }
 
+void Communications::setDataPointers(
+		uint8_t *FnCode,
+		PACESTATE *p_pacingState,
+		PACEMODE *p_pacingMode,
+		uint16_t *p_hysteresis,
+		uint16_t *p_hysteresisInterval,
+		float *p_vPaceAmp,
+		uint16_t *p_vPaceWidth_10x,
+		uint16_t *p_VRP,
+		char (*deviceID)[64],
+		char (*deviceImplantDate)[64],
+		char (*leadImplantDate)[64]
+	) {
+				
+	packetStruct.FnCode = FnCode;
+	
+	packetStruct.p_pacingState = p_pacingState;
+	packetStruct.p_pacingMode = p_pacingMode;
+	packetStruct.p_hysteresis = p_hysteresis;
+	packetStruct.p_hysteresisInterval = p_hysteresisInterval;
+	packetStruct.p_vPaceAmp = p_vPaceAmp;
+	packetStruct.p_vPaceWidth_10x = p_vPaceWidth_10x;
+	packetStruct.p_VRP = p_VRP;
+	
+	packetStruct.deviceID = deviceID;
+	packetStruct.deviceImplantDate = deviceImplantDate;
+	packetStruct.leadImplantDate = leadImplantDate;
+}
+
 uint16_t Communications::twoByteRecieve() {
 	uint8_t b[2];
 	
-	for (uint8_t C = 0;C < 2;C++)
+	for (uint8_t C = 0; C < 2; C++)
 		b[C] = USBSerialConnection.getc();
 	
 	return (b[1] << 8) | b[0];
@@ -32,10 +61,10 @@ void Communications::stringRecieve(char *outStr) {
 	char data;
 	int i;
 	
-	for(i = 0;(data = USBSerialConnection.getc()) >= 32;i++)
+	for(i = 0; (data = USBSerialConnection.getc()) >= 32; i++)
 		buf[i] = data;
 	
-	buf[i] = '\0'; // Make it a C string
+	buf[i] = '\0', // Make it a C string
 	
 	strcpy(outStr, buf);
 }
@@ -43,28 +72,28 @@ void Communications::stringRecieve(char *outStr) {
 void Communications::serialCallback() {
 	switch (serialRecieveMode) {
 		case SERIAL_RECIEVE_MODE::UPDATE_PARAMS:
-			packetStruct.FnCode				= USBSerialConnection.getc();
+			*packetStruct.FnCode					= USBSerialConnection.getc();
 			
-			packetStruct.p_pacingState			= USBSerialConnection.getc();
-			packetStruct.p_pacingMode			= USBSerialConnection.getc();
-			packetStruct.p_hysteresis			= USBSerialConnection.getc();
+			*packetStruct.p_pacingState			= (PACESTATE) USBSerialConnection.getc();
+			*packetStruct.p_pacingMode			= (PACEMODE) USBSerialConnection.getc();
+			*packetStruct.p_hysteresis				= USBSerialConnection.getc();
 			
-			packetStruct.p_hysteresisInterval	= twoByteRecieve();
-			packetStruct.p_vPaceAmp			= twoByteRecieve();
-			packetStruct.p_vPaceWidth_10x		= twoByteRecieve();
-			packetStruct.p_VRP					= twoByteRecieve();
+			*packetStruct.p_hysteresisInterval		= twoByteRecieve();
+			*packetStruct.p_vPaceAmp				= twoByteRecieve();
+			*packetStruct.p_vPaceWidth_10x		= twoByteRecieve();
+			*packetStruct.p_VRP					= twoByteRecieve();
 			
-			packetStruct.checkSum				= USBSerialConnection.getc();
+			packetStruct.checkSum					= USBSerialConnection.getc();
 			
 			USBSerialConnection.printf("RECIEVED: %i, %i, %i, %i, %i, %i, %i, %i, %i\n",
-				packetStruct.FnCode,
-				packetStruct.p_pacingState,
-				packetStruct.p_pacingMode,
-				packetStruct.p_hysteresis,
-				packetStruct.p_hysteresisInterval,
-				packetStruct.p_vPaceAmp,
-				packetStruct.p_vPaceWidth_10x,
-				packetStruct.p_VRP,
+				*packetStruct.FnCode,
+				*packetStruct.p_pacingState,
+				*packetStruct.p_pacingMode,
+				*packetStruct.p_hysteresis,
+				*packetStruct.p_hysteresisInterval,
+				*packetStruct.p_vPaceAmp,
+				*packetStruct.p_vPaceWidth_10x,
+				*packetStruct.p_VRP,
 				packetStruct.checkSum
 			);
 			
@@ -72,9 +101,9 @@ void Communications::serialCallback() {
 			
 		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:
 			
-			stringRecieve(packetStruct.deviceID);			
-			stringRecieve(packetStruct.deviceImplantDate);			
-			stringRecieve(packetStruct.leadImplantDate);
+			stringRecieve(*packetStruct.deviceID);
+			stringRecieve(*packetStruct.deviceImplantDate);	
+			stringRecieve(*packetStruct.leadImplantDate);
 			
 			transmitDeviceInfo();
 			
@@ -105,10 +134,10 @@ void Communications::recieveDeviceInfo() {
 
 void Communications::transmitDeviceInfo() {
 	USBSerialConnection.printf("%s\n%s\n%s\n%f\n",
-		packetStruct.deviceID,
-		packetStruct.deviceImplantDate,
-		packetStruct.leadImplantDate/*,
-		batteryVoltage,
-		cardiac_events*/
+		*packetStruct.deviceID,
+		*packetStruct.deviceImplantDate,
+		*packetStruct.leadImplantDate
+		//batteryVoltage,
+		//cardiac_events
 	);
 }
