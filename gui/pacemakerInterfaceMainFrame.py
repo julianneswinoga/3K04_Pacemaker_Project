@@ -2,6 +2,8 @@ import wx
 import pacemakerInterface
 import wx.lib.plot as plot
 
+import binascii
+
 import numpy, struct
 
 from serialHelper import *
@@ -95,7 +97,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				self.Img_Connected.SetBitmap(self.StaticBitmapConnected)
 				
 				
-				self.SerialInterface.write('aaaaaaaaaaa\nbbbbbbbbbbb\ncccccc\n')
+				self.SerialInterface.write('123456789\nbbbbbbbbbbb\ncccccc\n')
 				self.SerialInterface.flush()
 				
 				
@@ -109,36 +111,32 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 			else:
 				print 'Failed to disconnect from serial device!'
 				
-	def OnLoadBttnClicked(self, event):	
+	def OnLoadBttnClicked(self, event):
 		if (self.SerialInterface == None or not self.SerialInterface.is_open):
 			return
 		
 		dataStream = []
 		byteStream = ''
 		
-		dataStream.append([1, self.choice_FnCode.GetSelection()]) # FnCode
+		dataStream.append(['B', self.choice_FnCode.GetSelection()]) # FnCode
 		
-		dataStream.append([1, self.choice_pacingState.GetSelection()]) # pacingState
-		dataStream.append([1, self.choice_pacingMode.GetSelection()]) # pacingMode
-		dataStream.append([1, self.choice_hysteresis.GetSelection()]) # hysteresis
+		dataStream.append(['B', self.choice_pacingState.GetSelection()]) # pacingState
+		dataStream.append(['B', self.choice_pacingMode.GetSelection()]) # pacingMode
+		dataStream.append(['B', self.choice_hysteresis.GetSelection()]) # hysteresis
 		
-		dataStream.append([2, self.spinctrl_hysteresisInterval.GetValue()]) # hysteresisInterval
-		dataStream.append([2, self.spinctrl_vPaceAmp.GetValue()]) # vPaceAmp
-		dataStream.append([2, self.spinctrl_vPaceWidth_10x.GetValue()]) # vPaceWidth_10x
-		dataStream.append([2, self.spinctrl_VRP.GetValue()]) # VRP
+		dataStream.append(['H', self.spinctrl_hysteresisInterval.GetValue()]) # hysteresisInterval
+		dataStream.append(['<f', self.spinctrl_vPaceAmp.GetValue()]) # vPaceAmp
+		dataStream.append(['H', self.spinctrl_vPaceWidth_10x.GetValue()]) # vPaceWidth_10x
+		dataStream.append(['H', self.spinctrl_VRP.GetValue()]) # VRP
 		
-		dataStream.append([1, 0]); # checksum
+		dataStream.append(['B', 0]); # checksum
 		
 		for i in dataStream:
-			if (i[0] == 1):
-				conversion = 'B'
-			elif (i[0] == 2):
-				conversion = 'H'
-			elif (i[0] == 4):
-				conversion = 'I'
-			byteStream += struct.pack(conversion, i[1])
+			byteStream += struct.pack(i[0], i[1])
 		
 		print self.SerialInterface.write(byteStream), ':', repr(byteStream)
+		for b in byteStream[6:10]:
+			print bin(int(binascii.hexlify(b), 16))
 		self.SerialInterface.flush()
 		
 	def OnWindowClose(self, event):

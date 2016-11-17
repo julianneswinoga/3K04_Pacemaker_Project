@@ -11,7 +11,7 @@ void Communications::setDataPointers(
 		uint8_t *FnCode,
 		PACESTATE *p_pacingState,
 		PACEMODE *p_pacingMode,
-		uint16_t *p_hysteresis,
+		uint8_t *p_hysteresis,
 		uint16_t *p_hysteresisInterval,
 		float *p_vPaceAmp,
 		uint16_t *p_vPaceWidth_10x,
@@ -36,56 +36,86 @@ void Communications::setDataPointers(
 	packetStruct.leadImplantDate = leadImplantDate;
 }
 
-uint16_t Communications::twoByteRecieve() {
-	uint8_t b[2];
-	
-	for (uint8_t C = 0; C < 2; C++)
-		b[C] = USBSerialConnection.getc();
-	
-	return (b[1] << 8) | b[0];
+uint16_t Communications::twoBytesFromBuffer(volatile uint8_t buffer[], uint16_t position) {
+	return (buffer[position + 1] << 8) | buffer[position];
 }
 
-float Communications::floatRecieve() {
-	float f;
-	uint8_t b[4];
+float Communications::floatFromBuffer(volatile uint8_t buffer[], uint16_t position) {
+	union {
+	    float f;
+	    unsigned long ul;
+	 } floatConv;
 	
-	for (uint8_t C = 0;C < 4;C++)
-		b[C] = USBSerialConnection.getc();
-	
-	memcpy(&f, &b, 4);
-	return f;
+	floatConv.ul = (buffer[position + 3] << 24) | (buffer[position + 2] << 16) | (buffer[position + 1] << 8) | buffer[position];
+	return floatConv.f;
 }
 
-void Communications::stringRecieve(char *outStr) {
-	char buf[128];
-	char data;
-	int i;
+void Communications::stringsFromBuffer(volatile uint8_t buffer[], uint8_t numStrings ...) {
+	va_list strings;
 	
-	for(i = 0; (data = USBSerialConnection.getc()) >= 32; i++)
-		buf[i] = data;
+	va_start(strings, numStrings);
+	char (*tempStr)[64];
+	uint16_t bufferPos = 0, stringPos;
 	
-	buf[i] = '\0', // Make it a C string
+	for (uint8_t C = 0; C < numStrings; C++) {
+		tempStr = va_arg(strings, char(*)[64]);
+		stringPos = 0;
+		while(buffer[bufferPos] != '\n') {
+			(*tempStr)[stringPos] = buffer[bufferPos];
+			stringPos++;
+			bufferPos++;
+		}
+		(*tempStr)[stringPos] = '\0'; // Make C string
+		bufferPos++;
+	}
 	
-	strcpy(outStr, buf);
+	va_end(strings);
 }
 
 void Communications::serialCallback() {
+	uint16_t bufferPosition = 0;
+	
 	switch (serialRecieveMode) {
 		case SERIAL_RECIEVE_MODE::UPDATE_PARAMS:
-			*packetStruct.FnCode					= USBSerialConnection.getc();
+		
+			for (bufferPosition = 0; bufferPosition < 15; bufferPosition++)
+				serialBuffer[bufferPosition] = USBSerialConnection.getc();
 			
-			*packetStruct.p_pacingState			= (PACESTATE) USBSerialConnection.getc();
-			*packetStruct.p_pacingMode			= (PACEMODE) USBSerialConnection.getc();
-			*packetStruct.p_hysteresis				= USBSerialConnection.getc();
+			break;
 			
-			*packetStruct.p_hysteresisInterval		= twoByteRecieve();
-			*packetStruct.p_vPaceAmp				= twoByteRecieve();
-			*packetStruct.p_vPaceWidth_10x		= twoByteRecieve();
-			*packetStruct.p_VRP					= twoByteRecieve();
+		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:
 			
-			packetStruct.checkSum					= USBSerialConnection.getc();
+			uint8_t newlineCount = 0;
 			
-			USBSerialConnection.printf("RECIEVED: %i, %i, %i, %i, %i, %i, %i, %i, %i\n",
+			while (newlineCount < 3) {
+				serialBuffer[bufferPosition] = USBSerialConnection.getc();
+				newlineCount += serialBuffer[bufferPosition] == '\n';
+				bufferPosition++;
+			}
+			
+			break;
+	}
+	dataInBuffer = true;
+}
+
+void Communications::readBuffer() {	
+	switch (serialRecieveMode) {
+		case SERIAL_RECIEVE_MODE::UPDATE_PARAMS:
+			
+			*packetStruct.FnCode					= serialBuffer[0];
+			
+			*packetStruct.p_pacingState			= (PACESTATE) serialBuffer[1];
+			*packetStruct.p_pacingMode			= (PACEMODE) serialBuffer[2];
+			*packetStruct.p_hysteresis				= serialBuffer[3];
+			
+			*packetStruct.p_hysteresisInterval		= twoBytesFromBuffer(serialBuffer, 4);
+			*packetStruct.p_vPaceAmp				= floatFromBuffer(serialBuffer, 6);
+			*packetStruct.p_vPaceWidth_10x		= twoBytesFromBuffer(serialBuffer, 10);
+			*packetStruct.p_VRP					= twoBytesFromBuffer(serialBuffer, 12);
+			
+			packetStruct.checkSum					= serialBuffer[14];
+			
+			USBSerialConnection.printf("RECIEVED: %i, %i, %i, Hist:%i, hInt:%i, PAmp:%f, PWid:%i, VRP:%i, Chk:%i\n",
 				*packetStruct.FnCode,
 				*packetStruct.p_pacingState,
 				*packetStruct.p_pacingMode,
@@ -100,10 +130,7 @@ void Communications::serialCallback() {
 			break;
 			
 		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:
-			
-			stringRecieve(*packetStruct.deviceID);
-			stringRecieve(*packetStruct.deviceImplantDate);	
-			stringRecieve(*packetStruct.leadImplantDate);
+			stringsFromBuffer(serialBuffer, 3, packetStruct.deviceID, packetStruct.deviceImplantDate, packetStruct.leadImplantDate);
 			
 			transmitDeviceInfo();
 			
@@ -111,10 +138,11 @@ void Communications::serialCallback() {
 			
 			break;
 	}
+	
+	dataInBuffer = false;
 }
 
 bool Communications::sendEGM() {
-	//Return true if data sent successfully over serial.
 	return true;
 }
 

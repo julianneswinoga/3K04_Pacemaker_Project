@@ -1,12 +1,15 @@
 #include "Pacemaker.h"
 
 Pacemaker::Pacemaker() {
+	uint8_t temp1;
+	uint16_t temp2;
+	
 	setDataPointers(
 		&FnCode,
 		&pacingState,
 		&pacingMode,
-		NULL,
-		NULL,
+		&temp1,
+		&temp2,
 		&vPaceAmp,
 		&vPaceWidth_milliseconds,
 		&VRP,
@@ -17,5 +20,6 @@ Pacemaker::Pacemaker() {
 }
 
 void Pacemaker::mainLoop() {
-	
+	if (dataInBuffer)
+		readBuffer();
 }
