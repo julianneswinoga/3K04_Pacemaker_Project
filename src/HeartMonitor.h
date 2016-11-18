@@ -12,7 +12,7 @@ class HeartMonitor {
 	protected:
 		uint16_t VRP;
 		uint8_t getVentricleRate();
-		uint8_t getVAtriumRate();
+		uint8_t getAtriumRate();
 };
 
 #endif // HEARTMONITOR_H
