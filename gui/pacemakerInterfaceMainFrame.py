@@ -2,7 +2,9 @@ import wx
 import pacemakerInterface
 import wx.lib.plot as plot
 
-import numpy
+import binascii
+
+import numpy, struct
 
 from serialHelper import *
 
@@ -41,25 +43,24 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.timer = wx.Timer(self, 100)
 		self.Bind(wx.EVT_TIMER, self.OnTimer)
 		self.timer.Start(10)
-		
-		self.waitingTime = 0.1
 	
 	def OnTimer(self, event):
-		if (self.SerialInterface != None and self.SerialInterface.is_open):
-			if self.SerialInterface.inWaiting() == 0:
-				return
-			buf = ''
+		if (self.SerialInterface == None or not self.SerialInterface.is_open):
+			return
+		
+		if (self.SerialInterface.in_waiting == 0):
+			return
+		
+		buf = ''
+		data = self.SerialInterface.read()
+		while (data != "\n"):
+			buf += data
 			data = self.SerialInterface.read()
-			while (data != '\n'):
-				buf += data
-				data = self.SerialInterface.read()
-			try:
-				data = float(buf)
-			except(ValueError):
-				print 'Error converting', buf
-				data = -1
-		else:
-			data = numpy.sin(self.THING)
+		
+		print buf
+		
+		return
+		
 		self.AddPoint(data)
 		self.THING += 0.1
 		self.UpdateGraph()
@@ -90,10 +91,16 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				return
 			print 'Connecting to ' + activeText + '\n'
 			
-			self.SerialInterface = open_port(activeText, baud = 9600, timeout = 3)
+			self.SerialInterface = open_port(activeText, baud = 57600, timeout = 3)
 			if (self.SerialInterface.is_open):
 				self.Bttn_ConnectDisconnect.SetLabel('Disconnect')
 				self.Img_Connected.SetBitmap(self.StaticBitmapConnected)
+				
+				
+				self.SerialInterface.write('123456789\nbbbbbbbbbbb\ncccccc\n')
+				self.SerialInterface.flush()
+				
+				
 			else:
 				print 'Serial connection to ' + activeText + ' failed!'
 		elif (self.SerialInterface != None and self.SerialInterface.is_open): # Disconnect from a device
@@ -105,11 +112,32 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				print 'Failed to disconnect from serial device!'
 				
 	def OnLoadBttnClicked(self, event):
-		self.waitingTime = self.ParamWait.GetValue()
-	
-		self.SerialInterface.write('W:0.'+str(self.waitingTime)+'0000000\n')
+		if (self.SerialInterface == None or not self.SerialInterface.is_open):
+			return
+		
+		dataStream = []
+		byteStream = ''
+		
+		dataStream.append(['B', self.choice_FnCode.GetSelection()]) # FnCode
+		
+		dataStream.append(['B', self.choice_pacingState.GetSelection()]) # pacingState
+		dataStream.append(['B', self.choice_pacingMode.GetSelection()]) # pacingMode
+		dataStream.append(['B', self.choice_hysteresis.GetSelection()]) # hysteresis
+		
+		dataStream.append(['H', self.spinctrl_hysteresisInterval.GetValue()]) # hysteresisInterval
+		dataStream.append(['<f', self.spinctrl_vPaceAmp.GetValue()]) # vPaceAmp
+		dataStream.append(['H', self.spinctrl_vPaceWidth_10x.GetValue()]) # vPaceWidth_10x
+		dataStream.append(['H', self.spinctrl_VRP.GetValue()]) # VRP
+		
+		dataStream.append(['B', 0]); # checksum
+		
+		for i in dataStream:
+			byteStream += struct.pack(i[0], i[1])
+		
+		print self.SerialInterface.write(byteStream), ':', repr(byteStream)
+		for b in byteStream[6:10]:
+			print bin(int(binascii.hexlify(b), 16))
 		self.SerialInterface.flush()
-		print 'Writing ' + 'W'+str(self.waitingTime)
 		
 	def OnWindowClose(self, event):
 		self.timer.Stop()
@@ -121,3 +149,4 @@ if (__name__ == '__main__'):
 	frame.Show(True)
 	
 	app.MainLoop() 
+	
