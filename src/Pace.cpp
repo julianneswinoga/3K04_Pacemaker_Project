@@ -1,42 +1,72 @@
 #include "Pace.h"
 
-Pace::Pace()  {
-	//Initialize Critical State Variables
-	setHysteresisInterval(0);
-	setvPaceAmp(getMaxVOut());
-	setvPaceWidth(0);
-	setLowRateInterval(10);
-	setMaxHeartRate(180);
-	setBaseHeartRate(60);
+DigitalOut led1(LED1);
+DigitalOut led2(LED2);
+
+Pace::Pace() {
+	led1 = 1;
+	led2 = 1;
+	
+	setPaceRate(baseHeartRate);
 }
 
-// Public functions
-uint16_t Pace::getHysteresisInterval() {
-	return hysteresisInterval;
+void Pace::setPaceRate(uint8_t BPM) {
+	paceTicker.attach(this, &Pace::paceTick, (1.0f/BPM) * 60.0f);
 }
 
-uint16_t Pace::getLowRateInterval() {
-	return lowrateInterval;
+void Pace::paceTick() {
+	switch (pacingMode) {
+		case PACEMODE::OFF:
+			break;
+		case PACEMODE::AAT:
+			break;
+		case PACEMODE::VVT:
+			break;
+		case PACEMODE::AOO:
+			paceAtrium();
+			break;
+		case PACEMODE::AAI:
+			break;
+		default:
+		case PACEMODE::VOO:
+			paceVentricle();
+			break;
+		case PACEMODE::VVI:
+			break;
+		case PACEMODE::VDD:
+			break;
+		case PACEMODE::DOO:
+			break;
+		case PACEMODE::DDI:
+			break;
+		case PACEMODE::DDD:
+			break;
+		case PACEMODE::AOOR:
+			break;
+		case PACEMODE::AAIR:
+			break;
+		case PACEMODE::VOOR:
+			paceVentricle();
+			break;
+		case PACEMODE::VVIR:
+			break;
+		case PACEMODE::VDDR:
+			break;
+		case PACEMODE::DOOR:
+			break;
+		case PACEMODE::DDIR:
+			break;
+		case PACEMODE::DDDR:
+			break;
+	}
 }
 
-uint16_t Pace::getvPaceAmp() {
-	return vPaceAmp;
+void Pace::paceVentricle() {
+	led1 = led1 == 1 ? 0 : 1;
 }
 
-uint16_t Pace::getvPaceWidth() {
-	return vPaceWidth;
-}
-
-uint16_t Pace::getVRP() {
-	return VRP;
-}
-
-uint8_t Pace::getMaxHeartRate() {
-	return maxHeartRate;
-}
-
-uint8_t Pace::getBaseHeartRate() {
-	return baseHeartRate;
+void Pace::paceAtrium() {
+	led2 = led2 == 1 ? 0 : 1;
 }
 
 PACEMODE Pace::getPaceMode() {
@@ -45,117 +75,4 @@ PACEMODE Pace::getPaceMode() {
 
 PACESTATE Pace::getPaceState() {
 	return pacingState;
-}
-
-// Protected functions
-void Pace::setHysteresisInterval(uint16_t h) {
-	hysteresisInterval = h;
-}
-
-void Pace::setLowRateInterval(uint16_t l) {
-	lowrateInterval = l;
-}
-
-void Pace::setvPaceAmp(uint16_t p) {
-	vPaceAmp = p;
-}
-
-void Pace::setvPaceWidth(uint16_t p) {
-	vPaceWidth = p;
-}
-
-void Pace::setVRP(uint16_t p) {
-	VRP = p;
-}
-
-void Pace::setMaxHeartRate(uint8_t h) {
-	maxHeartRate = h;
-}
-
-void Pace::setBaseHeartRate(uint8_t h) {
-	baseHeartRate = h;
-}
-
-void Pace::setPaceState(PACESTATE state) {
-	switch (state)
-	{
-	case PACESTATE::PERMANENT:
-		pacingState = PACESTATE::PERMANENT;
-		break;
-	case PACESTATE::TEMPORARY:
-		pacingState =PACESTATE::TEMPORARY;
-		break;
-	case PACESTATE::PACE_NOW:
-		pacingState =PACESTATE::PACE_NOW;
-		break;
-	case PACESTATE::MAGNET:
-		pacingState =PACESTATE::MAGNET;
-		break;
-	case PACESTATE::POWER_ON_RESET:
-		pacingState = PACESTATE::POWER_ON_RESET;
-		break;
-	}
-}
-
-void Pace::setPaceMode(PACEMODE mode) {
-	switch(mode)
-	{
-	case PACEMODE::OFF:
-		pacingMode = PACEMODE::OFF;
-		break;
-	case PACEMODE::AAT:
-		pacingMode = PACEMODE::AAT;
-		break;
-	case PACEMODE::VVT:
-		pacingMode = PACEMODE::VVT;
-		break;
-	case PACEMODE::AOO:
-		pacingMode = PACEMODE::AOO;
-		break;
-	case PACEMODE::AAI:
-		pacingMode = PACEMODE::AAI;
-		break;
-	case PACEMODE::VOO:
-		pacingMode = PACEMODE::VOO;
-		break;
-	case PACEMODE::VVI:
-		pacingMode = PACEMODE::VVI;
-		break;
-	case PACEMODE::VDD:
-		pacingMode = PACEMODE::VDD;
-		break;
-	case PACEMODE::DOO:
-		pacingMode = PACEMODE::DOO;
-		break;
-	case PACEMODE::DDI:
-		pacingMode = PACEMODE::DDI;
-		break;
-	case PACEMODE::DDD:
-		pacingMode = PACEMODE::DDD;
-		break;
-	case PACEMODE::AOOR:
-		pacingMode = PACEMODE::AOOR;
-		break;
-	case PACEMODE::AAIR:
-		pacingMode = PACEMODE::AAIR;
-		break;
-	case PACEMODE::VOOR:
-		pacingMode = PACEMODE::VOOR;
-		break;
-	case PACEMODE::VVIR:
-		pacingMode = PACEMODE::VVIR;
-		break;
-	case PACEMODE::VDDR:
-		pacingMode = PACEMODE::VDDR;
-		break;
-	case PACEMODE::DOOR:
-		pacingMode = PACEMODE::DOOR;
-		break;
-	case PACEMODE::DDIR:
-		pacingMode = PACEMODE::DDIR;
-		break;
-	case PACEMODE::DDDR:
-		pacingMode = PACEMODE::DDDR;
-		break;
-	}
 }

@@ -2,46 +2,23 @@
 #define PACEMAKER_H
 
 #include "mbed.h"
-#include <string>
+#include "Communications.h"
+#include "Activity.h"
+#include "Logging.h"
+#include "Pace.h"
 
-enum class BATTERYSTATE {BOL,ERN,ERT,ERP};
-
-class Pacemaker {
+class Pacemaker : public Communications, public Activity, public Logging, public Pace {
 	private:
-		PinName leadOneInPin;
-		PinName leadTwoInPin;
-		PinName leadOneOutPin;
-		PinName leadTwoOutPin;
+		uint8_t FnCode;
 		
-		string deviceID;
-		string deviceImplantDate;
-		string leadImplantDate;
-		float maxVOut;
-		uint8_t txRegister;
-		uint8_t rxRegister;
-		float leadImpedanceThreshold;
-
+		char deviceID[64];
+		char deviceImplantDate[64];
+		char leadImplantDate[64];
 	protected:
-		float leadImpedance;
-		float replaceBatteryVoltage;
-		float batteryVoltage;
 
-		//setLeadPins([enum]);
-		//[enum] getLeadPins();
-		void setMaxVOut(float);
-		float getMaxVOut();
-		//void setTxRxReg([uint8_t]);
-		//[uint8_t] getTxRxReg();
-		float voltageTest(float);
-		//Object getCardiacEvents();
-		void clearCardiacEvents();
-		void setLeadImpedance(float);
-		float getLeadImpedance();
-
-	 
 	public:
 		Pacemaker();
-		BATTERYSTATE getBatteryStatus();
+		void mainLoop();
 };
 
 #endif // PACEMAKER_H
