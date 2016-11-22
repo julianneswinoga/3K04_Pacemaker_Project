@@ -1,6 +1,6 @@
 #include "Activity.h"
 
-Activity::Activity() {
+Activity::Activity() : accelerometer (PTE25, PTE24, FXOS8700CQ_SLAVE_ADDR1) {
 	
 }
 
