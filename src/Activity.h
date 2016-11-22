@@ -10,6 +10,7 @@ class Activity {
 	private:
 		uint16_t activityTimeThresholdSeconds = 5;
 		FXOS8700Q_acc accelerometer;
+		//FXOS8700Q_mag magnetometer;
 		
 	public:
 		Activity();
