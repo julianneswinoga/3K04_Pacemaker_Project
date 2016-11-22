@@ -22,4 +22,11 @@ Pacemaker::Pacemaker() {
 void Pacemaker::mainLoop() {
 	if (dataInBuffer)
 		readBuffer();
+	
+	//USBSerialConnection.printf("FUCK");
+	if (connected) {
+		float x = 0.5f;
+		//accelerometer.getX(&x);
+		USBSerialConnection.printf("%f\n", x);
+	}
 }
