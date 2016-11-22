@@ -98,7 +98,7 @@ void Communications::serialCallback() {
 	dataInBuffer = true;
 }
 
-void Communications::readBuffer() {	
+void Communications::readBuffer() {
 	switch (serialRecieveMode) {
 		case SERIAL_RECIEVE_MODE::UPDATE_PARAMS:
 			
@@ -135,6 +135,7 @@ void Communications::readBuffer() {
 			transmitDeviceInfo();
 			
 			serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_PARAMS;
+			connected = true;
 			
 			break;
 	}
