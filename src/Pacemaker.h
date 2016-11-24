@@ -7,8 +7,13 @@
 #include "Logging.h"
 #include "Pace.h"
 
-class Pacemaker : public Communications, public Activity, public Logging, public Pace {
+class Pacemaker {
 	private:
+		Communications communications;
+		Activity activity;
+		Logging logging;
+		Pace pace;
+	
 		uint8_t FnCode;
 		
 		char deviceID[64];

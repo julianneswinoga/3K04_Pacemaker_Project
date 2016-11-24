@@ -4,15 +4,15 @@ Pacemaker::Pacemaker() {
 	uint8_t temp1;
 	uint16_t temp2;
 	
-	setDataPointers(
+	communications.setDataPointers(
 		&FnCode,
-		&pacingState,
-		&pacingMode,
+		&pace.pacingState,
+		&pace.pacingMode,
 		&temp1,
 		&temp2,
-		&vPaceAmp,
-		&vPaceWidth_milliseconds,
-		&VRP,
+		&pace.vPaceAmp,
+		&pace.vPaceWidth_milliseconds,
+		&pace.VRP,
 		&deviceID,
 		&deviceImplantDate,
 		&leadImplantDate
@@ -20,12 +20,12 @@ Pacemaker::Pacemaker() {
 }
 
 void Pacemaker::mainLoop() {
-	updateAcc();
+	activity.updateAcc();
 	
-	if (dataInBuffer)
-		readBuffer();
+	if (communications.dataInBuffer)
+		communications.readBuffer();
 	
-	if (connected) {
+	if (communications.DCMConnected) {
 		
 	}
 }
