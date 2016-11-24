@@ -14,7 +14,7 @@ class Pacemaker {
 		Logging logging;
 		Pace pace;
 	
-		uint8_t FnCode;
+		uint8_t fnCode;
 		
 		char deviceID[64];
 		char deviceImplantDate[64];

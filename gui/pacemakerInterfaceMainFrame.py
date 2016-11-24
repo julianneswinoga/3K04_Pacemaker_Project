@@ -2,9 +2,7 @@ import wx
 import pacemakerInterface
 import wx.lib.plot as plot
 
-import binascii
-
-import numpy, struct
+import numpy, struct, binascii
 
 from serialHelper import *
 
@@ -24,8 +22,6 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.plotLength = 200
 		self.plotPoints = [0]*self.plotLength
 		
-		self.THING = 0.0
-		
 		sizer = self.GetSizer()
 		self.canvas = plot.PlotCanvas(self)
 		self.canvas.SetXSpec('none')
@@ -35,6 +31,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		
 		self.serialPortsAvailable = []
 		self.SerialInterface = None
+		self.streamingData = False
 		
 		self.StaticBitmapDisconnected = scale_bitmap(wx.Bitmap('img/disconnected.png', wx.BITMAP_TYPE_ANY), 50, 50)
 		self.StaticBitmapConnected = scale_bitmap(wx.Bitmap('img/connected.png', wx.BITMAP_TYPE_ANY), 50, 50)
@@ -59,17 +56,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 			buf += data
 			data = self.SerialInterface.read()
 		
-		#print buf
-		
-		#return
-		
-		try:
-			thinger = float(buf)
-		except:
-			return
-		
-		self.AddPoint(thinger)
-		self.THING += 0.1
+		self.AddPoint(struct.unpack('f', buf)[0])
 		self.UpdateGraph()
 	
 	def AddPoint(self, y):
@@ -91,6 +78,19 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		for port in self.serialPortsAvailable:
 			self.SerialDropdown.Append(port)
 	
+	def OnBttnStartStopStreamClicked(self, event):
+		if (self.SerialInterface == None or not self.SerialInterface.is_open):
+			return
+		if (self.streamingData):
+			self.SerialInterface.write(struct.pack('B', 3))
+			self.Bttn_StartStopStream.SetLabel('Start Streaming')
+			self.streamingData = False
+		else:
+			self.SerialInterface.write(struct.pack('B', 2))
+			self.Bttn_StartStopStream.SetLabel('Stop Streaming')
+			self.streamingData = True
+		
+	
 	def OnConnectBttnClicked(self, event):
 		if (self.SerialInterface == None or not self.SerialInterface.is_open): # Connect to a device
 			activeText = self.SerialDropdown.GetStringSelection()
@@ -103,7 +103,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				self.Bttn_ConnectDisconnect.SetLabel('Disconnect')
 				self.Img_Connected.SetBitmap(self.StaticBitmapConnected)
 				
-				
+				self.SerialInterface.write(struct.pack('B', 0))
 				self.SerialInterface.write('123456789\nbbbbbbbbbbb\ncccccc\n')
 				self.SerialInterface.flush()
 				
@@ -125,7 +125,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		dataStream = []
 		byteStream = ''
 		
-		dataStream.append(['B', self.choice_FnCode.GetSelection()]) # FnCode
+		self.SerialInterface.write(struct.pack('B', 1))
 		
 		dataStream.append(['B', self.choice_pacingState.GetSelection()]) # pacingState
 		dataStream.append(['B', self.choice_pacingMode.GetSelection()]) # pacingMode

@@ -4,11 +4,19 @@ Communications::Communications() : USBSerialConnection(USBTX, USBRX)  {
 	//Initialize Critical State Variables
 	baudRate = 57600;
 	connectDCM();
-	serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO;
+}
+
+void Communications::initDataStream(float *data) {
+	streamDataTicker.attach(this, &Communications::streamDataTick, dataStreamRate);
+	streamingData = data;
+}
+
+void Communications::setStreamMode(bool streamMode) {
+	streaming = streamMode;
 }
 
 void Communications::setDataPointers(
-		uint8_t *FnCode,
+		uint8_t *fnCode,
 		PACESTATE *p_pacingState,
 		PACEMODE *p_pacingMode,
 		uint8_t *p_hysteresis,
@@ -21,7 +29,7 @@ void Communications::setDataPointers(
 		char (*leadImplantDate)[64]
 	) {
 				
-	packetStruct.FnCode = FnCode;
+	packetStruct.fnCode = fnCode;
 	
 	packetStruct.p_pacingState = p_pacingState;
 	packetStruct.p_pacingMode = p_pacingMode;
@@ -75,15 +83,17 @@ void Communications::stringsFromBuffer(volatile uint8_t buffer[], uint8_t numStr
 void Communications::serialCallback() {
 	uint16_t bufferPosition = 0;
 	
-	switch (serialRecieveMode) {
-		case SERIAL_RECIEVE_MODE::UPDATE_PARAMS:
+	*packetStruct.fnCode = USBSerialConnection.getc();
+	
+	switch (*packetStruct.fnCode) {
+		case UPDATE_PARAMS:
 		
-			for (bufferPosition = 0; bufferPosition < 15; bufferPosition++)
+			for (bufferPosition = 0; bufferPosition < 14; bufferPosition++)
 				serialBuffer[bufferPosition] = USBSerialConnection.getc();
 			
 			break;
 			
-		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:
+		case UPDATE_DEVICE_INFO:
 			
 			uint8_t newlineCount = 0;
 			
@@ -98,25 +108,22 @@ void Communications::serialCallback() {
 	dataInBuffer = true;
 }
 
-void Communications::readBuffer() {
-	switch (serialRecieveMode) {
-		case SERIAL_RECIEVE_MODE::UPDATE_PARAMS:
+void Communications::readBuffer() {	
+	switch (*packetStruct.fnCode) {
+		case UPDATE_PARAMS:			
+			*packetStruct.p_pacingState			= (PACESTATE) serialBuffer[0];
+			*packetStruct.p_pacingMode			= (PACEMODE) serialBuffer[1];
+			*packetStruct.p_hysteresis				= serialBuffer[2];
 			
-			*packetStruct.FnCode					= serialBuffer[0];
+			*packetStruct.p_hysteresisInterval		= twoBytesFromBuffer(serialBuffer, 3);
+			*packetStruct.p_vPaceAmp				= floatFromBuffer(serialBuffer, 5);
+			*packetStruct.p_vPaceWidth_10x		= twoBytesFromBuffer(serialBuffer, 9);
+			*packetStruct.p_VRP					= twoBytesFromBuffer(serialBuffer, 11);
 			
-			*packetStruct.p_pacingState			= (PACESTATE) serialBuffer[1];
-			*packetStruct.p_pacingMode			= (PACEMODE) serialBuffer[2];
-			*packetStruct.p_hysteresis				= serialBuffer[3];
-			
-			*packetStruct.p_hysteresisInterval		= twoBytesFromBuffer(serialBuffer, 4);
-			*packetStruct.p_vPaceAmp				= floatFromBuffer(serialBuffer, 6);
-			*packetStruct.p_vPaceWidth_10x		= twoBytesFromBuffer(serialBuffer, 10);
-			*packetStruct.p_VRP					= twoBytesFromBuffer(serialBuffer, 12);
-			
-			packetStruct.checkSum					= serialBuffer[14];
+			packetStruct.checkSum					= serialBuffer[13];
 			
 			USBSerialConnection.printf("RECIEVED: %i, %i, %i, Hist:%i, hInt:%i, PAmp:%f, PWid:%i, VRP:%i, Chk:%i\n",
-				*packetStruct.FnCode,
+				*packetStruct.fnCode,
 				*packetStruct.p_pacingState,
 				*packetStruct.p_pacingMode,
 				*packetStruct.p_hysteresis,
@@ -129,12 +136,11 @@ void Communications::readBuffer() {
 			
 			break;
 			
-		case SERIAL_RECIEVE_MODE::UPDATE_DEVICE_INFO:
+		case UPDATE_DEVICE_INFO:
 			stringsFromBuffer(serialBuffer, 3, packetStruct.deviceID, packetStruct.deviceImplantDate, packetStruct.leadImplantDate);
 			
 			transmitDeviceInfo();
-			
-			serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_PARAMS;
+
 			DCMConnected = true;
 			
 			break;
@@ -157,8 +163,15 @@ bool Communications::connectDCM() {
 	return true;
 }
 
-void Communications::recieveDeviceInfo() {
-	
+void Communications::streamDataTick() {
+	if (!streaming || !DCMConnected)
+		return;
+	unsigned char const * const p = (unsigned char const *)streamingData;
+	USBSerialConnection.putc(p[0]);
+	USBSerialConnection.putc(p[1]);
+	USBSerialConnection.putc(p[2]);
+	USBSerialConnection.putc(p[3]);
+	USBSerialConnection.printf("\n");
 }
 
 void Communications::transmitDeviceInfo() {

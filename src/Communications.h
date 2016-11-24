@@ -5,8 +5,11 @@
 #include <cstdarg>
 #include "Pace.h"
 
+#define UPDATE_DEVICE_INFO 0
+#define UPDATE_PARAMS 1
+
 typedef struct {
-	uint8_t *FnCode;
+	uint8_t *fnCode;
 	
 	PACESTATE *p_pacingState;
 	PACEMODE *p_pacingMode;
@@ -23,16 +26,15 @@ typedef struct {
 	char (*leadImplantDate)[64];
 } SERIAL_PACKET;
 
-enum class SERIAL_RECIEVE_MODE {
-	UPDATE_PARAMS = 0,
-	UPDATE_DEVICE_INFO = 1
-};
-
 class Communications {
 	private:
+		Ticker streamDataTicker;
+		void streamDataTick();
+		bool streaming = false;
+		float dataStreamRate = 0.05;
+		float *streamingData;
+	
 		volatile uint8_t serialBuffer[256];
-		
-		SERIAL_RECIEVE_MODE serialRecieveMode;
 		volatile SERIAL_PACKET packetStruct;
 		uint16_t vraw;
 		uint16_t f_marker;
@@ -49,7 +51,6 @@ class Communications {
 	
 	protected:
 		bool sendEGM();
-		void recieveDeviceInfo();
 		
 	public:
 		Communications();
@@ -59,6 +60,8 @@ class Communications {
 		void readBuffer();
 		bool dataInBuffer = false;
 		bool DCMConnected = false;
+		void initDataStream(float*);
+		void setStreamMode(bool);
 };
 
 #endif // COMMUNICATIONS_H
