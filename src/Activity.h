@@ -11,7 +11,8 @@ class Activity {
 		const float activityUpdateRate = 0.1f;
 		uint16_t activityTimeThresholdSeconds = 5;
 		float accX, accY, accZ;
-		const float activityThreshold = 20.0f;
+		const float activitySumMax = 30.0f;
+		const float activitySumThreshold = 20.0f;
 		Ticker updateActivityTicker;
 		
 		void updateAcc();

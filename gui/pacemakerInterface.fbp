@@ -641,7 +641,7 @@
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxGridSizer" expanded="0">
+                    <object class="wxGridSizer" expanded="1">
                         <property name="cols">4</property>
                         <property name="hgap">0</property>
                         <property name="minimum_size"></property>
@@ -649,20 +649,6 @@
                         <property name="permission">none</property>
                         <property name="rows">4</property>
                         <property name="vgap">0</property>
-                        <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
-                            <object class="wxGridSizer" expanded="0">
-                                <property name="cols">2</property>
-                                <property name="hgap">0</property>
-                                <property name="minimum_size"></property>
-                                <property name="name">gSizer51</property>
-                                <property name="permission">none</property>
-                                <property name="rows">0</property>
-                                <property name="vgap">0</property>
-                            </object>
-                        </object>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
@@ -1773,11 +1759,11 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="0">
+                        <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxGridSizer" expanded="0">
+                            <object class="wxGridSizer" expanded="1">
                                 <property name="cols">2</property>
                                 <property name="hgap">0</property>
                                 <property name="minimum_size"></property>
@@ -1958,11 +1944,11 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="0">
+                        <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxGridSizer" expanded="0">
+                            <object class="wxGridSizer" expanded="1">
                                 <property name="cols">2</property>
                                 <property name="hgap">0</property>
                                 <property name="minimum_size"></property>
@@ -2002,7 +1988,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Parameter</property>
+                                        <property name="label">Base Heart Rate</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -2086,16 +2072,16 @@
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="initial">0</property>
-                                        <property name="max">10</property>
+                                        <property name="max">90</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
-                                        <property name="min">0</property>
+                                        <property name="min">50</property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_spinCtrl18</property>
+                                        <property name="name">spinctrl_BaseHeartRate</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -2143,11 +2129,11 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="0">
+                        <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxGridSizer" expanded="0">
+                            <object class="wxGridSizer" expanded="1">
                                 <property name="cols">2</property>
                                 <property name="hgap">0</property>
                                 <property name="minimum_size"></property>
@@ -2187,7 +2173,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Parameter</property>
+                                        <property name="label">Max Heart Rate</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -2271,16 +2257,16 @@
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="initial">0</property>
-                                        <property name="max">10</property>
+                                        <property name="max">17500</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
-                                        <property name="min">0</property>
+                                        <property name="min">110</property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_spinCtrl19</property>
+                                        <property name="name">spinctrl_MaxHeartRate</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>

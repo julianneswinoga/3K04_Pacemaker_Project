@@ -18,6 +18,8 @@ typedef struct {
 	float *p_vPaceAmp;
 	uint16_t *p_vPaceWidth_10x;
 	uint16_t *p_VRP;
+	uint8_t *p_baseHeartRate;
+	uint8_t *p_maxHeartRate;
 	
 	uint8_t checkSum;
 	
@@ -54,7 +56,7 @@ class Communications {
 		
 	public:
 		Communications();
-		void setDataPointers(uint8_t*, PACESTATE*, PACEMODE*, uint8_t*, uint16_t*, float*, uint16_t*, uint16_t*, char(*)[64], char(*)[64], char(*)[64]);
+		void setDataPointers(uint8_t*, PACESTATE*, PACEMODE*, uint8_t*, uint16_t*, float*, uint16_t*, uint16_t*, uint8_t*, uint8_t*, char(*)[64], char(*)[64], char(*)[64]);
 		void initEGM();
 		Serial USBSerialConnection;
 		void readBuffer();

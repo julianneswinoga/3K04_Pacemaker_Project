@@ -1,26 +1,30 @@
 #include "Pacemaker.h"
 
-float acc;
+float fuck;
 
-Pacemaker::Pacemaker() {
-	uint8_t temp1;
-	uint16_t temp2;
+Pacemaker::Pacemaker() : pace(&activity.activityTrip) {
+	uint8_t histeresits;
+	uint16_t histeresisInterval;
 	
 	communications.setDataPointers(
 		&fnCode,
 		&pace.pacingState,
 		&pace.pacingMode,
-		&temp1,
-		&temp2,
+		&histeresits,
+		&histeresisInterval,
 		&pace.vPaceAmp,
 		&pace.vPaceWidth_milliseconds,
 		&pace.VRP,
+		&pace.baseHeartRate,
+		&pace.maxHeartRate,
 		&deviceID,
 		&deviceImplantDate,
 		&leadImplantDate
 	);
 	
-	communications.initDataStream(&activity.accMagnitudeSum);
+	
+	
+	communications.initDataStream(&fuck);
 }
 
 void Pacemaker::mainLoop() {
@@ -31,6 +35,5 @@ void Pacemaker::mainLoop() {
 		if (fnCode == 3)
 			communications.setStreamMode(false);
 	}
-	
-	acc = activity.getAccMagnitude();
+	fuck = (float)*pace.activityTrip;
 }
