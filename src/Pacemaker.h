@@ -14,6 +14,7 @@ class Pacemaker : public Communications, public Activity, public Logging, public
 		char deviceID[64];
 		char deviceImplantDate[64];
 		char leadImplantDate[64];
+		
 	protected:
 
 	public:
