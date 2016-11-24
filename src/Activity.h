@@ -2,12 +2,17 @@
 #define ACTIVITY_H
 
 #include "mbed.h"
+#include "filter.h"
 #include "FXOS8700Q.h"
 
 enum class ACTIVITYSTATE { V_LOW, LOW, MED_LOW, MED, MED_HIGH, HIGH, V_HIGH };
 
 class Activity {
 	private:
+		float filteredOutput;
+		Filter inputFilter();
+		
+		
 		const float activityUpdateRate = 0.1f;
 	
 		uint16_t activityTimeThresholdSeconds = 5;
