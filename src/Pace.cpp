@@ -3,14 +3,20 @@
 DigitalOut led1(LED1);
 DigitalOut led2(LED2);
 
-Pace::Pace() {
+Pace::Pace(bool *aTrip) {
 	led1 = 1;
 	led2 = 1;
+	
+	activityTrip = aTrip;
 	
 	setPaceRate(baseHeartRate);
 }
 
 void Pace::setPaceRate(uint8_t BPM) {
+	if (prevBPM == BPM)
+		return;
+	else
+		prevBPM = BPM;
 	paceTicker.attach(this, &Pace::paceTick, (1.0f/BPM) * 60.0f);
 }
 
@@ -23,12 +29,14 @@ void Pace::paceTick() {
 		case PACEMODE::VVT:
 			break;
 		case PACEMODE::AOO:
+			setPaceRate(baseHeartRate);
 			paceAtrium();
 			break;
 		case PACEMODE::AAI:
 			break;
 		default:
 		case PACEMODE::VOO:
+			setPaceRate(baseHeartRate);
 			paceVentricle();
 			break;
 		case PACEMODE::VVI:
@@ -42,10 +50,21 @@ void Pace::paceTick() {
 		case PACEMODE::DDD:
 			break;
 		case PACEMODE::AOOR:
+			if (*activityTrip)
+				setPaceRate(maxHeartRate);
+			else
+				setPaceRate(baseHeartRate);
+			
+			paceAtrium();
 			break;
 		case PACEMODE::AAIR:
 			break;
 		case PACEMODE::VOOR:
+			if (*activityTrip)
+				setPaceRate(maxHeartRate);
+			else
+				setPaceRate(baseHeartRate);
+		
 			paceVentricle();
 			break;
 		case PACEMODE::VVIR:

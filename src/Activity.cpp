@@ -1,7 +1,5 @@
 #include "Activity.h"
 
-DigitalOut led3(LED3);
-
 Activity::Activity() : accelerometer (PTE25, PTE24, FXOS8700CQ_SLAVE_ADDR1) /*: magnetometer (PTE25, PTE24, FXOS8700CQ_SLAVE_ADDR1)*/ {
 	accelerometer.enable();
 	updateActivityTicker.attach(this, &Activity::updateAcc, activityUpdateRate);
@@ -20,11 +18,17 @@ void Activity::updateAcc() {
 	accY = getAccY();
 	accZ = getAccZ();
 	
-	// Lol
-	accMagnitudeSum += (accMagnitudeSum <= 30.0f ? (getAccMagnitude() > 30.0f - accMagnitudeSum ? 30.0f - accMagnitudeSum : getAccMagnitude() ) : 0.0f) - (accMagnitudeSum >= 0.01f ? 0.1 : 0);
 	
-	activityTrip = accShit > activityThreshold;
-	led3 = !activityTrip;
+	float accMagnitude = 0.0f;
+	
+	if (accMagnitudeSum <= activitySumMax) {
+		accMagnitude =  getAccMagnitude() > activitySumMax - accMagnitudeSum ? activitySumMax - accMagnitudeSum : getAccMagnitude();
+	}
+	
+	// TODO: Paramiter dependant
+	accMagnitudeSum += accMagnitude - (accMagnitudeSum >= 0.01f ? 0.1 : 0);
+	
+	activityTrip = accMagnitudeSum > activitySumThreshold;
 }
 
 float Activity::getAccX() {

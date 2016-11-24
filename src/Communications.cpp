@@ -24,6 +24,8 @@ void Communications::setDataPointers(
 		float *p_vPaceAmp,
 		uint16_t *p_vPaceWidth_10x,
 		uint16_t *p_VRP,
+		uint8_t *p_baseHeartRate,
+		uint8_t *p_maxHeartRate,
 		char (*deviceID)[64],
 		char (*deviceImplantDate)[64],
 		char (*leadImplantDate)[64]
@@ -38,6 +40,8 @@ void Communications::setDataPointers(
 	packetStruct.p_vPaceAmp = p_vPaceAmp;
 	packetStruct.p_vPaceWidth_10x = p_vPaceWidth_10x;
 	packetStruct.p_VRP = p_VRP;
+	packetStruct.p_baseHeartRate = p_baseHeartRate;
+	packetStruct.p_maxHeartRate = p_maxHeartRate;
 	
 	packetStruct.deviceID = deviceID;
 	packetStruct.deviceImplantDate = deviceImplantDate;
@@ -88,7 +92,7 @@ void Communications::serialCallback() {
 	switch (*packetStruct.fnCode) {
 		case UPDATE_PARAMS:
 		
-			for (bufferPosition = 0; bufferPosition < 14; bufferPosition++)
+			for (bufferPosition = 0; bufferPosition < 16; bufferPosition++)
 				serialBuffer[bufferPosition] = USBSerialConnection.getc();
 			
 			break;
@@ -119,10 +123,12 @@ void Communications::readBuffer() {
 			*packetStruct.p_vPaceAmp				= floatFromBuffer(serialBuffer, 5);
 			*packetStruct.p_vPaceWidth_10x		= twoBytesFromBuffer(serialBuffer, 9);
 			*packetStruct.p_VRP					= twoBytesFromBuffer(serialBuffer, 11);
+			*packetStruct.p_baseHeartRate		= serialBuffer[13];
+			*packetStruct.p_maxHeartRate		= serialBuffer[14];
 			
-			packetStruct.checkSum					= serialBuffer[13];
+			packetStruct.checkSum					= serialBuffer[15];
 			
-			USBSerialConnection.printf("RECIEVED: %i, %i, %i, Hist:%i, hInt:%i, PAmp:%f, PWid:%i, VRP:%i, Chk:%i\n",
+			USBSerialConnection.printf("RECIEVED: %i, %i, %i, Hist:%i, hInt:%i, PAmp:%f, PWid:%i, VRP:%i, Base:%i, Max:%i, Chk:%i\n",
 				*packetStruct.fnCode,
 				*packetStruct.p_pacingState,
 				*packetStruct.p_pacingMode,
@@ -131,6 +137,8 @@ void Communications::readBuffer() {
 				*packetStruct.p_vPaceAmp,
 				*packetStruct.p_vPaceWidth_10x,
 				*packetStruct.p_VRP,
+				*packetStruct.p_baseHeartRate,
+				*packetStruct.p_maxHeartRate,
 				packetStruct.checkSum
 			);
 			

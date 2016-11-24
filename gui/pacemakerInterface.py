@@ -58,11 +58,6 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer5 = wx.GridSizer( 4, 4, 0, 0 )
 		
-		gSizer51 = wx.GridSizer( 0, 2, 0, 0 )
-		
-		
-		gSizer5.Add( gSizer51, 1, wx.EXPAND, 5 )
-		
 		gSizer511 = wx.GridSizer( 0, 2, 0, 0 )
 		
 		self.m_staticText1711 = wx.StaticText( self, wx.ID_ANY, u"Pacing State", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -155,24 +150,24 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer518 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1718 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1718 = wx.StaticText( self, wx.ID_ANY, u"Base Heart Rate", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1718.Wrap( -1 )
 		gSizer518.Add( self.m_staticText1718, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl18 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer518.Add( self.m_spinCtrl18, 0, wx.ALL|wx.EXPAND, 5 )
+		self.spinctrl_BaseHeartRate = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 50, 90, 0 )
+		gSizer518.Add( self.spinctrl_BaseHeartRate, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer518, 1, wx.EXPAND, 5 )
 		
 		gSizer519 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1719 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1719 = wx.StaticText( self, wx.ID_ANY, u"Max Heart Rate", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1719.Wrap( -1 )
 		gSizer519.Add( self.m_staticText1719, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl19 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer519.Add( self.m_spinCtrl19, 0, wx.ALL|wx.EXPAND, 5 )
+		self.spinctrl_MaxHeartRate = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 110, 17500, 0 )
+		gSizer519.Add( self.spinctrl_MaxHeartRate, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer519, 1, wx.EXPAND, 5 )

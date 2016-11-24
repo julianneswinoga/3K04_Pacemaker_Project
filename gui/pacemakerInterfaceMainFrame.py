@@ -56,7 +56,13 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 			buf += data
 			data = self.SerialInterface.read()
 		
-		self.AddPoint(struct.unpack('f', buf)[0])
+		try:
+			point = struct.unpack('f', buf)[0]
+		except:
+			print buf
+			return
+		
+		self.AddPoint(point)
 		self.UpdateGraph()
 	
 	def AddPoint(self, y):
@@ -135,6 +141,8 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		dataStream.append(['<f', self.spinctrl_vPaceAmp.GetValue()]) # vPaceAmp
 		dataStream.append(['H', self.spinctrl_vPaceWidth_10x.GetValue()]) # vPaceWidth_10x
 		dataStream.append(['H', self.spinctrl_VRP.GetValue()]) # VRP
+		dataStream.append(['B', self.spinctrl_BaseHeartRate.GetValue()]) # Base heart rate
+		dataStream.append(['B', self.spinctrl_MaxHeartRate.GetValue()]) # Max heart rate
 		
 		dataStream.append(['B', 0]); # checksum
 		
