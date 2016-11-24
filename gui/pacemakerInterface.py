@@ -166,7 +166,7 @@ class MainFrame ( wx.Frame ):
 		self.m_staticText1719.Wrap( -1 )
 		gSizer519.Add( self.m_staticText1719, 0, wx.ALL, 5 )
 		
-		self.spinctrl_MaxHeartRate = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 110, 17500, 0 )
+		self.spinctrl_MaxHeartRate = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 110, 175, 0 )
 		gSizer519.Add( self.spinctrl_MaxHeartRate, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
