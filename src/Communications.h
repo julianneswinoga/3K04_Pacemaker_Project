@@ -44,12 +44,13 @@ class Communications {
 		void stringsFromBuffer(volatile uint8_t[], uint8_t, ...);
 		
 		bool connectDCM();
-		void transmitDeviceInfo();
 		void serialCallback();
+		void transmitDeviceInfo();
 	
 	protected:
 		bool sendEGM();
 		void recieveDeviceInfo();
+		bool connected = false;
 		
 	public:
 		Communications();

@@ -20,6 +20,12 @@ Pacemaker::Pacemaker() {
 }
 
 void Pacemaker::mainLoop() {
+	updateAcc();
+	
 	if (dataInBuffer)
 		readBuffer();
+	
+	if (connected) {
+		
+	}
 }
