@@ -50,7 +50,6 @@ class Communications {
 	protected:
 		bool sendEGM();
 		void recieveDeviceInfo();
-		bool connected = false;
 		
 	public:
 		Communications();
@@ -59,6 +58,7 @@ class Communications {
 		Serial USBSerialConnection;
 		void readBuffer();
 		bool dataInBuffer = false;
+		bool DCMConnected = false;
 };
 
 #endif // COMMUNICATIONS_H

@@ -135,7 +135,7 @@ void Communications::readBuffer() {
 			transmitDeviceInfo();
 			
 			serialRecieveMode = SERIAL_RECIEVE_MODE::UPDATE_PARAMS;
-			connected = true;
+			DCMConnected = true;
 			
 			break;
 	}

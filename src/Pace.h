@@ -21,15 +21,15 @@ class Pace : public HeartMonitor {
 		
 	public:
 		Pace();
-		
-	protected:
+		PACEMODE pacingMode = PACEMODE::VOO;
+		PACESTATE pacingState;
 		float vPaceAmp;
 		uint16_t vPaceWidth_milliseconds;
+		
+	protected:
 		PACEMODE getPaceMode();
 		PACESTATE getPaceState();
 		
-		PACEMODE pacingMode = PACEMODE::VOO;
-		PACESTATE pacingState;
 };
 
 #endif // PACE_H
