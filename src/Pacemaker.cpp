@@ -1,11 +1,13 @@
 #include "Pacemaker.h"
 
+float acc;
+
 Pacemaker::Pacemaker() {
 	uint8_t temp1;
 	uint16_t temp2;
 	
 	communications.setDataPointers(
-		&FnCode,
+		&fnCode,
 		&pace.pacingState,
 		&pace.pacingMode,
 		&temp1,
@@ -17,15 +19,18 @@ Pacemaker::Pacemaker() {
 		&deviceImplantDate,
 		&leadImplantDate
 	);
+	
+	communications.initDataStream(&activity.accMagnitudeSum);
 }
 
 void Pacemaker::mainLoop() {
-	activity.updateAcc();
-	
-	if (communications.dataInBuffer)
+	if (communications.dataInBuffer) {
 		communications.readBuffer();
-	
-	if (communications.DCMConnected) {
-		
+		if (fnCode == 2)
+			communications.setStreamMode(true);
+		if (fnCode == 3)
+			communications.setStreamMode(false);
 	}
+	
+	acc = activity.getAccMagnitude();
 }

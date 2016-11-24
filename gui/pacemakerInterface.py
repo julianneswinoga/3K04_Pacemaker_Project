@@ -23,7 +23,7 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer1 = wx.GridSizer( 3, 1, 0, 0 )
 		
-		gSizer4 = wx.GridSizer( 0, 2, 0, 0 )
+		gSizer4 = wx.GridSizer( 2, 2, 0, 0 )
 		
 		gSizer3 = wx.GridSizer( 0, 3, 0, 0 )
 		
@@ -39,10 +39,13 @@ class MainFrame ( wx.Frame ):
 		gSizer3.Add( self.Bttn_ConnectDisconnect, 0, wx.ALL, 5 )
 		
 		
-		gSizer4.Add( gSizer3, 1, 0, 5 )
+		gSizer4.Add( gSizer3, 1, wx.EXPAND, 5 )
 		
 		self.Img_Connected = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
 		gSizer4.Add( self.Img_Connected, 0, wx.ALL, 5 )
+		
+		self.Bttn_StartStopStream = wx.Button( self, wx.ID_ANY, u"Start Streaming", wx.DefaultPosition, wx.DefaultSize, 0 )
+		gSizer4.Add( self.Bttn_StartStopStream, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer1.Add( gSizer4, 1, 0, 5 )
@@ -56,15 +59,6 @@ class MainFrame ( wx.Frame ):
 		gSizer5 = wx.GridSizer( 4, 4, 0, 0 )
 		
 		gSizer51 = wx.GridSizer( 0, 2, 0, 0 )
-		
-		self.m_staticText171 = wx.StaticText( self, wx.ID_ANY, u"FnCode", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText171.Wrap( -1 )
-		gSizer51.Add( self.m_staticText171, 0, wx.ALL, 5 )
-		
-		choice_FnCodeChoices = [ u"k_pparams", u"k_echo", u"k_egram", u"k_estop" ]
-		self.choice_FnCode = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choice_FnCodeChoices, 0 )
-		self.choice_FnCode.SetSelection( 0 )
-		gSizer51.Add( self.choice_FnCode, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer51, 1, wx.EXPAND, 5 )
@@ -199,6 +193,7 @@ class MainFrame ( wx.Frame ):
 		self.Bind( wx.EVT_CLOSE, self.OnWindowClose )
 		self.Bttn_Scan.Bind( wx.EVT_BUTTON, self.OnScanBttnClicked )
 		self.Bttn_ConnectDisconnect.Bind( wx.EVT_BUTTON, self.OnConnectBttnClicked )
+		self.Bttn_StartStopStream.Bind( wx.EVT_BUTTON, self.OnBttnStartStopStreamClicked )
 		self.Btn_LoadParams.Bind( wx.EVT_BUTTON, self.OnLoadBttnClicked )
 	
 	def __del__( self ):
@@ -213,6 +208,9 @@ class MainFrame ( wx.Frame ):
 		event.Skip()
 	
 	def OnConnectBttnClicked( self, event ):
+		event.Skip()
+	
+	def OnBttnStartStopStreamClicked( self, event ):
 		event.Skip()
 	
 	def OnLoadBttnClicked( self, event ):
