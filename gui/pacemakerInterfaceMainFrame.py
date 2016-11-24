@@ -21,7 +21,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	def __init__(self, parent):
 		pacemakerInterface.MainFrame.__init__(self, parent)
 		
-		self.plotLength = 100
+		self.plotLength = 200
 		self.plotPoints = [0]*self.plotLength
 		
 		self.THING = 0.0
@@ -51,17 +51,24 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		if (self.SerialInterface.in_waiting == 0):
 			return
 		
+		#print self.SerialInterface.in_waiting
+		
 		buf = ''
 		data = self.SerialInterface.read()
 		while (data != "\n"):
 			buf += data
 			data = self.SerialInterface.read()
 		
-		print buf
+		#print buf
 		
-		return
+		#return
 		
-		self.AddPoint(data)
+		try:
+			thinger = float(buf)
+		except:
+			return
+		
+		self.AddPoint(thinger)
 		self.THING += 0.1
 		self.UpdateGraph()
 	

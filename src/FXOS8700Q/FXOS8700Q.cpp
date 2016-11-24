@@ -77,6 +77,7 @@ FXOS8700Q_acc::~FXOS8700Q_acc() { }
 void FXOS8700Q_acc::enable(void) {
     uint8_t data[2];
     readRegs( FXOS8700Q_CTRL_REG1, &data[1], 1);
+    printf("Is this working %04x \r\n", &data[1]);
     data[1] |= 0x01;
     data[0] = FXOS8700Q_CTRL_REG1;
     writeRegs(data, 2);
@@ -176,7 +177,7 @@ void FXOS8700Q_acc::getAxis(MotionSensorDataCounts &data) {
     MagReadStatus = 1;
 }
 
-void FXOS8700Q_acc::readRegs(uint8_t addr, uint8_t * data, int len) {
+void FXOS8700Q_acc::readRegs(int addr, uint8_t * data, int len) {
     char t[1] = {addr};
     m_i2c.write(m_addr, t, 1, true);
     m_i2c.read(m_addr, (char *)data, len);
@@ -325,7 +326,7 @@ void FXOS8700Q_mag::getAxis(MotionSensorDataCounts &data) {
     data.z = (res[4] << 8) | res[5];
 }
 
-void FXOS8700Q_mag::readRegs(uint8_t addr, uint8_t * data, int len) {
+void FXOS8700Q_mag::readRegs(int addr, uint8_t * data, int len) {
     char t[1] = {addr};
     m_i2c.write(m_addr, t, 1, true);
     m_i2c.read(m_addr, (char *)data, len);

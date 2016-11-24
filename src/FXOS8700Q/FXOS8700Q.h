@@ -117,7 +117,7 @@ public:
     uint8_t getStatus(void);
     uint8_t getIntSource(void);
   
-  void readRegs(uint8_t addr, uint8_t * data, int len);
+  void readRegs(int addr, uint8_t * data, int len);
   
 private:
   I2C m_i2c;
@@ -152,7 +152,7 @@ public:
     void getAxis(MotionSensorDataCounts &data);
     void getAxis(MotionSensorDataUnits &data);
   
-  void readRegs(uint8_t addr, uint8_t * data, int len);
+  void readRegs(int addr, uint8_t * data, int len);
   
 private:
   I2C m_i2c;
@@ -165,4 +165,6 @@ private:
 
 };
 
-#endif // FXOSDRIVER__H
+
+
+#endif
