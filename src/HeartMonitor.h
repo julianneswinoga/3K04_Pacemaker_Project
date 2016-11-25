@@ -2,8 +2,9 @@
 #define HEARTMONITOR_H
 
 #include "mbed.h"
+#include "pinmap.h"
 
-class HeartMonitor {		
+class HeartMonitor {	
 	public:
 		HeartMonitor();
 		uint16_t VRP;

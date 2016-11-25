@@ -1,4 +1,5 @@
 #include "Pacemaker.h"
+#include "pinmap.h"
 
 float fuck;
 
@@ -35,5 +36,5 @@ void Pacemaker::mainLoop() {
 		if (fnCode == 3)
 			communications.setStreamMode(false);
 	}
-	fuck = (float)*pace.activityTrip;
+	fuck = (float)(atrialIn + ventricleIn + leadImpedence + atr_rect_signal + vent_rect_signal);
 }

@@ -18,7 +18,6 @@ void Activity::updateAcc() {
 	accY = getAccY();
 	accZ = getAccZ();
 	
-	
 	float accMagnitude = 0.0f;
 	
 	if (accMagnitudeSum <= activitySumMax) {

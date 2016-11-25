@@ -16,7 +16,6 @@ class Pace : public HeartMonitor {
 		void paceVentricle();
 		void paceAtrium();
 		
-		
 	public:
 		Pace(bool*);
 		PACEMODE pacingMode = PACEMODE::VOO;

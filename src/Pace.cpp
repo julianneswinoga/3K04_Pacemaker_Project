@@ -20,7 +20,7 @@ void Pace::setPaceRate(uint8_t BPM) {
 	paceTicker.attach(this, &Pace::paceTick, (1.0f/BPM) * 60.0f);
 }
 
-void Pace::paceTick() {
+void Pace::paceTick() {	
 	switch (pacingMode) {
 		case PACEMODE::OFF:
 			break;
@@ -80,7 +80,7 @@ void Pace::paceTick() {
 	}
 }
 
-void Pace::paceVentricle() {
+void Pace::paceVentricle() {	
 	led1 = led1 == 1 ? 0 : 1;
 }
 
