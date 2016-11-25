@@ -130,7 +130,7 @@ class MainFrame ( wx.Frame ):
 		self.m_staticText1716.Wrap( -1 )
 		gSizer516.Add( self.m_staticText1716, 0, wx.ALL, 5 )
 		
-		self.spinctrl_vPaceWidth_10x = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
+		self.spinctrl_vPaceWidth_10x = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 1000, 0 )
 		gSizer516.Add( self.spinctrl_vPaceWidth_10x, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		

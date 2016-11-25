@@ -10,18 +10,26 @@ enum class PACEMODE { OFF,  AAT,  VVT,  AOO,  AAI, VOO, VVI, VDD, DOO, DDI, DDD,
 class Pace : public HeartMonitor {
 	private:
 		Ticker paceTicker;
+		Timeout changeVar[6];
 		void paceTick();
 		uint8_t prevBPM = 0;
 		
 		void paceVentricle();
 		void paceAtrium();
 		
+		void paceVentricleStage1();
+		void paceVentricleStage2();
+		void paceVentricleStage3();
+		void paceVentricleStage4();
+		void paceVentricleStage5();
+		void paceVentricleStage6();
+		
 	public:
 		Pace(bool*);
 		PACEMODE pacingMode = PACEMODE::VOO;
 		PACESTATE pacingState;
 		float vPaceAmp;
-		uint16_t vPaceWidth_milliseconds;
+		uint16_t vPaceWidth_milliseconds = 100;
 		uint8_t baseHeartRate = 60;
 		uint8_t maxHeartRate = 180;
 		void setPaceRate(uint8_t);
@@ -31,7 +39,6 @@ class Pace : public HeartMonitor {
 	protected:
 		PACEMODE getPaceMode();
 		PACESTATE getPaceState();
-		
 };
 
 #endif // PACE_H
