@@ -31,7 +31,7 @@ void Pace::paceTick() {
 		case PACEMODE::AOO:
 			setPaceRate(baseHeartRate);
 			paceAtrium();
-			egramData = 5.0f;//atrialIn;//heartMonitor.getAtriumVoltage();
+			egramData = getAtriumVoltage();
 			break;
 		case PACEMODE::AAI:
 			break;
@@ -39,7 +39,7 @@ void Pace::paceTick() {
 		case PACEMODE::VOO:
 			setPaceRate(baseHeartRate);
 			paceVentricle();
-			egramData = 5.0f;//ventricleIn;//heartMonitor.getVentricleVoltage();
+			egramData = getVentricleVoltage();
 			break;
 		case PACEMODE::VVI:
 			break;
@@ -58,7 +58,7 @@ void Pace::paceTick() {
 				setPaceRate(baseHeartRate);
 			
 			paceAtrium();
-			egramData = 5.0f;//atrialIn;//heartMonitor.getAtriumVoltage();
+			egramData = getAtriumVoltage();
 			break;
 		case PACEMODE::AAIR:
 			break;
@@ -69,7 +69,7 @@ void Pace::paceTick() {
 				setPaceRate(baseHeartRate);
 		
 			paceVentricle();
-			egramData = 5.0f;//ventricleIn;//heartMonitor.getVentricleVoltage();
+			egramData = getVentricleVoltage();
 			break;
 		case PACEMODE::VVIR:
 			break;
