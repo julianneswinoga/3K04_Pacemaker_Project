@@ -4,6 +4,14 @@ HeartMonitor::HeartMonitor() {
 	VRP = 5;
 }
 
+float HeartMonitor::getAtriumVoltage() {
+	return V_REF * atrialIn;
+}
+
+float HeartMonitor::getVentricleVoltage() {
+	return V_REF * ventricleIn;
+}
+
 uint8_t HeartMonitor::getVentricleRate() {
 	return 0;
 }
