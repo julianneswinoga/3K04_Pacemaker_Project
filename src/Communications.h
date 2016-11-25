@@ -38,9 +38,6 @@ class Communications {
 	
 		volatile uint8_t serialBuffer[256];
 		volatile SERIAL_PACKET packetStruct;
-		uint16_t vraw;
-		uint16_t f_marker;
-		uint8_t o_CommOut;
 		uint32_t baudRate;
 
 		uint16_t twoBytesFromBuffer(volatile uint8_t[], uint16_t);
