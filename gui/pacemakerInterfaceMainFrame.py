@@ -121,6 +121,8 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 			if (not self.SerialInterface.is_open):
 				self.Bttn_ConnectDisconnect.SetLabel('Connect')
 				self.Img_Connected.SetBitmap(self.StaticBitmapDisconnected)
+				self.streamingData = False
+				self.Bttn_StartStopStream.SetLabel('Start Streaming')
 			else:
 				print 'Failed to disconnect from serial device!'
 				

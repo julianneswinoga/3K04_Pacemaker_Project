@@ -1,7 +1,7 @@
 #include "Pacemaker.h"
-#include "pinmap.h"
+//#include "pinmap.h"
 
-float fuck;
+float temp = 0.0f;
 
 Pacemaker::Pacemaker() : pace(&activity.activityTrip) {
 	uint8_t histeresits;
@@ -23,9 +23,7 @@ Pacemaker::Pacemaker() : pace(&activity.activityTrip) {
 		&leadImplantDate
 	);
 	
-	
-	
-	communications.initDataStream(&fuck);
+	communications.initDataStream(&temp);
 }
 
 void Pacemaker::mainLoop() {
@@ -36,5 +34,5 @@ void Pacemaker::mainLoop() {
 		if (fnCode == 3)
 			communications.setStreamMode(false);
 	}
-	fuck = (float)(atrialIn + ventricleIn + leadImpedence + atr_rect_signal + vent_rect_signal);
+	//EGRAMData = 1.0f;//pace.egramData;
 }
