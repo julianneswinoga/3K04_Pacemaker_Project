@@ -26,6 +26,7 @@ class Pace : public HeartMonitor {
 		uint8_t maxHeartRate = 180;
 		void setPaceRate(uint8_t);
 		bool *activityTrip;
+		float egramData = 0.0f;
 		
 	protected:
 		PACEMODE getPaceMode();

@@ -112,7 +112,8 @@ void Communications::serialCallback() {
 	dataInBuffer = true;
 }
 
-void Communications::readBuffer() {	
+void Communications::readBuffer() {
+	//__disable_irq();
 	switch (*packetStruct.fnCode) {
 		case UPDATE_PARAMS:			
 			*packetStruct.p_pacingState			= (PACESTATE) serialBuffer[0];
@@ -155,6 +156,7 @@ void Communications::readBuffer() {
 	}
 	
 	dataInBuffer = false;
+	//__enable_irq();
 }
 
 bool Communications::sendEGM() {
