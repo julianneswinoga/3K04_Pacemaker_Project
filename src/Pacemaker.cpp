@@ -1,7 +1,5 @@
 #include "Pacemaker.h"
-//#include "pinmap.h"
-
-float temp = 0.0f;
+#include "pinmap.h"
 
 Pacemaker::Pacemaker() : pace(&activity.activityTrip) {
 	uint8_t histeresits;
@@ -23,16 +21,17 @@ Pacemaker::Pacemaker() : pace(&activity.activityTrip) {
 		&leadImplantDate
 	);
 	
-	communications.initDataStream(&temp);
+	communications.initDataStream(&pace.egramData);
 }
 
 void Pacemaker::mainLoop() {
 	if (communications.dataInBuffer) {
+		communications.USBSerialConnection.printf("");
 		communications.readBuffer();
+		communications.USBSerialConnection.printf("");
 		if (fnCode == 2)
 			communications.setStreamMode(true);
 		if (fnCode == 3)
 			communications.setStreamMode(false);
 	}
-	//EGRAMData = 1.0f;//pace.egramData;
 }
