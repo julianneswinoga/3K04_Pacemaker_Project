@@ -86,10 +86,53 @@ void Pace::paceTick() {
 
 void Pace::paceVentricle() {	
 	led1 = led1 == 1 ? 0 : 1;
+	
+	atr_grnd_ctrl  = 0;
+	vent_grnd_ctrl = 0;
+	pacing_ref_pwm = 1;
+	changeVar[0].attach(this, &Pace::paceVentricleStage1, 0.01f);
+	changeVar[1].attach(this, &Pace::paceVentricleStage2, 0.02f);
+	changeVar[2].attach(this, &Pace::paceVentricleStage3, 0.02f+(vPaceWidth_milliseconds/1000.0f));
+	changeVar[3].attach(this, &Pace::paceVentricleStage4, 0.02f+(vPaceWidth_milliseconds/1000.0f)+0.05f);
+	changeVar[4].attach(this, &Pace::paceVentricleStage5, 0.02f+(vPaceWidth_milliseconds/1000.0f)+0.05f+0.1f);
+	changeVar[5].attach(this, &Pace::paceVentricleStage6, 0.02f+(vPaceWidth_milliseconds/1000.0f)+0.05f+0.1f+0.01f);
+}
+
+void Pace::paceVentricleStage1() {
+	pace_charge_ctrl = 1;
+}
+
+void Pace::paceVentricleStage2() {
+	vent_pace_ctrl = 1;
+}
+
+void Pace::paceVentricleStage3() {
+	vent_pace_ctrl = 0;
+	atr_pace_ctrl =  0;
+	vent_pace_ctrl = 0;
+	atr_grnd_ctrl  = 1;
+	vent_grnd_ctrl = 1;	
+}
+
+void Pace::paceVentricleStage4() {
+	pacing_ref_pwm = 0;
+}
+
+void Pace::paceVentricleStage5() {
+	pace_charge_ctrl = 0;
+}
+
+void Pace::paceVentricleStage6() {
+	atr_grnd_ctrl  = 0;
+	vent_grnd_ctrl = 0;
 }
 
 void Pace::paceAtrium() {
 	led2 = led2 == 1 ? 0 : 1;
+	
+	atr_grnd_ctrl  = 0;
+	vent_grnd_ctrl = 0;
+	pacing_ref_pwm = 1;
 }
 
 PACEMODE Pace::getPaceMode() {
