@@ -32,9 +32,9 @@ VPATH = ..
 
 GCC_BIN = 
 PROJECT = main
-OBJECTS = main.o src/Pacemaker.o src/Communications.o src/Activity.o src/Pace.o src/Logging.o src/HeartMonitor.o
+OBJECTS = main.o src/Pacemaker.o src/Communications.o src/Activity.o src/Pace.o src/Logging.o src/HeartMonitor.o src/FXOS8700Q/FXOS8700Q.o src/pinmap.o
 SYS_OBJECTS = mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/cmsis_nvic.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/mbed_board.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/mbed_overrides.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/retarget.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/startup_MK64F12.o mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/system_MK64F12.o 
-INCLUDE_PATHS = -I../. -I../src -I../mbed/. -I../mbed/TARGET_K64F -I../mbed/TARGET_K64F/TARGET_Freescale -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F/TARGET_FRDM -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F/drivers -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/api -I../mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM 
+INCLUDE_PATHS = -I../. -I../src/. -I../src/FXOS8700Q/. -I../src/FXOS8700Q/MotionSensor/. -I../mbed/. -I../mbed/TARGET_K64F -I../mbed/TARGET_K64F/TARGET_Freescale -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F/TARGET_FRDM -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/TARGET_MCU_K64F/drivers -I../mbed/TARGET_K64F/TARGET_Freescale/TARGET_KSDK2_MCUS/api -I../mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM 
 LIBRARY_PATHS = -L../mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM 
 LIBRARIES = -lmbed 
 LINKER_SCRIPT = ../mbed/TARGET_K64F/TOOLCHAIN_GCC_ARM/MK64FN1M0xxx12.ld

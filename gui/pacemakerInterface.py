@@ -23,7 +23,7 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer1 = wx.GridSizer( 3, 1, 0, 0 )
 		
-		gSizer4 = wx.GridSizer( 0, 2, 0, 0 )
+		gSizer4 = wx.GridSizer( 2, 2, 0, 0 )
 		
 		gSizer3 = wx.GridSizer( 0, 3, 0, 0 )
 		
@@ -39,10 +39,13 @@ class MainFrame ( wx.Frame ):
 		gSizer3.Add( self.Bttn_ConnectDisconnect, 0, wx.ALL, 5 )
 		
 		
-		gSizer4.Add( gSizer3, 1, 0, 5 )
+		gSizer4.Add( gSizer3, 1, wx.EXPAND, 5 )
 		
 		self.Img_Connected = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
 		gSizer4.Add( self.Img_Connected, 0, wx.ALL, 5 )
+		
+		self.Bttn_StartStopStream = wx.Button( self, wx.ID_ANY, u"Start Streaming", wx.DefaultPosition, wx.DefaultSize, 0 )
+		gSizer4.Add( self.Bttn_StartStopStream, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer1.Add( gSizer4, 1, 0, 5 )
@@ -54,20 +57,6 @@ class MainFrame ( wx.Frame ):
 		gSizer1.Add( self.PlotFrame, 1, wx.ALL|wx.EXPAND, 5 )
 		
 		gSizer5 = wx.GridSizer( 4, 4, 0, 0 )
-		
-		gSizer51 = wx.GridSizer( 0, 2, 0, 0 )
-		
-		self.m_staticText171 = wx.StaticText( self, wx.ID_ANY, u"FnCode", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText171.Wrap( -1 )
-		gSizer51.Add( self.m_staticText171, 0, wx.ALL, 5 )
-		
-		choice_FnCodeChoices = [ u"k_pparams", u"k_echo", u"k_egram", u"k_estop" ]
-		self.choice_FnCode = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choice_FnCodeChoices, 0 )
-		self.choice_FnCode.SetSelection( 0 )
-		gSizer51.Add( self.choice_FnCode, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		
-		gSizer5.Add( gSizer51, 1, wx.EXPAND, 5 )
 		
 		gSizer511 = wx.GridSizer( 0, 2, 0, 0 )
 		
@@ -141,7 +130,7 @@ class MainFrame ( wx.Frame ):
 		self.m_staticText1716.Wrap( -1 )
 		gSizer516.Add( self.m_staticText1716, 0, wx.ALL, 5 )
 		
-		self.spinctrl_vPaceWidth_10x = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
+		self.spinctrl_vPaceWidth_10x = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 1000, 0 )
 		gSizer516.Add( self.spinctrl_vPaceWidth_10x, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -161,24 +150,24 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer518 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1718 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1718 = wx.StaticText( self, wx.ID_ANY, u"Base Heart Rate", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1718.Wrap( -1 )
 		gSizer518.Add( self.m_staticText1718, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl18 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer518.Add( self.m_spinCtrl18, 0, wx.ALL|wx.EXPAND, 5 )
+		self.spinctrl_BaseHeartRate = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 50, 90, 0 )
+		gSizer518.Add( self.spinctrl_BaseHeartRate, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer518, 1, wx.EXPAND, 5 )
 		
 		gSizer519 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1719 = wx.StaticText( self, wx.ID_ANY, u"Parameter", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1719 = wx.StaticText( self, wx.ID_ANY, u"Max Heart Rate", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1719.Wrap( -1 )
 		gSizer519.Add( self.m_staticText1719, 0, wx.ALL, 5 )
 		
-		self.m_spinCtrl19 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
-		gSizer519.Add( self.m_spinCtrl19, 0, wx.ALL|wx.EXPAND, 5 )
+		self.spinctrl_MaxHeartRate = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 110, 175, 0 )
+		gSizer519.Add( self.spinctrl_MaxHeartRate, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		gSizer5.Add( gSizer519, 1, wx.EXPAND, 5 )
@@ -199,6 +188,7 @@ class MainFrame ( wx.Frame ):
 		self.Bind( wx.EVT_CLOSE, self.OnWindowClose )
 		self.Bttn_Scan.Bind( wx.EVT_BUTTON, self.OnScanBttnClicked )
 		self.Bttn_ConnectDisconnect.Bind( wx.EVT_BUTTON, self.OnConnectBttnClicked )
+		self.Bttn_StartStopStream.Bind( wx.EVT_BUTTON, self.OnBttnStartStopStreamClicked )
 		self.Btn_LoadParams.Bind( wx.EVT_BUTTON, self.OnLoadBttnClicked )
 	
 	def __del__( self ):
@@ -213,6 +203,9 @@ class MainFrame ( wx.Frame ):
 		event.Skip()
 	
 	def OnConnectBttnClicked( self, event ):
+		event.Skip()
+	
+	def OnBttnStartStopStreamClicked( self, event ):
 		event.Skip()
 	
 	def OnLoadBttnClicked( self, event ):
