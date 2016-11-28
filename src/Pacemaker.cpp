@@ -34,4 +34,6 @@ void Pacemaker::mainLoop() {
 		if (fnCode == 3)
 			communications.setStreamMode(false);
 	}
+	
+	pace.updateEgramData();
 }

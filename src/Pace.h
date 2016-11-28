@@ -35,6 +35,7 @@ class Pace : public HeartMonitor {
 		void setPaceRate(uint8_t);
 		bool *activityTrip;
 		float egramData = 0.0f;
+		void updateEgramData();
 		
 	protected:
 		PACEMODE getPaceMode();
