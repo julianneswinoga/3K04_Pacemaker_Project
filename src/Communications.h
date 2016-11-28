@@ -33,7 +33,7 @@ class Communications {
 		Ticker streamDataTicker;
 		void streamDataTick();
 		bool streaming = false;
-		float dataStreamRate = 0.05;
+		float dataStreamRate = 0.005;
 		float *streamingData;
 	
 		volatile uint8_t serialBuffer[256];
