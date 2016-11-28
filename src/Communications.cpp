@@ -128,20 +128,6 @@ void Communications::readBuffer() {
 			
 			packetStruct.checkSum					= serialBuffer[15];
 			
-			USBSerialConnection.printf("RECIEVED: %i, %i, %i, Hist:%i, hInt:%i, PAmp:%f, PWid:%i, VRP:%i, Base:%i, Max:%i, Chk:%i\n",
-				*packetStruct.fnCode,
-				*packetStruct.p_pacingState,
-				*packetStruct.p_pacingMode,
-				*packetStruct.p_hysteresis,
-				*packetStruct.p_hysteresisInterval,
-				*packetStruct.p_vPaceAmp,
-				*packetStruct.p_vPaceWidth_10x,
-				*packetStruct.p_VRP,
-				*packetStruct.p_baseHeartRate,
-				*packetStruct.p_maxHeartRate,
-				packetStruct.checkSum
-			);
-			
 			break;
 			
 		case UPDATE_DEVICE_INFO:
