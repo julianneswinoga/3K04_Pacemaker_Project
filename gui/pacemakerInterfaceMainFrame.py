@@ -60,10 +60,16 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 					print 'Overload:', self.SerialInterface.in_waiting
 				
 				buf = ''
-				data = self.SerialInterface.read()
+				try:
+					data = self.SerialInterface.read()
+				except:
+					pass
 				while (data != "\n" and self.runSerialThread):
 					buf += data
-					data = self.SerialInterface.read()
+					try:
+						data = self.SerialInterface.read()
+					except:
+						pass
 				
 				try:
 					point = struct.unpack('f', buf)[0]
