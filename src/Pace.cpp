@@ -31,7 +31,6 @@ void Pace::paceTick() {
 		case PACEMODE::AOO:
 			setPaceRate(baseHeartRate);
 			paceAtrium();
-			egramData = getAtriumVoltage();
 			break;
 		case PACEMODE::AAI:
 			break;
@@ -39,7 +38,6 @@ void Pace::paceTick() {
 		case PACEMODE::VOO:
 			setPaceRate(baseHeartRate);
 			paceVentricle();
-			egramData = getVentricleVoltage();
 			break;
 		case PACEMODE::VVI:
 			break;
@@ -58,7 +56,6 @@ void Pace::paceTick() {
 				setPaceRate(baseHeartRate);
 			
 			paceAtrium();
-			egramData = getAtriumVoltage();
 			break;
 		case PACEMODE::AAIR:
 			break;
@@ -69,7 +66,6 @@ void Pace::paceTick() {
 				setPaceRate(baseHeartRate);
 		
 			paceVentricle();
-			egramData = getVentricleVoltage();
 			break;
 		case PACEMODE::VVIR:
 			break;
@@ -80,6 +76,39 @@ void Pace::paceTick() {
 		case PACEMODE::DDIR:
 			break;
 		case PACEMODE::DDDR:
+			break;
+	}
+}
+
+void Pace::updateEgramData() {
+	switch (pacingMode) {
+		default:
+		case PACEMODE::OFF:
+		case PACEMODE::AAT:
+		case PACEMODE::VVT:
+		case PACEMODE::AAI:
+		case PACEMODE::VVI:
+		case PACEMODE::VDD:
+		case PACEMODE::DOO:
+		case PACEMODE::DDI:
+		case PACEMODE::DDD:
+		case PACEMODE::AAIR:
+		case PACEMODE::VVIR:
+		case PACEMODE::VDDR:
+		case PACEMODE::DOOR:
+		case PACEMODE::DDIR:
+		case PACEMODE::DDDR:
+			egramData = 0.0f;
+			break;
+			
+		case PACEMODE::AOO:
+		case PACEMODE::AOOR:
+			egramData = getAtriumVoltage();
+			break;
+			
+		case PACEMODE::VOO:
+		case PACEMODE::VOOR:
+			egramData = getVentricleVoltage();
 			break;
 	}
 }
