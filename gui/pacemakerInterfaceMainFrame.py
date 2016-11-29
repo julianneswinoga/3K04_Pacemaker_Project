@@ -126,6 +126,9 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 				self.Bttn_ConnectDisconnect.SetLabel('Disconnect')
 				self.Img_Connected.SetBitmap(self.StaticBitmapConnected)
 				
+				self.SerialInterface.write(struct.pack('B', 4)) # send connect signal
+				self.SerialInterface.flush()
+				
 				self.SerialInterface.write(struct.pack('B', 0))
 				self.SerialInterface.write('123456789\nbbbbbbbbbbb\ncccccc\n')
 				self.SerialInterface.flush()
@@ -134,6 +137,9 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 			else:
 				print 'Serial connection to ' + activeText + ' failed!'
 		elif (self.SerialInterface != None and self.SerialInterface.is_open): # Disconnect from a device
+			self.SerialInterface.write(struct.pack('B', 5)) # send disconnect signal
+			self.SerialInterface.flush()
+		
 			self.SerialInterface.close()
 			if (not self.SerialInterface.is_open):
 				self.Bttn_ConnectDisconnect.SetLabel('Connect')

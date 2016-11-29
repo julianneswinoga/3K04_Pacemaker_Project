@@ -1,7 +1,6 @@
 #include "Communications.h"
 
 Communications::Communications() : USBSerialConnection(USBTX, USBRX)  {
-	//Initialize Critical State Variables
 	baudRate = 57600;
 	connectDCM();
 }
@@ -98,16 +97,19 @@ void Communications::serialCallback() {
 			break;
 			
 		case UPDATE_DEVICE_INFO:
-			
-			uint8_t newlineCount = 0;
-			
-			while (newlineCount < 3) {
-				serialBuffer[bufferPosition] = USBSerialConnection.getc();
-				newlineCount += serialBuffer[bufferPosition] == '\n';
-				bufferPosition++;
+			{
+				uint8_t newlineCount = 0;
+				
+				while (newlineCount < 3) {
+					serialBuffer[bufferPosition] = USBSerialConnection.getc();
+					newlineCount += serialBuffer[bufferPosition] == '\n';
+					bufferPosition++;
+				}
 			}
-			
 			break;
+		
+		default:
+			return;
 	}
 	dataInBuffer = true;
 }
@@ -134,8 +136,19 @@ void Communications::readBuffer() {
 			stringsFromBuffer(serialBuffer, 3, packetStruct.deviceID, packetStruct.deviceImplantDate, packetStruct.leadImplantDate);
 			
 			transmitDeviceInfo();
-
+			
+			break;
+		
+		case DCM_CONNECT_SIG:
+			connectDCM();
+			streaming = false;
 			DCMConnected = true;
+			
+			break;
+			
+		case DCM_DISCONNECT_SIG:
+			streaming = false;
+			DCMConnected = false;
 			
 			break;
 	}
