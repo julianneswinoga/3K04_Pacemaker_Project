@@ -28,8 +28,9 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	def __init__(self, parent):
 		pacemakerInterface.MainFrame.__init__(self, parent)
 		
-		self.plotLength = 500
+		self.plotLength = 600
 		self.plotPoints = [0]*self.plotLength
+		self.pointsToAdd = []
 		
 		sizer = self.GetSizer()
 		self.canvas = plot.PlotCanvas(self)
@@ -48,38 +49,39 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.StaticBitmapConnected = scale_bitmap(wx.Bitmap('img/connected.png', wx.BITMAP_TYPE_ANY), 50, 50)
 		self.Img_Connected.SetBitmap(self.StaticBitmapDisconnected)
 		
-		self.timer = wx.Timer(self, 100)
+		self.timer = wx.Timer(self, 100) # 100 is the timer ID
 		self.Bind(wx.EVT_TIMER, self.OnGraphUpdateTimer)
-		self.timer.Start(10)
+		self.timer.Start(20)
 	
 	@threaded
 	def serialFunction(self):
 		while (self.runSerialThread):
-			if (self.SerialInterface != None and self.SerialInterface.is_open and self.SerialInterface.in_waiting >= 0):
-				if (self.SerialInterface.in_waiting >= 400):
-					print 'Overload:', self.SerialInterface.in_waiting
-				
+			if (self.SerialInterface != None and self.SerialInterface.is_open and self.SerialInterface.in_waiting >= 0):				
 				buf = ''
 				try:
 					data = self.SerialInterface.read()
 				except:
-					pass
+					continue
 				while (data != "\n" and self.runSerialThread):
 					buf += data
 					try:
 						data = self.SerialInterface.read()
 					except:
-						pass
+						continue
 				
 				try:
 					point = struct.unpack('f', buf)[0]
-					self.AddPoint(point)
+					self.pointsToAdd.append(point)
 				except:
 					print buf
 		self.serialThreadExit = True
-		return
 	
 	def OnGraphUpdateTimer(self, event):
+		if (self.SerialInterface != None and self.SerialInterface.is_open and self.SerialInterface.in_waiting >= 1000):
+			print 'Overload:', self.SerialInterface.in_waiting
+	
+		while(len(self.pointsToAdd) > 0):
+			self.AddPoint(self.pointsToAdd.pop())
 		self.UpdateGraph()
 	
 	def AddPoint(self, y):

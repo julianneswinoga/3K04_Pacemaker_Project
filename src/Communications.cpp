@@ -2,7 +2,8 @@
 
 Communications::Communications() : USBSerialConnection(USBTX, USBRX)  {
 	baudRate = 57600;
-	connectDCM();
+	USBSerialConnection.baud(baudRate); // Set the baudrate
+	USBSerialConnection.attach(this, &Communications::serialCallback); // Add an inturupt
 }
 
 void Communications::initDataStream(float *data) {
@@ -97,7 +98,6 @@ void Communications::serialCallback() {
 			break;
 			
 		case UPDATE_DEVICE_INFO:
-			{
 				uint8_t newlineCount = 0;
 				
 				while (newlineCount < 3) {
@@ -105,11 +105,7 @@ void Communications::serialCallback() {
 					newlineCount += serialBuffer[bufferPosition] == '\n';
 					bufferPosition++;
 				}
-			}
 			break;
-		
-		default:
-			return;
 	}
 	dataInBuffer = true;
 }
@@ -140,7 +136,6 @@ void Communications::readBuffer() {
 			break;
 		
 		case DCM_CONNECT_SIG:
-			connectDCM();
 			streaming = false;
 			DCMConnected = true;
 			
@@ -154,12 +149,6 @@ void Communications::readBuffer() {
 	}
 	
 	dataInBuffer = false;
-}
-
-bool Communications::connectDCM() {
-	USBSerialConnection.baud(baudRate); // Set the baudrate
-	USBSerialConnection.attach(this, &Communications::serialCallback); // Add an inturupt
-	return true;
 }
 
 void Communications::streamDataTick() {

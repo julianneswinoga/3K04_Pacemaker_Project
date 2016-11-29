@@ -47,7 +47,6 @@ class Communications {
 		uint16_t twoBytesFromBuffer(volatile uint8_t[], uint16_t);
 		float floatFromBuffer(volatile uint8_t[], uint16_t);
 		void stringsFromBuffer(volatile uint8_t[], uint8_t, ...);
-		bool connectDCM();
 		void serialCallback();
 		void transmitDeviceInfo();
 		void streamDataTick();
