@@ -11,12 +11,11 @@ class Pace : public HeartMonitor {
 	private:
 		Ticker paceTicker;
 		Timeout changeVar[6];
-		void paceTick();
 		uint8_t prevBPM = 0;
 		
+		void paceTick();
 		void paceVentricle();
 		void paceAtrium();
-		
 		void paceVentricleStage1();
 		void paceVentricleStage2();
 		void paceVentricleStage3();
@@ -25,16 +24,17 @@ class Pace : public HeartMonitor {
 		void paceVentricleStage6();
 		
 	public:
-		Pace(bool*);
-		PACEMODE pacingMode = PACEMODE::VOO;
-		PACESTATE pacingState;
+		float egramData = 0.0f;
 		float vPaceAmp;
 		uint16_t vPaceWidth_milliseconds = 100;
 		uint8_t baseHeartRate = 60;
 		uint8_t maxHeartRate = 180;
-		void setPaceRate(uint8_t);
+		PACEMODE pacingMode = PACEMODE::VOO;
+		PACESTATE pacingState;
 		bool *activityTrip;
-		float egramData = 0.0f;
+		
+		Pace(bool*);
+		void setPaceRate(uint8_t);
 		void updateEgramData();
 		
 	protected:

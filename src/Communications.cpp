@@ -143,14 +143,6 @@ void Communications::readBuffer() {
 	dataInBuffer = false;
 }
 
-bool Communications::sendEGM() {
-	return true;
-}
-
-void Communications::initEGM() {
-	
-}
-
 bool Communications::connectDCM() {
 	USBSerialConnection.baud(baudRate); // Set the baudrate
 	USBSerialConnection.attach(this, &Communications::serialCallback); // Add an inturupt

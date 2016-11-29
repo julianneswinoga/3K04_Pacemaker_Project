@@ -31,8 +31,8 @@ typedef struct {
 class Communications {
 	private:
 		Ticker streamDataTicker;
-		void streamDataTick();
 		bool streaming = false;
+		bool DCMConnected = false;
 		float dataStreamRate = 0.005;
 		float *streamingData;
 	
@@ -43,22 +43,18 @@ class Communications {
 		uint16_t twoBytesFromBuffer(volatile uint8_t[], uint16_t);
 		float floatFromBuffer(volatile uint8_t[], uint16_t);
 		void stringsFromBuffer(volatile uint8_t[], uint8_t, ...);
-		
 		bool connectDCM();
 		void serialCallback();
 		void transmitDeviceInfo();
-	
-	protected:
-		bool sendEGM();
+		void streamDataTick();
 		
 	public:
+		bool dataInBuffer = false;
+		Serial USBSerialConnection;
+		
 		Communications();
 		void setDataPointers(uint8_t*, PACESTATE*, PACEMODE*, uint8_t*, uint16_t*, float*, uint16_t*, uint16_t*, uint8_t*, uint8_t*, char(*)[64], char(*)[64], char(*)[64]);
-		void initEGM();
-		Serial USBSerialConnection;
 		void readBuffer();
-		bool dataInBuffer = false;
-		bool DCMConnected = false;
 		void initDataStream(float*);
 		void setStreamMode(bool);
 };
