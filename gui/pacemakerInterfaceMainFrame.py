@@ -54,7 +54,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	
 	@threaded
 	def serialFunction(self):
-		while (self.runSerialThread):		
+		while (self.runSerialThread):
 			if (self.SerialInterface != None and self.SerialInterface.is_open and self.SerialInterface.in_waiting >= 0):
 				if (self.SerialInterface.in_waiting >= 400):
 					print 'Overload:', self.SerialInterface.in_waiting

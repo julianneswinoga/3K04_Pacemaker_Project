@@ -3,9 +3,7 @@
 
 #include "mbed.h"
 
-class Logging {
-	private:
-		
+class Logging {		
 	public:
 		Logging();
 		
