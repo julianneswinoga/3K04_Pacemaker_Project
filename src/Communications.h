@@ -5,8 +5,12 @@
 #include <cstdarg>
 #include "Pace.h"
 
-#define UPDATE_DEVICE_INFO 0
-#define UPDATE_PARAMS 1
+#define UPDATE_DEVICE_INFO		0
+#define UPDATE_PARAMS			1
+#define DCM_START_STREAM_SIG	2
+#define DCM_STOP_STREAM_SIG	3
+#define DCM_CONNECT_SIG		4
+#define DCM_DISCONNECT_SIG	5
 
 typedef struct {
 	uint8_t *fnCode;
@@ -31,9 +35,9 @@ typedef struct {
 class Communications {
 	private:
 		Ticker streamDataTicker;
-		void streamDataTick();
 		bool streaming = false;
-		float dataStreamRate = 0.05;
+		bool DCMConnected = false;
+		float dataStreamRate = 0.005;
 		float *streamingData;
 	
 		volatile uint8_t serialBuffer[256];
@@ -43,22 +47,17 @@ class Communications {
 		uint16_t twoBytesFromBuffer(volatile uint8_t[], uint16_t);
 		float floatFromBuffer(volatile uint8_t[], uint16_t);
 		void stringsFromBuffer(volatile uint8_t[], uint8_t, ...);
-		
-		bool connectDCM();
 		void serialCallback();
 		void transmitDeviceInfo();
-	
-	protected:
-		bool sendEGM();
+		void streamDataTick();
 		
 	public:
+		bool dataInBuffer = false;
+		Serial USBSerialConnection;
+		
 		Communications();
 		void setDataPointers(uint8_t*, PACESTATE*, PACEMODE*, uint8_t*, uint16_t*, float*, uint16_t*, uint16_t*, uint8_t*, uint8_t*, char(*)[64], char(*)[64], char(*)[64]);
-		void initEGM();
-		Serial USBSerialConnection;
 		void readBuffer();
-		bool dataInBuffer = false;
-		bool DCMConnected = false;
 		void initDataStream(float*);
 		void setStreamMode(bool);
 };
