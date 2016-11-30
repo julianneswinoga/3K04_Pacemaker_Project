@@ -9,8 +9,9 @@ class HeartMonitor {
 		float V_REF = 5.0f;
 	
 	public:
-		HeartMonitor();
 		uint16_t VRP;
+		
+		HeartMonitor();
 		float getAtriumVoltage();
 		float getVentricleVoltage();
 		

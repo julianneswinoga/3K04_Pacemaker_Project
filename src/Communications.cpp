@@ -1,9 +1,9 @@
 #include "Communications.h"
 
 Communications::Communications() : USBSerialConnection(USBTX, USBRX)  {
-	//Initialize Critical State Variables
 	baudRate = 57600;
-	connectDCM();
+	USBSerialConnection.baud(baudRate); // Set the baudrate
+	USBSerialConnection.attach(this, &Communications::serialCallback); // Add an inturupt
 }
 
 void Communications::initDataStream(float *data) {
@@ -98,15 +98,13 @@ void Communications::serialCallback() {
 			break;
 			
 		case UPDATE_DEVICE_INFO:
-			
-			uint8_t newlineCount = 0;
-			
-			while (newlineCount < 3) {
-				serialBuffer[bufferPosition] = USBSerialConnection.getc();
-				newlineCount += serialBuffer[bufferPosition] == '\n';
-				bufferPosition++;
-			}
-			
+				uint8_t newlineCount = 0;
+				
+				while (newlineCount < 3) {
+					serialBuffer[bufferPosition] = USBSerialConnection.getc();
+					newlineCount += serialBuffer[bufferPosition] == '\n';
+					bufferPosition++;
+				}
 			break;
 	}
 	dataInBuffer = true;
@@ -128,47 +126,29 @@ void Communications::readBuffer() {
 			
 			packetStruct.checkSum					= serialBuffer[15];
 			
-			USBSerialConnection.printf("RECIEVED: %i, %i, %i, Hist:%i, hInt:%i, PAmp:%f, PWid:%i, VRP:%i, Base:%i, Max:%i, Chk:%i\n",
-				*packetStruct.fnCode,
-				*packetStruct.p_pacingState,
-				*packetStruct.p_pacingMode,
-				*packetStruct.p_hysteresis,
-				*packetStruct.p_hysteresisInterval,
-				*packetStruct.p_vPaceAmp,
-				*packetStruct.p_vPaceWidth_10x,
-				*packetStruct.p_VRP,
-				*packetStruct.p_baseHeartRate,
-				*packetStruct.p_maxHeartRate,
-				packetStruct.checkSum
-			);
-			
 			break;
 			
 		case UPDATE_DEVICE_INFO:
 			stringsFromBuffer(serialBuffer, 3, packetStruct.deviceID, packetStruct.deviceImplantDate, packetStruct.leadImplantDate);
 			
 			transmitDeviceInfo();
-
+			
+			break;
+		
+		case DCM_CONNECT_SIG:
+			streaming = false;
 			DCMConnected = true;
+			
+			break;
+			
+		case DCM_DISCONNECT_SIG:
+			streaming = false;
+			DCMConnected = false;
 			
 			break;
 	}
 	
 	dataInBuffer = false;
-}
-
-bool Communications::sendEGM() {
-	return true;
-}
-
-void Communications::initEGM() {
-	
-}
-
-bool Communications::connectDCM() {
-	USBSerialConnection.baud(baudRate); // Set the baudrate
-	USBSerialConnection.attach(this, &Communications::serialCallback); // Add an inturupt
-	return true;
 }
 
 void Communications::streamDataTick() {
