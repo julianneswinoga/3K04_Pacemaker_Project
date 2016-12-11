@@ -783,7 +783,7 @@
                         <property name="maximum_size"></property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
-                        <property name="minimum_size"></property>
+                        <property name="minimum_size">-1,-1</property>
                         <property name="moveable">1</property>
                         <property name="name">PlotFrame</property>
                         <property name="pane_border">1</property>
@@ -794,7 +794,7 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
-                        <property name="size"></property>
+                        <property name="size">-1,-1</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
                         <property name="tooltip"></property>
@@ -833,7 +833,7 @@
                     <object class="wxGridSizer" expanded="1">
                         <property name="cols">4</property>
                         <property name="hgap">0</property>
-                        <property name="minimum_size"></property>
+                        <property name="minimum_size">-1,10</property>
                         <property name="name">gSizer5</property>
                         <property name="permission">none</property>
                         <property name="rows">4</property>

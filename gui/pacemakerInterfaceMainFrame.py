@@ -1,6 +1,6 @@
 import wx
 import pacemakerInterface
-import wx.lib.plot as plot
+import wxmplot
 
 import numpy, struct, binascii, threading, time, csv
 
@@ -28,15 +28,16 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		pacemakerInterface.MainFrame.__init__(self, parent)
 		
 		self.plotLength = 600
-		self.plotPoints = [0]*self.plotLength
+		self.plotPointsX = range(-self.plotLength, 0)
+		self.plotPointsY = [0]*self.plotLength
 		self.pointsToAdd = []
 		
 		sizer = self.GetSizer()
-		self.canvas = plot.PlotCanvas(self)
-		self.canvas.SetXSpec('none')
-		self.canvas.SetYSpec('auto')
+		self.canvas = wxmplot.PlotPanel(self)
 		sizer.Replace(self.PlotFrame, self.canvas)
 		self.Layout()
+		self.canvas.plot(numpy.array(self.plotPointsX), numpy.array(self.plotPointsY), ymin=-5, ymax=10, axes_style='bottom', size=(800, 500))
+		self.canvas.axesmargins = (10, 10, 10, 10)
 		
 		self.serialPortsAvailable = []
 		self.SerialInterface = None
@@ -56,9 +57,12 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.StaticBitmapConnected = scale_bitmap(wx.Bitmap('img/connected.png', wx.BITMAP_TYPE_ANY), 50, 50)
 		self.Img_Connected.SetBitmap(self.StaticBitmapDisconnected)
 		
-		self.timer = wx.Timer(self, 100) # 100 is the timer ID
-		self.Bind(wx.EVT_TIMER, self.OnGraphUpdateTimer)
-		self.timer.Start(20)
+		self.timer = wx.Timer() # 100 is the timer ID
+		self.timer.Bind(wx.EVT_TIMER, self.OnGraphUpdateTimer)
+		self.timer.Start(50)
+		self.limitTimer = wx.Timer() # 100 is the timer ID
+		self.limitTimer.Bind(wx.EVT_TIMER, self.OnLimitUpdateTimer)
+		self.limitTimer.Start(500)
 	
 	@threaded
 	def serialFunction(self):
@@ -92,6 +96,9 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 						print buf
 		self.serialThreadExit = True
 	
+	def OnLimitUpdateTimer(self, event):
+		self.canvas.set_xylims((self.plotPointsX[0], self.plotPointsX[-1], min(self.plotPointsY), max(self.plotPointsY)))
+	
 	def OnGraphUpdateTimer(self, event):
 		if (self.SerialInterface != None and self.SerialInterface.is_open):
 			self.gauge_bufferSize.SetValue(self.SerialInterface.in_waiting)
@@ -101,14 +108,11 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.UpdateGraph()
 	
 	def AddPoint(self, y):
-		self.plotPoints = rotate(self.plotPoints, -1)
-		self.plotPoints[-1] = y
+		self.plotPointsY = rotate(self.plotPointsY, -1)
+		self.plotPointsY[-1] = y
 	
 	def UpdateGraph(self):
-		pts = [[c, self.plotPoints[c]] for c in range(len(self.plotPoints))]
-		line = plot.PolyLine(pts, colour='green', legend='2', width=1)
-		self.canvas.Draw(plot.PlotGraphics([line]))
-		print dir(plot)
+		self.canvas.update_line(0, numpy.array(self.plotPointsX), numpy.array(self.plotPointsY), draw=True)
 		
 	def OnScanBttnClicked(self, event):
 		for i in self.serialPortsAvailable:
@@ -221,6 +225,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		while (not self.serialThreadExit):
 			pass
 		self.timer.Stop()
+		self.limitTimer.Stop()
 		self.Destroy()
 
 if (__name__ == '__main__'):
