@@ -62,7 +62,7 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer1.Add( gSizer4, 1, 0, 5 )
 		
-		self.PlotFrame = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.PlotFrame = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TAB_TRAVERSAL )
 		self.PlotFrame.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 		self.PlotFrame.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 		
@@ -70,6 +70,7 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer5 = wx.GridSizer( 4, 4, 0, 0 )
 		
+		gSizer5.SetMinSize( wx.Size( -1,10 ) ) 
 		gSizer511 = wx.GridSizer( 0, 2, 0, 0 )
 		
 		self.m_staticText1711 = wx.StaticText( self, wx.ID_ANY, u"Pacing State", wx.DefaultPosition, wx.DefaultSize, 0 )
