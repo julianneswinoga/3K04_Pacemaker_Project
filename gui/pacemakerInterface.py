@@ -17,7 +17,7 @@ import wx.xrc
 class MainFrame ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 1000,500 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL, name = u"Pacemaker Interface" )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 1200,500 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL, name = u"Pacemaker Interface" )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
@@ -46,6 +46,18 @@ class MainFrame ( wx.Frame ):
 		
 		self.Bttn_StartStopStream = wx.Button( self, wx.ID_ANY, u"Start Streaming", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gSizer4.Add( self.Bttn_StartStopStream, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		gSizer14 = wx.GridSizer( 1, 2, 0, 0 )
+		
+		self.gauge_bufferSize = wx.Gauge( self, wx.ID_ANY, 4096, wx.DefaultPosition, wx.DefaultSize, wx.GA_HORIZONTAL )
+		self.gauge_bufferSize.SetValue( 0 ) 
+		gSizer14.Add( self.gauge_bufferSize, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		self.checkBox_simulateData = wx.CheckBox( self, wx.ID_ANY, u"Simulate Data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		gSizer14.Add( self.checkBox_simulateData, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		gSizer4.Add( gSizer14, 1, wx.EXPAND, 5 )
 		
 		
 		gSizer1.Add( gSizer4, 1, 0, 5 )
@@ -189,6 +201,7 @@ class MainFrame ( wx.Frame ):
 		self.Bttn_Scan.Bind( wx.EVT_BUTTON, self.OnScanBttnClicked )
 		self.Bttn_ConnectDisconnect.Bind( wx.EVT_BUTTON, self.OnConnectBttnClicked )
 		self.Bttn_StartStopStream.Bind( wx.EVT_BUTTON, self.OnBttnStartStopStreamClicked )
+		self.checkBox_simulateData.Bind( wx.EVT_CHECKBOX, self.OnSimulateDataChecked )
 		self.Btn_LoadParams.Bind( wx.EVT_BUTTON, self.OnLoadBttnClicked )
 	
 	def __del__( self ):
@@ -206,6 +219,9 @@ class MainFrame ( wx.Frame ):
 		event.Skip()
 	
 	def OnBttnStartStopStreamClicked( self, event ):
+		event.Skip()
+	
+	def OnSimulateDataChecked( self, event ):
 		event.Skip()
 	
 	def OnLoadBttnClicked( self, event ):
