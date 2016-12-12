@@ -27,7 +27,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	def __init__(self, parent):
 		pacemakerInterface.MainFrame.__init__(self, parent)
 		
-		self.plotLength = 600
+		self.plotLength = 1000
 		self.plotPointsX = range(-self.plotLength, 0)
 		self.plotPointsY = [0]*self.plotLength
 		self.pointsToAdd = []
@@ -38,6 +38,9 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.Layout()
 		self.canvas.plot(numpy.array(self.plotPointsX), numpy.array(self.plotPointsY), ymin=-5, ymax=10, axes_style='bottom', size=(800, 500))
 		self.canvas.axesmargins = (10, 10, 10, 10)
+		
+		self.annotationMax = None
+		self.annotationMin = None
 		
 		self.serialPortsAvailable = []
 		self.SerialInterface = None
@@ -57,10 +60,10 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.StaticBitmapConnected = scale_bitmap(wx.Bitmap('img/connected.png', wx.BITMAP_TYPE_ANY), 50, 50)
 		self.Img_Connected.SetBitmap(self.StaticBitmapDisconnected)
 		
-		self.timer = wx.Timer() # 100 is the timer ID
+		self.timer = wx.Timer()
 		self.timer.Bind(wx.EVT_TIMER, self.OnGraphUpdateTimer)
-		self.timer.Start(50)
-		self.limitTimer = wx.Timer() # 100 is the timer ID
+		self.timer.Start(100)
+		self.limitTimer = wx.Timer()
 		self.limitTimer.Bind(wx.EVT_TIMER, self.OnLimitUpdateTimer)
 		self.limitTimer.Start(500)
 	
@@ -97,7 +100,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.serialThreadExit = True
 	
 	def OnLimitUpdateTimer(self, event):
-		self.canvas.set_xylims((self.plotPointsX[0], self.plotPointsX[-1], min(self.plotPointsY), max(self.plotPointsY)))
+		self.canvas.set_xylims((self.plotPointsX[0], self.plotPointsX[-1], min(self.plotPointsY), max(self.plotPointsY)*1.3))
 	
 	def OnGraphUpdateTimer(self, event):
 		if (self.SerialInterface != None and self.SerialInterface.is_open):
@@ -112,8 +115,18 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.plotPointsY[-1] = y
 	
 	def UpdateGraph(self):
-		self.canvas.update_line(0, numpy.array(self.plotPointsX), numpy.array(self.plotPointsY), draw=True)
+		minPosition, minValue = min(enumerate(self.plotPointsY), key=lambda p: p[1])
+		maxPosition, maxValue = max(enumerate(self.plotPointsY), key=lambda p: p[1])
+		self.annotationMax = self.addMarker(self.annotationMax, self.plotPointsX[maxPosition], maxValue, 'Max', 'red')
+		self.annotationMin = self.addMarker(self.annotationMin, self.plotPointsX[minPosition], minValue, 'Min', 'black')
 		
+		self.canvas.update_line(0, numpy.array(self.plotPointsX), numpy.array(self.plotPointsY), draw=True)
+	
+	def addMarker(self, marker, x, y, text, color):
+		if (marker != None):
+			self.canvas.axes.texts.remove(marker)
+		return self.canvas.axes.annotate(text, xy=(x, y), xytext=(x+50, y), arrowprops=dict(facecolor=color, shrink=0.05))
+	
 	def OnScanBttnClicked(self, event):
 		for i in self.serialPortsAvailable:
 			self.SerialDropdown.Delete(0)
