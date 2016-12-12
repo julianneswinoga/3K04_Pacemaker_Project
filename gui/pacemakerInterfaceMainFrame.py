@@ -31,6 +31,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.plotPointsX = range(-self.plotLength, 0)
 		self.plotPointsY = [0]*self.plotLength
 		self.pointsToAdd = []
+		self.axisOverscale = 0.2 # 20%
 		
 		sizer = self.GetSizer()
 		self.canvas = wxmplot.PlotPanel(self)
@@ -100,7 +101,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.serialThreadExit = True
 	
 	def OnLimitUpdateTimer(self, event):
-		self.canvas.set_xylims((self.plotPointsX[0], self.plotPointsX[-1], min(self.plotPointsY), max(self.plotPointsY)*1.3))
+		self.canvas.set_xylims((self.plotPointsX[0], self.plotPointsX[-1], min(self.plotPointsY)-((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale), max(self.plotPointsY)+((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale)))
 	
 	def OnGraphUpdateTimer(self, event):
 		if (self.SerialInterface != None and self.SerialInterface.is_open):
@@ -136,6 +137,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		
 		for port in self.serialPortsAvailable:
 			self.SerialDropdown.Append(port)
+		self.SerialDropdown.SetSelection(0)
 	
 	def OnBttnStartStopStreamClicked(self, event):
 		if (self.SerialInterface == None or not self.SerialInterface.is_open):
