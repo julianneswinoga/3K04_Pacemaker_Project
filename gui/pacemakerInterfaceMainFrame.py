@@ -72,13 +72,12 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	def serialFunction(self):
 		while (self.runSerialThread):
 			if (self.simulating):
-				self.pointsToAdd.append(self.simulatedData[self.simulatedDataPosition])
+				self.pointsToAdd.append(self.simulatedData[self.simulatedDataPosition] + numpy.random.normal(scale=0.01))
 				if (self.simulatedDataPosition < len(self.simulatedData) - 1):
 					self.simulatedDataPosition += 1
 				else:
 					self.simulatedDataPosition = 0
-				for i in range(100000): # Wait loop
-					pass
+				time.sleep(0.001)
 			else:
 				if (self.SerialInterface != None and self.SerialInterface.is_open and self.SerialInterface.in_waiting >= 0):				
 					buf = ''
