@@ -67,7 +67,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.timer.Start(100)
 		self.limitTimer = wx.Timer()
 		self.limitTimer.Bind(wx.EVT_TIMER, self.OnLimitUpdateTimer)
-		self.limitTimer.Start(100)
+		self.limitTimer.Start(500)
 	
 	@threaded
 	def serialFunction(self):
@@ -104,8 +104,11 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	
 	def OnLimitUpdateTimer(self, event):
 		if (len(self.relativeX) > 0 and len(self.plotPointsY) > 0):
-			self.canvas.set_xylims((self.relativeX[0], self.relativeX[-1] + 0.1, min(self.plotPointsY)-((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale), max(self.plotPointsY)+((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale)))
-	
+			if (self.canvas.axes.get_xlim()[0] < self.relativeX[0] - 1):
+				self.canvas.axes.set_xlim((self.relativeX[0], 0.0))
+			self.canvas.user_limits[self.canvas.axes][2] = min(self.plotPointsY)-((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale) # Y min
+			self.canvas.user_limits[self.canvas.axes][3] = max(self.plotPointsY)+((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale) # Y max
+
 	def OnGraphUpdateTimer(self, event):
 		if (self.SerialInterface != None and self.SerialInterface.is_open):
 			self.gauge_bufferSize.SetValue(self.SerialInterface.in_waiting)
