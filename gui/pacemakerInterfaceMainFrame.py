@@ -28,8 +28,9 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		pacemakerInterface.MainFrame.__init__(self, parent)
 		
 		self.plotLength = 1000
-		self.plotPointsX = range(-self.plotLength, 0)
-		self.plotPointsY = [0]*self.plotLength
+		self.plotPointsX = []
+		self.plotPointsY = []
+		self.relativeX = []
 		self.pointsToAdd = []
 		self.axisOverscale = 0.2 # 20%
 		
@@ -37,7 +38,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.canvas = wxmplot.PlotPanel(self)
 		sizer.Replace(self.PlotFrame, self.canvas)
 		self.Layout()
-		self.canvas.plot(numpy.array(self.plotPointsX), numpy.array(self.plotPointsY), ymin=-5, ymax=10, axes_style='bottom', size=(800, 500))
+		self.canvas.plot(numpy.array([0]), numpy.array([0]), ymin=-5, ymax=10, axes_style='bottom', size=(800, 500))
 		self.canvas.axesmargins = (10, 10, 10, 10)
 		
 		self.annotationMax = None
@@ -66,18 +67,20 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.timer.Start(100)
 		self.limitTimer = wx.Timer()
 		self.limitTimer.Bind(wx.EVT_TIMER, self.OnLimitUpdateTimer)
-		self.limitTimer.Start(500)
+		self.limitTimer.Start(100)
 	
 	@threaded
 	def serialFunction(self):
 		while (self.runSerialThread):
 			if (self.simulating):
-				self.pointsToAdd.append(self.simulatedData[self.simulatedDataPosition] + numpy.random.normal(scale=0.01))
+				self.pointsToAdd.append([time.time(), self.simulatedData[self.simulatedDataPosition] + numpy.random.normal(scale=0.01)])
 				if (self.simulatedDataPosition < len(self.simulatedData) - 1):
 					self.simulatedDataPosition += 1
 				else:
 					self.simulatedDataPosition = 0
 				time.sleep(0.001)
+				#for i in range(1000000):
+				#	pass
 			else:
 				if (self.SerialInterface != None and self.SerialInterface.is_open and self.SerialInterface.in_waiting >= 0):				
 					buf = ''
@@ -94,38 +97,55 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 					
 					try:
 						point = struct.unpack('f', buf)[0]
-						self.pointsToAdd.append(point)
+						self.pointsToAdd.append([time.time(), point])
 					except:
 						print buf
 		self.serialThreadExit = True
 	
 	def OnLimitUpdateTimer(self, event):
-		self.canvas.set_xylims((self.plotPointsX[0], self.plotPointsX[-1], min(self.plotPointsY)-((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale), max(self.plotPointsY)+((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale)))
+		if (len(self.relativeX) > 0 and len(self.plotPointsY) > 0):
+			self.canvas.set_xylims((self.relativeX[0], self.relativeX[-1] + 0.1, min(self.plotPointsY)-((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale), max(self.plotPointsY)+((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale)))
 	
 	def OnGraphUpdateTimer(self, event):
 		if (self.SerialInterface != None and self.SerialInterface.is_open):
 			self.gauge_bufferSize.SetValue(self.SerialInterface.in_waiting)
 	
 		while(len(self.pointsToAdd) > 0):
-			self.AddPoint(self.pointsToAdd.pop(0))
+			time, y = self.pointsToAdd.pop(0)
+			self.AddPoint(time, y)
 		self.UpdateGraph()
 	
-	def AddPoint(self, y):
-		self.plotPointsY = rotate(self.plotPointsY, -1)
-		self.plotPointsY[-1] = y
+	def AddPoint(self, time, y):
+		if (len(self.plotPointsX) >= self.plotLength):
+			self.plotPointsX = rotate(self.plotPointsX, -1)
+			self.plotPointsX[-1] = time
+			
+			self.plotPointsY = rotate(self.plotPointsY, -1)
+			self.plotPointsY[-1] = y
+		else:
+			self.plotPointsX.append(time)
+			self.plotPointsY.append(y)
 	
 	def UpdateGraph(self):
-		minPosition, minValue = min(enumerate(self.plotPointsY), key=lambda p: p[1])
-		maxPosition, maxValue = max(enumerate(self.plotPointsY), key=lambda p: p[1])
-		self.annotationMax = self.addMarker(self.annotationMax, self.plotPointsX[maxPosition], maxValue, 'Max', 'red')
-		self.annotationMin = self.addMarker(self.annotationMin, self.plotPointsX[minPosition], minValue, 'Min', 'black')
-		
-		self.canvas.update_line(0, numpy.array(self.plotPointsX), numpy.array(self.plotPointsY), draw=True)
+		if (len(self.plotPointsX) > 0 and len(self.plotPointsY) > 0):
+			currTime = time.time()
+			for i, x in enumerate(self.plotPointsX):
+				if (i > len(self.relativeX)-1):
+					self.relativeX.append(x - currTime)
+				else:
+					self.relativeX[i] = x - currTime
+			
+			minPosition, minValue = min(enumerate(self.plotPointsY), key=lambda p: p[1])
+			maxPosition, maxValue = max(enumerate(self.plotPointsY), key=lambda p: p[1])
+			self.annotationMax = self.addMarker(self.annotationMax, self.relativeX[maxPosition], maxValue, 'Max', 'red')
+			self.annotationMin = self.addMarker(self.annotationMin, self.relativeX[minPosition], minValue, 'Min', 'black')
+			
+			self.canvas.update_line(0, numpy.array(self.relativeX), numpy.array(self.plotPointsY), draw=True)
 	
 	def addMarker(self, marker, x, y, text, color):
 		if (marker != None):
 			self.canvas.axes.texts.remove(marker)
-		return self.canvas.axes.annotate(text, xy=(x, y), xytext=(x+50, y), arrowprops=dict(facecolor=color, shrink=0.05))
+		return self.canvas.axes.annotate(text, xy=(x, y), xytext=(x+1, y), arrowprops=dict(facecolor=color, shrink=0.05))
 	
 	def OnScanBttnClicked(self, event):
 		for i in self.serialPortsAvailable:
