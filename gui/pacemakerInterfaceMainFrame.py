@@ -50,6 +50,10 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.runSerialThread = True
 		self.serialThreadExit = False
 		
+		self.paramsFromDevice = []
+		self.paramNames = ['Device ID', 'Device Implant Date', 'Lead Implant Date', 'Pacing State', 'Pacing Mode', 'Hysteresis', 'Hysteresis Interval', 'Pacing Amplitude', 'Pace Width', 'VRP', 'Base HR', 'Max HR']
+		self.readParams = False
+		
 		self.simulating = False
 		self.simulatedData = []
 		self.simulatedDataPosition = 0
@@ -94,12 +98,16 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 							data = self.SerialInterface.read()
 						except:
 							pass
-					
-					try:
-						point = struct.unpack('f', buf)[0]
-						self.pointsToAdd.append([time.time(), point])
-					except:
-						print buf
+						
+					if (self.readParams and len(buf) >= 4 and buf[0:4] == chr(0)+chr(0)+chr(0)+chr(0)):
+						self.paramsFromDevice = buf[4:].split(' ')
+						self.readParams = False
+					else:
+						try:
+							point = struct.unpack('f', buf)[0]
+							self.pointsToAdd.append([time.time(), point])
+						except:
+							print 'Info:', buf
 		self.serialThreadExit = True
 	
 	def OnLimitUpdateTimer(self, event):
@@ -202,7 +210,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 			self.SerialInterface.flush()
 			
 			self.SerialInterface.write(struct.pack('B', 0))
-			self.SerialInterface.write('123456789\nbbbbbbbbbbb\ncccccc\n')
+			self.SerialInterface.write('0000001\n12/01/16\n11/25/16\n')
 			self.SerialInterface.flush()
 			
 		else:
@@ -233,7 +241,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		dataStream = []
 		byteStream = ''
 		
-		self.SerialInterface.write(struct.pack('B', 1))
+		self.SerialInterface.write(struct.pack('B', 1)) # Update params signal
 		
 		dataStream.append(['B', self.choice_pacingState.GetSelection()]) # pacingState
 		dataStream.append(['B', self.choice_pacingMode.GetSelection()]) # pacingMode
@@ -257,8 +265,21 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.SerialInterface.flush()
 		
 	def OnBttnReadParamsClicked(self, event):
-		self.grid_params.AppendRows(1)
-		self.grid_params.SetCellValue(1, 1, 'test')
+		if (self.SerialInterface == None or not self.SerialInterface.is_open):
+			return
+	
+		self.readParams = True
+		self.SerialInterface.write(struct.pack('B', 6)) # Read params signal
+		while (self.readParams):
+			pass # Wait for params to be read
+		
+		self.grid_params.DeleteRows(numRows=self.grid_params.GetNumberRows()) # Delete all rows
+		self.grid_params.AppendRows(len(self.paramNames))
+		
+		for i, p in enumerate(self.paramsFromDevice):
+			self.grid_params.SetCellValue(i, 0, self.paramNames[i])
+			self.grid_params.SetCellValue(i, 1, p)
+
 		self.grid_params.AutoSize()
 		self.Layout()
 		
