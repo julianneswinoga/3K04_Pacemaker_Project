@@ -9,6 +9,7 @@
 
 import wx
 import wx.xrc
+import wx.grid
 
 ###########################################################################
 ## Class MainFrame
@@ -17,46 +18,50 @@ import wx.xrc
 class MainFrame ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 1000,500 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL, name = u"Pacemaker Interface" )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Pacemaker Interface", pos = wx.DefaultPosition, size = wx.Size( 1300,600 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL, name = u"Pacemaker Interface" )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
-		gSizer1 = wx.GridSizer( 3, 1, 0, 0 )
+		gSizer1 = wx.GridSizer( 4, 1, 0, 0 )
 		
-		gSizer4 = wx.GridSizer( 2, 2, 0, 0 )
-		
-		gSizer3 = wx.GridSizer( 0, 3, 0, 0 )
+		gSizer4 = wx.GridSizer( 1, 7, 0, 0 )
 		
 		SerialDropdownChoices = []
-		self.SerialDropdown = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 200,-1 ), SerialDropdownChoices, 0 )
+		self.SerialDropdown = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( -1,-1 ), SerialDropdownChoices, 0 )
 		self.SerialDropdown.SetSelection( 0 )
-		gSizer3.Add( self.SerialDropdown, 0, wx.ALL, 5 )
+		gSizer4.Add( self.SerialDropdown, 0, wx.ALIGN_TOP|wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		self.Bttn_Scan = wx.Button( self, wx.ID_ANY, u"Scan Ports", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer3.Add( self.Bttn_Scan, 0, wx.ALL, 5 )
+		gSizer4.Add( self.Bttn_Scan, 0, wx.ALL, 5 )
 		
 		self.Bttn_ConnectDisconnect = wx.Button( self, wx.ID_ANY, u"Connect", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer3.Add( self.Bttn_ConnectDisconnect, 0, wx.ALL, 5 )
-		
-		
-		gSizer4.Add( gSizer3, 1, wx.EXPAND, 5 )
+		gSizer4.Add( self.Bttn_ConnectDisconnect, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 		
 		self.Img_Connected = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
-		gSizer4.Add( self.Img_Connected, 0, wx.ALL, 5 )
+		gSizer4.Add( self.Img_Connected, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		self.Bttn_StartStopStream = wx.Button( self, wx.ID_ANY, u"Start Streaming", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer4.Add( self.Bttn_StartStopStream, 0, wx.ALL|wx.EXPAND, 5 )
+		gSizer4.Add( self.Bttn_StartStopStream, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+		
+		self.checkBox_simulateData = wx.CheckBox( self, wx.ID_ANY, u"Simulate Data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		gSizer4.Add( self.checkBox_simulateData, 0, wx.ALL, 5 )
+		
+		self.gauge_bufferSize = wx.Gauge( self, wx.ID_ANY, 4096, wx.DefaultPosition, wx.Size( -1,-1 ), wx.GA_HORIZONTAL )
+		self.gauge_bufferSize.SetValue( 0 ) 
+		self.gauge_bufferSize.SetMaxSize( wx.Size( -1,50 ) )
+		
+		gSizer4.Add( self.gauge_bufferSize, 0, wx.ALL|wx.ALIGN_RIGHT, 5 )
 		
 		
-		gSizer1.Add( gSizer4, 1, 0, 5 )
+		gSizer1.Add( gSizer4, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND|wx.ALL, 5 )
 		
-		self.PlotFrame = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.PlotFrame = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TAB_TRAVERSAL )
 		self.PlotFrame.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 		self.PlotFrame.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 		
-		gSizer1.Add( self.PlotFrame, 1, wx.ALL|wx.EXPAND, 5 )
+		gSizer1.Add( self.PlotFrame, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
-		gSizer5 = wx.GridSizer( 4, 4, 0, 0 )
+		gSizer5 = wx.GridSizer( 3, 4, 0, 0 )
 		
 		gSizer511 = wx.GridSizer( 0, 2, 0, 0 )
 		
@@ -114,7 +119,7 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer515 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1715 = wx.StaticText( self, wx.ID_ANY, u"vPaceAmp", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1715 = wx.StaticText( self, wx.ID_ANY, u"Pacing Amplitude", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1715.Wrap( -1 )
 		gSizer515.Add( self.m_staticText1715, 0, wx.ALL, 5 )
 		
@@ -126,7 +131,7 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer516 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1716 = wx.StaticText( self, wx.ID_ANY, u"vPaceWidth_10x", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1716 = wx.StaticText( self, wx.ID_ANY, u"Pace Width", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1716.Wrap( -1 )
 		gSizer516.Add( self.m_staticText1716, 0, wx.ALL, 5 )
 		
@@ -172,11 +177,63 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer5.Add( gSizer519, 1, wx.EXPAND, 5 )
 		
+		self.m_staticText10 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText10.Wrap( -1 )
+		gSizer5.Add( self.m_staticText10, 0, wx.ALL, 5 )
+		
+		self.m_staticText11 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText11.Wrap( -1 )
+		gSizer5.Add( self.m_staticText11, 0, wx.ALL, 5 )
+		
 		self.Btn_LoadParams = wx.Button( self, wx.ID_ANY, u"Load onto Device", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gSizer5.Add( self.Btn_LoadParams, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		gSizer1.Add( gSizer5, 1, wx.EXPAND, 5 )
+		gSizer1.Add( gSizer5, 1, wx.ALIGN_CENTER_HORIZONTAL, 5 )
+		
+		self.m_scrolledWindow2 = wx.ScrolledWindow( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.HSCROLL|wx.VSCROLL )
+		self.m_scrolledWindow2.SetScrollRate( 5, 5 )
+		gSizer16 = wx.GridSizer( 1, 2, 0, 0 )
+		
+		self.grid_params = wx.grid.Grid( self.m_scrolledWindow2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		
+		# Grid
+		self.grid_params.CreateGrid( 1, 2 )
+		self.grid_params.EnableEditing( False )
+		self.grid_params.EnableGridLines( True )
+		self.grid_params.EnableDragGridSize( False )
+		self.grid_params.SetMargins( 0, 0 )
+		
+		# Columns
+		self.grid_params.SetColSize( 0, 10 )
+		self.grid_params.SetColSize( 1, 10 )
+		self.grid_params.EnableDragColMove( False )
+		self.grid_params.EnableDragColSize( True )
+		self.grid_params.SetColLabelSize( 30 )
+		self.grid_params.SetColLabelValue( 0, u"Parameter" )
+		self.grid_params.SetColLabelValue( 1, u"Value" )
+		self.grid_params.SetColLabelAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
+		
+		# Rows
+		self.grid_params.AutoSizeRows()
+		self.grid_params.EnableDragRowSize( True )
+		self.grid_params.SetRowLabelSize( 0 )
+		self.grid_params.SetRowLabelAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
+		
+		# Label Appearance
+		
+		# Cell Defaults
+		self.grid_params.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
+		gSizer16.Add( self.grid_params, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+		
+		self.Bttn_ReadParams = wx.Button( self.m_scrolledWindow2, wx.ID_ANY, u"Read Parameters from Pacemaker", wx.DefaultPosition, wx.DefaultSize, 0 )
+		gSizer16.Add( self.Bttn_ReadParams, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		
+		
+		self.m_scrolledWindow2.SetSizer( gSizer16 )
+		self.m_scrolledWindow2.Layout()
+		gSizer16.Fit( self.m_scrolledWindow2 )
+		gSizer1.Add( self.m_scrolledWindow2, 1, wx.EXPAND |wx.ALL, 5 )
 		
 		
 		self.SetSizer( gSizer1 )
@@ -189,7 +246,9 @@ class MainFrame ( wx.Frame ):
 		self.Bttn_Scan.Bind( wx.EVT_BUTTON, self.OnScanBttnClicked )
 		self.Bttn_ConnectDisconnect.Bind( wx.EVT_BUTTON, self.OnConnectBttnClicked )
 		self.Bttn_StartStopStream.Bind( wx.EVT_BUTTON, self.OnBttnStartStopStreamClicked )
+		self.checkBox_simulateData.Bind( wx.EVT_CHECKBOX, self.OnSimulateDataChecked )
 		self.Btn_LoadParams.Bind( wx.EVT_BUTTON, self.OnLoadBttnClicked )
+		self.Bttn_ReadParams.Bind( wx.EVT_BUTTON, self.OnBttnReadParamsClicked )
 	
 	def __del__( self ):
 		pass
@@ -208,7 +267,13 @@ class MainFrame ( wx.Frame ):
 	def OnBttnStartStopStreamClicked( self, event ):
 		event.Skip()
 	
+	def OnSimulateDataChecked( self, event ):
+		event.Skip()
+	
 	def OnLoadBttnClicked( self, event ):
+		event.Skip()
+	
+	def OnBttnReadParamsClicked( self, event ):
 		event.Skip()
 	
 
