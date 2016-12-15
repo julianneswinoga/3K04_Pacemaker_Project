@@ -18,7 +18,7 @@ import wx.grid
 class MainFrame ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Pacemaker Interface", pos = wx.DefaultPosition, size = wx.Size( 1500,600 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL, name = u"Pacemaker Interface" )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Pacemaker Interface", pos = wx.DefaultPosition, size = wx.Size( 1300,600 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL, name = u"Pacemaker Interface" )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
@@ -177,11 +177,11 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer5.Add( gSizer519, 1, wx.EXPAND, 5 )
 		
-		self.m_staticText10 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText10 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText10.Wrap( -1 )
 		gSizer5.Add( self.m_staticText10, 0, wx.ALL, 5 )
 		
-		self.m_staticText11 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText11 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText11.Wrap( -1 )
 		gSizer5.Add( self.m_staticText11, 0, wx.ALL, 5 )
 		
