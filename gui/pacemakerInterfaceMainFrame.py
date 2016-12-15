@@ -256,6 +256,12 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 			print bin(int(binascii.hexlify(b), 16))
 		self.SerialInterface.flush()
 		
+	def OnBttnReadParamsClicked(self, event):
+		self.grid_params.AppendRows(1)
+		self.grid_params.SetCellValue(1, 1, 'test')
+		self.grid_params.AutoSize()
+		self.Layout()
+		
 	def OnWindowClose(self, event):
 		self.runSerialThread = False
 		print 'Waiting for serial thread to die'
