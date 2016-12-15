@@ -69,7 +69,7 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer1.Add( self.PlotFrame, 1, wx.ALL|wx.EXPAND, 5 )
 		
-		gSizer5 = wx.GridSizer( 4, 4, 0, 0 )
+		gSizer5 = wx.GridSizer( 3, 4, 0, 0 )
 		
 		gSizer511 = wx.GridSizer( 0, 2, 0, 0 )
 		
@@ -127,7 +127,7 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer515 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1715 = wx.StaticText( self, wx.ID_ANY, u"vPaceAmp", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1715 = wx.StaticText( self, wx.ID_ANY, u"Pacing Amplitude", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1715.Wrap( -1 )
 		gSizer515.Add( self.m_staticText1715, 0, wx.ALL, 5 )
 		
@@ -139,7 +139,7 @@ class MainFrame ( wx.Frame ):
 		
 		gSizer516 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.m_staticText1716 = wx.StaticText( self, wx.ID_ANY, u"vPaceWidth_10x", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1716 = wx.StaticText( self, wx.ID_ANY, u"Pace Width", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1716.Wrap( -1 )
 		gSizer516.Add( self.m_staticText1716, 0, wx.ALL, 5 )
 		
@@ -184,6 +184,14 @@ class MainFrame ( wx.Frame ):
 		
 		
 		gSizer5.Add( gSizer519, 1, wx.EXPAND, 5 )
+		
+		self.m_staticText10 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText10.Wrap( -1 )
+		gSizer5.Add( self.m_staticText10, 0, wx.ALL, 5 )
+		
+		self.m_staticText11 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText11.Wrap( -1 )
+		gSizer5.Add( self.m_staticText11, 0, wx.ALL, 5 )
 		
 		self.Btn_LoadParams = wx.Button( self, wx.ID_ANY, u"Load onto Device", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gSizer5.Add( self.Btn_LoadParams, 0, wx.ALL|wx.EXPAND, 5 )
