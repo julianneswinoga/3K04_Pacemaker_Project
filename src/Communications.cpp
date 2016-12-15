@@ -113,19 +113,41 @@ void Communications::serialCallback() {
 void Communications::readBuffer() {
 	switch (*packetStruct.fnCode) {
 		case UPDATE_PARAMS:			
-			*packetStruct.p_pacingState			= (PACESTATE) serialBuffer[0];
-			*packetStruct.p_pacingMode			= (PACEMODE) serialBuffer[1];
+			*packetStruct.p_pacingState				= (PACESTATE) serialBuffer[0];
+			*packetStruct.p_pacingMode				= (PACEMODE) serialBuffer[1];
 			*packetStruct.p_hysteresis				= serialBuffer[2];
 			
-			*packetStruct.p_hysteresisInterval		= twoBytesFromBuffer(serialBuffer, 3);
+			*packetStruct.p_hysteresisInterval			= twoBytesFromBuffer(serialBuffer, 3);
 			*packetStruct.p_vPaceAmp				= floatFromBuffer(serialBuffer, 5);
-			*packetStruct.p_vPaceWidth_10x		= twoBytesFromBuffer(serialBuffer, 9);
-			*packetStruct.p_VRP					= twoBytesFromBuffer(serialBuffer, 11);
-			*packetStruct.p_baseHeartRate		= serialBuffer[13];
-			*packetStruct.p_maxHeartRate		= serialBuffer[14];
+			*packetStruct.p_vPaceWidth_10x			= twoBytesFromBuffer(serialBuffer, 9);
+			*packetStruct.p_VRP						= twoBytesFromBuffer(serialBuffer, 11);
+			*packetStruct.p_baseHeartRate			= serialBuffer[13];
+			*packetStruct.p_maxHeartRate			= serialBuffer[14];
 			
 			packetStruct.checkSum					= serialBuffer[15];
 			
+			break;
+			
+		case READ_PARAMS:
+			__disable_irq(); // Disable Interrupts
+			
+			USBSerialConnection.printf("%c%c%c%c%s %s %s %i %i %i %i %f %i %i %i %i\n",
+				0x0, 0x0, 0x0, 0x0,
+				*packetStruct.deviceID,
+				*packetStruct.deviceImplantDate,
+				*packetStruct.leadImplantDate,
+				*packetStruct.p_pacingState,
+				*packetStruct.p_pacingMode,
+				*packetStruct.p_hysteresis,
+				*packetStruct.p_hysteresisInterval,
+				*packetStruct.p_vPaceAmp,
+				*packetStruct.p_vPaceWidth_10x,
+				*packetStruct.p_VRP,
+				*packetStruct.p_baseHeartRate,
+				*packetStruct.p_maxHeartRate
+			);
+			
+			__enable_irq(); // Enable Interrupts
 			break;
 			
 		case UPDATE_DEVICE_INFO:
@@ -163,7 +185,7 @@ void Communications::streamDataTick() {
 }
 
 void Communications::transmitDeviceInfo() {
-	USBSerialConnection.printf("%s\n%s\n%s\n%f\n",
+	USBSerialConnection.printf("%s\n%s\n%s\n",
 		*packetStruct.deviceID,
 		*packetStruct.deviceImplantDate,
 		*packetStruct.leadImplantDate
