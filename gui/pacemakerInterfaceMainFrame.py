@@ -27,7 +27,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	def __init__(self, parent):
 		pacemakerInterface.MainFrame.__init__(self, parent)
 		
-		self.plotLength = 5000
+		self.plotLength = 2000
 		self.plotPointsX = []
 		self.plotPointsY = []
 		self.relativeX = []
@@ -177,15 +177,15 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 		self.SerialDropdown.SetSelection(0)
 	
 	def OnBttnStartStopStreamClicked(self, event):
-		if (self.SerialInterface == None or not self.SerialInterface.is_open):
-			if (self.checkBox_simulateData.GetValue()):
-				if (self.simulating):
-					self.Bttn_StartStopStream.SetLabel('Start Streaming')
-					self.simulating = False
-				else:
-					self.Bttn_StartStopStream.SetLabel('Stop Streaming')
-					self.simulating = True
-			return
+		if (self.checkBox_simulateData.GetValue()):
+			if (self.simulating):
+				self.Bttn_StartStopStream.SetLabel('Start Streaming')
+				self.simulating = False
+				return
+			else:
+				self.Bttn_StartStopStream.SetLabel('Stop Streaming')
+				self.simulating = True
+				return
 		if (self.streamingData):
 			self.SerialInterface.write(struct.pack('B', 3))
 			self.Bttn_StartStopStream.SetLabel('Start Streaming')
