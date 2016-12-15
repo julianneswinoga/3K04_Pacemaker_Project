@@ -6,11 +6,12 @@
 #include "Pace.h"
 
 #define UPDATE_DEVICE_INFO		0
-#define UPDATE_PARAMS			1
+#define UPDATE_PARAMS				1
 #define DCM_START_STREAM_SIG	2
-#define DCM_STOP_STREAM_SIG	3
-#define DCM_CONNECT_SIG		4
-#define DCM_DISCONNECT_SIG	5
+#define DCM_STOP_STREAM_SIG		3
+#define DCM_CONNECT_SIG			4
+#define DCM_DISCONNECT_SIG		5
+#define READ_PARAMS				6
 
 typedef struct {
 	uint8_t *fnCode;
