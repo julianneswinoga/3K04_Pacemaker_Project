@@ -27,18 +27,19 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	def __init__(self, parent):
 		pacemakerInterface.MainFrame.__init__(self, parent)
 		
-		self.plotLength = 1000
+		self.plotLength = 5000
 		self.plotPointsX = []
 		self.plotPointsY = []
 		self.relativeX = []
 		self.pointsToAdd = []
 		self.axisOverscale = 0.2 # 20%
+		self.lastCurrentTime = 0
 		
 		sizer = self.GetSizer()
 		self.canvas = wxmplot.PlotPanel(self)
 		sizer.Replace(self.PlotFrame, self.canvas)
 		self.Layout()
-		self.canvas.plot(numpy.array([0]), numpy.array([0]), ymin=-5, ymax=10, axes_style='bottom', size=(800, 500))
+		self.canvas.plot(numpy.array([0]), numpy.array([0]), ymin=-5, ymax=10, axes_style='bottom')
 		self.canvas.axesmargins = (10, 10, 10, 10)
 		
 		self.annotationMax = None
@@ -112,7 +113,7 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	
 	def OnLimitUpdateTimer(self, event):
 		if (len(self.relativeX) > 0 and len(self.plotPointsY) > 0):
-			if (self.canvas.axes.get_xlim()[0] < self.relativeX[0] - 1):
+			if (self.canvas.axes.get_xlim()[0] < self.relativeX[0] - 1.0):
 				self.canvas.axes.set_xlim((self.relativeX[0], 0.0))
 			self.canvas.user_limits[self.canvas.axes][2] = min(self.plotPointsY)-((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale) # Y min
 			self.canvas.user_limits[self.canvas.axes][3] = max(self.plotPointsY)+((max(self.plotPointsY)-min(self.plotPointsY))*self.axisOverscale) # Y max
@@ -139,7 +140,13 @@ class pacemakerInterfaceMainFrame(pacemakerInterface.MainFrame):
 	
 	def UpdateGraph(self):
 		if (len(self.plotPointsX) > 0 and len(self.plotPointsY) > 0):
-			currTime = time.time()
+		
+			if (self.streamingData or self.simulating):
+				currTime = time.time()
+				self.lastCurrentTime = currTime
+			else:
+				currTime = self.lastCurrentTime
+				
 			for i, x in enumerate(self.plotPointsX):
 				if (i > len(self.relativeX)-1):
 					self.relativeX.append(x - currTime)

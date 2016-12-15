@@ -18,56 +18,48 @@ import wx.grid
 class MainFrame ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Pacemaker Interface", pos = wx.DefaultPosition, size = wx.Size( 1200,600 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL, name = u"Pacemaker Interface" )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Pacemaker Interface", pos = wx.DefaultPosition, size = wx.Size( 1500,600 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL, name = u"Pacemaker Interface" )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
 		gSizer1 = wx.GridSizer( 4, 1, 0, 0 )
 		
-		gSizer4 = wx.GridSizer( 2, 2, 0, 0 )
-		
-		gSizer3 = wx.GridSizer( 0, 3, 0, 0 )
+		gSizer4 = wx.GridSizer( 1, 7, 0, 0 )
 		
 		SerialDropdownChoices = []
-		self.SerialDropdown = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 200,-1 ), SerialDropdownChoices, 0 )
+		self.SerialDropdown = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( -1,-1 ), SerialDropdownChoices, 0 )
 		self.SerialDropdown.SetSelection( 0 )
-		gSizer3.Add( self.SerialDropdown, 1, wx.ALIGN_TOP|wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+		gSizer4.Add( self.SerialDropdown, 0, wx.ALIGN_TOP|wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		self.Bttn_Scan = wx.Button( self, wx.ID_ANY, u"Scan Ports", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer3.Add( self.Bttn_Scan, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		gSizer4.Add( self.Bttn_Scan, 0, wx.ALL, 5 )
 		
 		self.Bttn_ConnectDisconnect = wx.Button( self, wx.ID_ANY, u"Connect", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer3.Add( self.Bttn_ConnectDisconnect, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
-		
-		
-		gSizer4.Add( gSizer3, 1, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+		gSizer4.Add( self.Bttn_ConnectDisconnect, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 		
 		self.Img_Connected = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
-		gSizer4.Add( self.Img_Connected, 0, wx.ALL, 5 )
+		gSizer4.Add( self.Img_Connected, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		self.Bttn_StartStopStream = wx.Button( self, wx.ID_ANY, u"Start Streaming", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer4.Add( self.Bttn_StartStopStream, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		gSizer14 = wx.GridSizer( 1, 2, 0, 0 )
-		
-		self.gauge_bufferSize = wx.Gauge( self, wx.ID_ANY, 4096, wx.DefaultPosition, wx.DefaultSize, wx.GA_HORIZONTAL )
-		self.gauge_bufferSize.SetValue( 0 ) 
-		gSizer14.Add( self.gauge_bufferSize, 0, wx.ALL|wx.EXPAND, 5 )
+		gSizer4.Add( self.Bttn_StartStopStream, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		self.checkBox_simulateData = wx.CheckBox( self, wx.ID_ANY, u"Simulate Data", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer14.Add( self.checkBox_simulateData, 0, wx.ALL|wx.EXPAND, 5 )
+		gSizer4.Add( self.checkBox_simulateData, 0, wx.ALL, 5 )
+		
+		self.gauge_bufferSize = wx.Gauge( self, wx.ID_ANY, 4096, wx.DefaultPosition, wx.Size( -1,-1 ), wx.GA_HORIZONTAL )
+		self.gauge_bufferSize.SetValue( 0 ) 
+		self.gauge_bufferSize.SetMaxSize( wx.Size( -1,50 ) )
+		
+		gSizer4.Add( self.gauge_bufferSize, 0, wx.ALL|wx.ALIGN_RIGHT, 5 )
 		
 		
-		gSizer4.Add( gSizer14, 1, wx.EXPAND, 5 )
-		
-		
-		gSizer1.Add( gSizer4, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_TOP, 5 )
+		gSizer1.Add( gSizer4, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND|wx.ALL, 5 )
 		
 		self.PlotFrame = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TAB_TRAVERSAL )
 		self.PlotFrame.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 		self.PlotFrame.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 		
-		gSizer1.Add( self.PlotFrame, 1, wx.ALL|wx.EXPAND, 5 )
+		gSizer1.Add( self.PlotFrame, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
 		gSizer5 = wx.GridSizer( 3, 4, 0, 0 )
 		
@@ -197,7 +189,7 @@ class MainFrame ( wx.Frame ):
 		gSizer5.Add( self.Btn_LoadParams, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		gSizer1.Add( gSizer5, 1, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+		gSizer1.Add( gSizer5, 1, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		self.m_scrolledWindow2 = wx.ScrolledWindow( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.HSCROLL|wx.VSCROLL )
 		self.m_scrolledWindow2.SetScrollRate( 5, 5 )
