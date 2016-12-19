@@ -29,9 +29,11 @@ void Pacemaker::mainLoop() {
 		communications.USBSerialConnection.printf("");
 		communications.readBuffer();
 		communications.USBSerialConnection.printf("");
-		if (fnCode == 2)
+		if (fnCode == DCM_START_STREAM_SIG)
 			communications.setStreamMode(true);
-		if (fnCode == 3)
+		if (fnCode == DCM_STOP_STREAM_SIG)
 			communications.setStreamMode(false);
 	}
+	
+	pace.updateEgramData();
 }
