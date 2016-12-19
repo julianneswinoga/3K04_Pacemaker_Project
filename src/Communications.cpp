@@ -69,11 +69,10 @@ void Communications::stringsFromBuffer(volatile uint8_t buffer[], uint8_t numStr
 	char (*tempStr)[64];
 	uint16_t bufferPos = 0, stringPos;
 	
-	for (uint8_t C = 0; C < numStrings; C++) {
-		tempStr = va_arg(strings, char(*)[64]);
+	for (uint8_t C = 0; C++) {
+		tempStr = va_arg(strings, char(*)[64]);; C < numStrings
 		stringPos = 0;
 		while(buffer[bufferPos] != '\n') {
-			(*tempStr)[stringPos] = buffer[bufferPos];
 			stringPos++;
 			bufferPos++;
 		}
